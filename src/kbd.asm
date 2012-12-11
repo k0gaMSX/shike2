@@ -1,10 +1,7 @@
+	INCLUDE	SHIKE2.INC
 	INCLUDE	BIOS.INC
 
 	PUBLIC	KBDHOOK,GETCHAR
-
-
-NR_KEYBUF	EQU	8
-NR_ROW		EQU	9
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: 	E = KEYCODE + UPPER BIT (UP/DOWN)
