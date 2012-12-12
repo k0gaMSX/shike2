@@ -29,6 +29,37 @@ INITVDP:
 	LD	BC,32*4
 	CALL	LDIRMV		;GET A COPY OF THE SPRITE ATTRIBUTE TABLE
 
+	XOR	A
+	LD	(ACPAGE),A	;INITIALISE THE PAGES TO CORRECT VALUES
+	LD	(DPPAGE),A
+	CALL	SETPAGE
+
+	EI
+	RET
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:       (ACPAGE) = ACTUAL PAGE
+;             (DPPAGE) = DISPLAY PAGE
+	CSEG
+	PUBLIC	SETPAGE
+
+SETPAGE:
+	LD	A,(ACPAGE)
+	LD	B,A
+	LD	C,14
+	CALL	WRTVDP
+	EI
+	LD	A,(DPPAGE)
+	LD	B,A
+
+SHOWPAGE:	;INPUT: B = DISPLAY PAGE
+	LD	A,B
+	RRCA
+	RRCA
+	RRCA
+	OR	01FH
+	LD	B,A
+	LD	C,2
+	CALL	WRTVDP
 	EI
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
