@@ -239,15 +239,8 @@ VDPEND:
 	OR	A		;SET NZ FLAG
 	RET
 
-.FERR:	LD	HL,(DEBUG)
-	LD	A,0FBH
-	LD	(HL),A
-	INC	HL
-	LD	(DEBUG),HL
-	XOR	A		;SET Z FLAG
+.FERR:	XOR	A		;SET Z FLAG
 	RET
-
-DEBUG:	DW	200H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;OUTPUT:	Z = 1 WHEN CMD IS RUNNING
