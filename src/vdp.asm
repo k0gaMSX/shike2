@@ -289,6 +289,66 @@ VDPSYNC:
 	JR	VDPSYNC
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		D = ORIGIN X
+;		E = ORIGIN Y
+;		B = DESTINE X
+;		C = DESTINE Y
+;		(ACPAGE) = PAGE
+;		(LOGOP) = LOGICAL OPERATION
+;		(FORCLR) = COLOR
+;		(CMDARG) = VDP COMMAND ARGUMENT
+	CSEG
+	PUBLIC	LINE
+
+LINE:
+	LD	IY,CMDBUF
+	LD	(IY+4),D	;<- ORIGIN X
+	LD	(IY+5),0
+	LD	(IY+6),E	;<- ORIGIN Y
+	LD	A,(ACPAGE)
+	LD	(IY+7),A	;<- PAGE
+
+	LD	A,D		;CALCULATE B = NX, D = DIX
+	SUB	B
+	LD	D,4
+	JR	NC,.L1
+	LD	D,0
+	NEG
+
+.L1:	LD	B,A
+	LD	A,E		;CALCULATE C = NY, E = DIY
+	SUB	C
+	LD	E,8
+	JR	NC,.L2
+	LD	E,0
+	NEG
+
+.L2:	LD	C,A		;CALCULATE B = MAJ, C = MIN
+	CP	B
+	LD	L,0
+	JR	C,.L3
+	LD	L,1
+	LD	A,B
+	LD	B,C
+	LD	C,A
+
+.L3:	LD	(IY+8),B	;<- MAJ
+	LD	(IY+9),0
+	LD	(IY+10),C	;<- MIN
+	LD	(IY+11),0
+	LD	A,(FORCLR)
+	LD	(IY+12),A	;<- COLOR
+	LD	A,(CMDARG)
+	AND	0F0H
+	OR	L
+	OR	E
+	OR	D
+	LD	(IY+13),A	;<- ARG
+	LD	A,(LOGOP)
+	OR	OPLINE
+	LD	(IY+14),A
+	JP	VDPCMD
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
