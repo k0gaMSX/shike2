@@ -26,6 +26,11 @@ RG14SAV		EQU	0FFEDH
 DPPAGE		EQU	0FAF5H
 ACPAGE		EQU	0FAF6H
 
+FORCLR		EQU	0F3E9H
+BAKCLR		EQU	0F3EAH
+BDRCLR		EQU	0F3EBH
+
+
 SPRITEATT	EQU	07600H
 SPRITECOL	EQU	07400H
 SPRITEGEN	EQU	07800H
@@ -281,6 +286,20 @@ FILVRM:
 
 	POP	HL
 	RET
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:       (FORCLR) = FOREGROUND COLOR (IT IS IGNORED)
+;             (BAKCLR) = BACKGROUND COLOR (IT IS IGNORED)
+;             (BDRCLR) = BORDER COLOR
+
+	CSEG
+	PUBLIC	CHGCLR
+
+CHGCLR:
+	LD	A,(BDRCLR)
+
+	LD	B,A
+	LD	C,7
+	JP	WRTVDP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
