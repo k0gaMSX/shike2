@@ -53,7 +53,6 @@ INITVDP:
 	LD	(DPPAGE),A
 	CALL	SETPAGE
 
-	EI
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       (ACPAGE) = ACTUAL PAGE
@@ -74,7 +73,6 @@ SHOWPAGE:	;INPUT: B = DISPLAY PAGE
 	LD	B,A
 	LD	C,2
 	CALL	WRTVDP
-	EI
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = PATTERN NUMBER
@@ -144,6 +142,7 @@ PUTSPRITE:
 	LD	(HL),D
 	INC	HL
 	LD	(HL),B
+	EI
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = NUMBER WHICH WILL BE MULTIPLIED BY 15
@@ -216,20 +215,22 @@ VDPEND:
 	CALL	MUL15           ;HL = C * CMDSIZE
 	LD	DE,QUEUE
 	ADD	HL,DE
-	LD	B,32
-	LD	C,17
-	CALL	WRTVDP		;SET INDIRECT REGISTER (AND DISABLE INT)
-	LD	A,(VDPW)
-	INC	A
-	INC	A
-	INC	A
-	LD	C,A
+	LD	BC,(VDPW)
+	INC	C
 	LD	B,CMDSIZE
+	LD	E,32
+	LD	D,128+17
+
+	DI
+	OUT	(C),E
+	OUT	(C),D		;SET INDIRECT REGISTER
+	INC	C
+	INC	C
 	OTIR			;SEND THE COMMAND
 	EI
 	POP	BC
 
-	LD	A,B             ;A = PUT COUNTER
+	LD	A,B             ;A = OUT COUNTER
 	INC	A
 	AND	NR_CMDBUF - 1	;NR_CMDBUF MUST BE A POWER OF 2
 	LD	B,A		;UPDATE THE OUT COUNTER
@@ -349,7 +350,6 @@ LINE:
 	PUBLIC	VDPHOOK
 
 VDPHOOK:
-	DI
 	LD	HL,SPRITEBUF
 	LD	DE,SPRITEATT
 	LD	BC,32*4
