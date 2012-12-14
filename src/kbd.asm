@@ -1,8 +1,6 @@
 	INCLUDE	SHIKE2.INC
 	INCLUDE	BIOS.INC
 
-	PUBLIC	KBDHOOK,GETCHAR
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: 	E = KEYCODE + UPPER BIT (UP/DOWN)
 
@@ -30,16 +28,35 @@ KEYEVENT:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;OUTPUT:	A = KEYCODE
+
+	CSEG
+	PUBLIC	GETCHAR
+
+GETCHAR:
+	CALL	GETCH
+	JR	Z,.SLEEP
+	BIT	7,A
+	JR	NZ,GETCHAR      ;KEY RELEASE, WE ONLY WANT PRESS
+	RET
+
+.SLEEP:	EI
+	HALT                    ;SLEEP A FRAME
+	JR	GETCHAR         ;AND TRY AGAIN
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;OUTPUT:      A = KEYCODE OR 0 IF EMPTY QUEUE
 
 	CSEG
+        PUBLIC	GETCH
 
-GETCHAR:
-	DI
+GETCH:
+	DI			;TODO: USE A MUTEX VARIABLE INSTEAD OF DI
 	LD	BC,(QPOINTER)	;C = IN, B = OUT
 	LD	A,B
 	CP	C
 	JR	NZ,.GETCH
+        EI
 	XOR	A		;NO DATA IN THE QUEUE
 	RET			;Z FLAG IS RESET
 
@@ -59,6 +76,7 @@ GETCHAR:
 	LD	(QPOINTER),BC
 	LD	A,(HL)
 	OR	A		;SET Z FLAG
+        EI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -99,6 +117,7 @@ SCANROW:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+        PUBLIC	KBDHOOK
 
 KBDHOOK:
 	DI
