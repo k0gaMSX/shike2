@@ -116,6 +116,17 @@ COLORSPRITE:
 	CALL	LDIRVM
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		C = NUMBER SPRITE
+
+	CSEG
+	PUBLIC	HIDESPRITE
+
+HIDESPRITE:
+	LD	B,C
+	LD	DE,217
+	;CONTINUE IN PUTSPRITE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = NUMBER SPRITE
 ;             B = NUMBER PATTERN
 ;             D = X
