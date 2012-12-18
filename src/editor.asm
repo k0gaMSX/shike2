@@ -245,8 +245,7 @@ PRINTNUM:
 	RET
 
 	DSEG
-
-.NUMBERBUF:	DB	3
+.NUMBERBUF:	DS	3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		A = NUMBER
