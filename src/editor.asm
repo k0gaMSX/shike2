@@ -10,7 +10,7 @@ PATTERNPAG	EQU	1
 
 NUMBERPAT	EQU	8
 NUMBERSPR	EQU	3
-NUMBERCOORD	EQU	06060H
+NUMBERCOORD	EQU	06080H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	CSEG
