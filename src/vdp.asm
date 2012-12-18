@@ -146,7 +146,7 @@ DELSPR:	LD	C,32
 
 HIDESPRITE:
 	LD	B,C
-	LD	DE,217
+	LD	DE,218
 	;CONTINUE IN PUTSPRITE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -159,6 +159,7 @@ HIDESPRITE:
 	PUBLIC	PUTSPRITE
 
 PUTSPRITE:
+	DEC	E			;SPRITES ARE LOCATED -1
 	LD	L,C
 	LD	H,0
 	ADD	HL,HL
