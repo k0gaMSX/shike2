@@ -1,11 +1,8 @@
-DEP = shike2.rel vdp.rel kbd.rel bios.rel debug.rel editor.rel
-REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,debug.rel,editor.rel
+DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel
+REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel
 H = shike2.inc bios.inc dos.inc
 
 all : shike2.com
-
-debug.rel : debug.asm $H
-	as debug.asm
 
 vdp.rel : vdp.asm $H
 	as vdp.asm
