@@ -121,6 +121,23 @@ COLORSPRITE:
 	LD	BC,16
 	CALL	LDIRVM
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	DELSPR
+
+DELSPR:	LD	C,32
+
+.DLOOP:	DEC	C
+	PUSH	BC
+	CALL	HIDESPRITE
+	POP	BC
+	LD	A,C
+	OR	A
+	JR	NZ,.DLOOP
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		C = NUMBER SPRITE
 
