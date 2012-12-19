@@ -364,6 +364,40 @@ VDPSYNC:
 	CALL	VDPEND
 	JR	VDPSYNC
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		D = ORIGIN X
+;		E = ORIGIN Y
+;		B = NUMBER OF DOTS IN X
+;		C = NUMBER OF DOTS IN Y
+;		(ACPAGE) = PAGE
+;		(FORCLR) = COLOR
+;		(CMDARG) = VDP COMMAND ARGUMENT
+	CSEG
+	PUBLIC	RECTANGLE
+
+RECTANGLE:
+	LD	IY,CMDBUF
+	LD	(IY+4),D	;ORIGIN X
+	LD	(IY+5),0
+	LD	(IY+6),E	;ORIGIN Y
+	LD	A,(ACPAGE)
+	LD	(IY+7),A	;PAGE
+	LD	(IY+8),B	;NX
+	LD	(IY+9),0
+	LD	(IY+10),C	;NY
+	LD	(IY+11),0
+	LD	A,(FORCLR)
+	LD	E,A
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR	E
+	LD	(IY+12),A	;CLR
+	LD	A,(CMDARG)	;ARG
+	LD	(IY+13),A
+	LD	(IY+14),OPHMMV	;CMD
+	JP	VDPCMD
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		D = ORIGIN X
