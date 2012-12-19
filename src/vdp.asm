@@ -55,11 +55,60 @@ INITVDP:
 	LD	(LOGOP),A
 	XOR	A
 	LD	(CMDARG),A	;DEFAULT VALUE OF VDP ARGUMENT
+	LD	A,1
+	LD	(DPPAGE),A
+	CALL	RSTPLT		;RESTORE PALLETE FROM PAGE 1
+	XOR	A
 	LD	(ACPAGE),A	;INITIALISE THE PAGES TO CORRECT VALUES
 	LD	(DPPAGE),A
 	CALL	SETPAGE
 
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		(DCPAGE) = ACTUAL DISPLAY PAGE
+;		SCR5PAL = VRAM ADDRESS WHERE IS STORED THE PALLETE
+	CSEG
+	PUBLIC	RSTPLT
+
+RSTPLT:	LD	HL,SCR5PAL
+	LD	A,(DPPAGE)
+	RRCA
+	AND	80H
+	OR	H
+	LD	H,A
+	LD	DE,PALBUF
+	LD	BC,32
+	CALL	LDIRMV
+	LD	HL,PALBUF
+	;CONTINUE IN SETPAL
+
+	DSEG
+PALBUF:	DS	32
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		HL = PALLETE
+
+	CSEG
+	PUBLIC	SETPAL
+
+SETPAL:	LD	BC,(VDPW)
+	INC	C
+	INC	C
+	LD	B,32
+	EXX
+	LD	BC,(VDPW)
+	INC	C
+	XOR	A
+	LD	B,128+16
+	DI
+	OUT	(C),A
+	OUT	(C),B
+	EXX
+	OTIR
+	EI
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       (ACPAGE) = ACTUAL PAGE
 ;             (DPPAGE) = DISPLAY PAGE
