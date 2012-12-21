@@ -245,6 +245,50 @@ SELPATTERN:
 	INC	D
 	JR	.PATLOOP
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		DE = TILE POSITION WE WANT MARK
+
+	CSEG
+	EXTRN	LINE
+
+MARKTILE:
+	LD	A,E			;CHECK IF THE TILE IS VISIBLE
+	CP	NR_SCRROW
+	RET	NC
+	LD	A,D
+	CP	NR_SCRCOL
+	RET	NC
+
+	CALL	TILE2XY			;TRANSFORM IT TO COORDINATES
+	LD	A,D
+	ADD	A,15
+	LD	B,A
+	LD	C,E
+	PUSH	BC
+	CALL	LINE			;LINE ORIGIN-RIGTH
+
+	POP	DE
+	LD	A,E
+	ADD	A,7
+	LD	C,A
+	LD	B,D
+	PUSH	BC
+	CALL	LINE			;LINE RIGTH-UP/RIGTH
+
+	POP	DE
+	LD	A,D
+	ADD	A,-15
+	LD	B,A
+	LD	C,E
+	PUSH	BC
+	CALL	LINE			;LINE UP/RIGTH-UP/LEFT
+
+	POP	DE
+	LD	A,E
+	ADD	A,-7
+	LD	C,A
+	LD	B,D
+	JP	LINE			;LINE UP/LEFT-ORIGIN
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		A = NUMBER TO PRINT
