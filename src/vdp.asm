@@ -373,9 +373,9 @@ VDPSYNC:
 ;		(FORCLR) = COLOR
 ;		(CMDARG) = VDP COMMAND ARGUMENT
 	CSEG
-	PUBLIC	RECTANGLE
+	PUBLIC	HMMV
 
-RECTANGLE:
+HMMV:
 	LD	IY,CMDBUF
 	LD	(IY+4),D	;ORIGIN X
 	LD	(IY+5),0
@@ -398,6 +398,45 @@ RECTANGLE:
 	LD	(IY+13),A
 	LD	(IY+14),OPHMMV	;CMD
 	JP	VDPCMD
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		H = ORIGIN X
+;		L = ORIGIN Y
+;		D = DESTINE X
+;		E = DESTINE Y
+;		B = X SIZE
+;		C = Y SIZE
+;		(ACPAGE) = PAGE
+;		(CMDARG) = VDP COMMAND ARGUMENT
+;		(VDPPAGE) = VDP SOURCE PAGE
+	CSEG
+	PUBLIC	HMMM
+
+HMMM:
+	LD	IY,CMDBUF
+	LD	(IY+0),H	;<- SX
+	LD	(IY+1),0
+	LD	(IY+2),L	;<- SY
+	LD	A,(VDPPAGE)
+	LD	(IY+3),A	;<- GRAPHIC SOURCE PAGE
+	LD	(IY+4),D	;<- DX
+	LD	(IY+5),0
+	LD	(IY+6),E	;<- DY
+	LD	A,(ACPAGE)
+	LD	(IY+7),A	;ACTUAL PAGE
+	LD	(IY+8),B	;NX
+	LD	(IY+9),0
+	LD	(IY+10),C	;NY
+	LD	(IY+11),0
+	LD	A,(CMDARG)
+	LD	(IY+13),A	;ARG
+	LD	(IY+14),OPHMMM	;CMD
+	JP	VDPCMD
+
+
+	DSEG
+	PUBLIC	VDPPAGE
+VDPPAGE:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		D = ORIGIN X
