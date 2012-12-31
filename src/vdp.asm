@@ -71,7 +71,7 @@ INITVDP:
 	LD	(ACPAGE),A	;INITIALISE THE PAGES TO CORRECT VALUES
 	LD	(DPPAGE),A
 	CALL	SETPAGE
-
+	CALL	RESSCROLL	;RESET SCROLL VALUE
 	RET
 
 VDP.PAL:
@@ -122,6 +122,29 @@ SETPAL:	LD	BC,(VDPW)
 	OTIR
 	EI
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		E -> SCROLL INCREMENT
+
+	CSEG
+	PUBLIC	SCROLL,RESSCROLL
+
+RESSCROLL:
+	XOR	A
+	JR	S.SET
+
+SCROLL:	LD	A,(S.DATA)
+	ADD	A,E
+
+S.SET:	LD	(S.DATA),A
+	LD	B,A
+	LD	C,23
+	JP	WRTVDP
+
+
+	DSEG
+S.DATA:	DB	0
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       (ACPAGE) = ACTUAL PAGE
