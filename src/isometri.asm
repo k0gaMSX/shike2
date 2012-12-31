@@ -59,7 +59,7 @@ ISODIR:	DB	0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:;	(TILEINC) = UPPER -> X INCREMENT, LOWER -> Y INCREMENT
+;INPUT:		(TILEINC) = UPPER -> X INCREMENT-1, LOWER -> Y INCREMENT-1
 ;		(TILE) = INITIAL TILE
 ;		(PATTERN) = ACTUAL PATTERN
 ;		(ISODIR) = 0 -> POSITIVE (RIGTH), 1 -> NEGATIVE (LEFT)
@@ -80,7 +80,7 @@ DRAWREGION:
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:		(TILEINC) = UPPER -> X INCREMENT, LOWER -> Y INCREMENT
+;INPUT:		(TILEINC) = UPPER -> X INCREMENT-1, LOWER -> Y INCREMENT-1
 ;		(TILE) = INITIAL TILE
 ;		(ISODIR) = 0 -> POSITIVE (RIGTH), 1 -> NEGATIVE (LEFT)
 ;		(ACPAGE) = PAGE
@@ -142,7 +142,7 @@ R.HELPER:
 
 R.LOOP:	PUSH	BC
 	PUSH	DE			;LOOP OVER Y AND DRAW PARAREL ISO LINES
-	CALL	ISOLINE			;SKIP THE LINE BECAUSE X=0
+	CALL	ISOLINE
 	POP	DE
 	INC	E
 	INC	D
@@ -151,11 +151,6 @@ R.LOOP:	PUSH	BC
 	JR	NZ,R.LOOP
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:		D = X TILE POSITION
-;		E = Y TILE POSITION
-
-	CSEG
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		D = X TILE POSITION
 ;		E = Y TILE POSITION
