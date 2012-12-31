@@ -72,12 +72,9 @@ ISODIR:	DB	0
 DRAWREGION:
 	LD	A,DEFARG
 	LD	(CMDARG),A
-	LD	A,PATPAGE
-	LD	(VDPPAGE),A
 	LD	BC,(TILEINC)
 	LD	HL,DRAWTILE
 	JR	ISORECT
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		(TILEINC) = UPPER -> X INCREMENT-1, LOWER -> Y INCREMENT-1
@@ -179,11 +176,10 @@ TILE2XY:
 ;		(PATTERN) = PATTERN NUMBER
 ;		(ACPAGE) = PAGE
 ;		(CMDARG) = VDP COMMAND ARGUMENT
-;		(VDPPAGE) = VDP SOURCE PAGE
 
 
 	CSEG
-	EXTRN	HMMM
+	EXTRN	HMMM,VDPPAGE
 
 DRAWTILE:
 	CALL	ISVISIBLE
@@ -196,6 +192,8 @@ DRAWTILE:
 	LD	H,D
 	POP	DE
 	LD	BC,1008H
+	LD	A,PATPAGE
+	LD	(VDPPAGE),A
 	JP	HMMM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
