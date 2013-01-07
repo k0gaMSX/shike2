@@ -164,7 +164,7 @@ ISOCMD:	LD	A,TILPAGE
 	LD	A,(ISOTILE)
 	LD	DE,(TILE)
 	OR	A
-	JP	NZ,DRAWTILET
+	JP	NZ,DRAWMETAT
 	;CONTINUE IN DRAWREGION
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -701,6 +701,45 @@ DRAWTILE:
 	LD	(VDPPAGE),A
 	JP	HMMM
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		DE = TILE POSITION WE WANT MARK
+;		(PATTERN) = PATTERN NUMBER
+;		(ACPAGE) = PAGE
+;		(CMDARG) = VDP COMMAND ARGUMENT
+;		(METAPAT) = SIZE OF THE META PATTERN (SAME FORMAT OF TILEINC)
+
+	CSEG
+
+DRAWMETAT:
+	LD	A,(PATTERN)
+	LD	BC,(METAPAT)
+	INC	B
+	INC	C
+
+DM.Y:	PUSH	BC
+	PUSH	AF
+	PUSH	DE
+
+DM.X:	PUSH	BC			;PAINT ALL THE	PATTERNS IN THIS ROW
+	PUSH	AF
+	PUSH	DE
+	LD	(I.PATTERN),A
+	CALL	DRAWTILET
+	POP	DE
+	INC	D
+	POP	AF
+	INC	A
+	POP	BC
+	DJNZ	DM.X
+
+	POP	DE
+	INC	E
+	POP	AF			;PASS TO THE NEXT PATTERN ROW
+	ADD	A,16
+	POP	BC
+	DEC	C
+	JR	NZ,DM.Y
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		DE = TILE POSITION WE WANT MARK
