@@ -43,7 +43,7 @@ V.NO:	XOR	A			; Z = 1, VISIBLE
 MARKREGION:
 MREGION.XY:
 	LD	IY,REGXY
-	LD	HL,MARKTILE
+	LD	HL,MARKMETATIL
 	LD	(IY+0),L
 	LD	(IY+1),H
 	LD	BC,(TILEINC)
@@ -289,6 +289,16 @@ DT.MASK:PUSH	DE			;DE = TILE COORDENATES
 	LD	A,LOGTIMP
 	LD	(LOGOP),A
 	JP	LMMM			;COPY THE RESULT TO THE SCREEN
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		(METAPAT) = META PATTERN SIZE (SAME FORMAT TILEINC)
+;		DE = INITIAL TILE
+;		(ACPAGE) = PAGE
+
+MARKMETATIL:
+	LD	HL,MARKTILE
+	JR	META
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		DE = TILE POSITION WE WANT MARK
