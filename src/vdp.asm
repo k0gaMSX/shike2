@@ -168,11 +168,19 @@ SHOWPAGE:	;INPUT: B = DISPLAY PAGE
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = PATTERN NUMBER
 ;             DE = PATTERN DATA
-
+;             B = NUMBER SPRITES
 	CSEG
 	PUBLIC	SPRITE
 
 SPRITE:
+	LD	L,B
+	LD	H,0
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	PUSH	HL
 	LD	L,C
 	LD	H,0
 	ADD	HL,HL
@@ -182,17 +190,25 @@ SPRITE:
 	ADD	HL,BC
 	EX	DE,HL
 
-	LD	BC,32
+	POP	BC
 	CALL	LDIRVM
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = SPRITE NUMBER
 ;             DE = COLOUR DATA
+;             B = NUMBER SPRITES
 
 	CSEG
 	PUBLIC	COLORSPRITE
 
 COLORSPRITE:
+	LD	L,B
+	LD	H,0
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	PUSH	HL
 	LD	L,C
 	LD	H,0
 	ADD	HL,HL
@@ -203,7 +219,7 @@ COLORSPRITE:
 	ADD	HL,BC
 	EX	DE,HL
 
-	LD	BC,16
+	POP	BC
 	CALL	LDIRVM
 	RET
 
