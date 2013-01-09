@@ -82,9 +82,16 @@ VDPW:		DB	0	;VDP PORT WRITING
 	CSEG
 	PUBLIC	MSXTERM
 
-MSXTERM:
+MSXTERM:LD	C,CONST
+	CALL	BDOS
+	OR	A
 	LD	C,TERM0
-	JP	BDOS
+	JP	Z,BDOS
+
+	LD	C,INNOE
+	CALL	BDOS
+	JR	MSXTERM
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		C = REGISTER NUMBER
 ;		B = VALUE
