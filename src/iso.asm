@@ -12,6 +12,8 @@ MASKLEFTDW	EQU	3		;MASK LEFT DOWN
 NOMASK		EQU	15		;NO USE ANY MASK
 MASKTRANS	EQU	16		;COPY ONLY WITH TRANSPARENT COLOR
 
+MARKCOLOR	EQU	12
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		DE = TILE
 

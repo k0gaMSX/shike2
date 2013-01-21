@@ -10,6 +10,7 @@ CUADPAT		EQU	NR_ISOCMD*4
 NUMBERPAT	EQU	16
 NUMBERCOORD	EQU	06080H
 
+GRIDCOLOR	EQU	6
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	CSEG
