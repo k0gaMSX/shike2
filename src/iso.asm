@@ -51,6 +51,10 @@ DRAWREGION:
 	JP	Z,DXZREGION
 	CP	ISOYZ
 	JP	Z,DYZREGION
+	CP	ISOXZ_
+	JP	Z,DXZREGION_
+	CP	ISOYZ_
+	JP	Z,DYZREGION_
 	RET
 
 MARKREGION:
@@ -61,7 +65,39 @@ MARKREGION:
 	JP	Z,MXZREGION
 	CP	ISOYZ
 	JP	Z,MYZREGION
+	CP	ISOXZ_
+	JP	Z,MXZREGION_
+	CP	ISOYZ_
+	JP	Z,MYZREGION_
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+;	  I
+;	 II
+;	III
+;	III
+;	III
+;	II
+;	I
+
+	CSEG
+
+DXZREGION_:				;SIMILAR TO DXZREGION BUT WITHOUT MASKS
+	LD	HL,DRAWMTILE
+	JR	XZ_.DO
+
+MXZREGION_:
+	LD	HL,MARKMETATIL
+
+XZ_.DO:	LD	(XZ.TILESI),HL
+	CALL	XZREGION
+	LD	BC,(TILEINC)		;PAINT TILES I
+	LD	DE,(TILE)
+	JP	DTILESI
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -97,6 +133,32 @@ XZREGION:
 	LD	(DR.INCX),A		;INTO A XZ REGION
 	LD	A,1
 	LD	(DR.INCY),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+;	I
+;	II
+;	III
+;	III
+;	 II
+;	  I
+
+	CSEG
+
+DYZREGION_:				;SIMILAR TO DYZREGION BUT WITHOUT MASKS
+	LD	HL,DRAWMTILE
+	JR	YZ_.DO
+
+MYZREGION_:
+	LD	HL,MARKMETATIL
+
+YZ_.DO:	LD	(XZ.TILESI),HL
+	CALL	YZREGION
+	LD	BC,(TILEINC)		;PAINT TILES I
+	LD	DE,(TILE)
+	JR	DTILESI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
