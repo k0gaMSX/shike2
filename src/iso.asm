@@ -55,6 +55,8 @@ DRAWREGION:
 	JP	Z,DXZREGION_
 	CP	ISOYZ_
 	JP	Z,DYZREGION_
+	CP	ISOTILE
+	JP	Z,DISOTILE
 	RET
 
 MARKREGION:
@@ -69,6 +71,33 @@ MARKREGION:
 	JP	Z,MXZREGION_
 	CP	ISOYZ_
 	JP	Z,MYZREGION_
+	CP	ISOTILE
+	JP	Z,MISOTILE
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;
+;	III
+;	III
+;	III
+;
+
+	CSEG
+DISOTILE:				;SIMILAR TO DXZREGION BUT WITHOUT MASKS
+	LD	HL,DRAWMISOTILE
+	JR	ISO.DO
+
+MISOTILE:
+	LD	HL,MARKMTILE
+
+ISO.DO:	LD	(XZ.TILESI),HL
+	CALL	XZREGION
+	LD	BC,(TILEINC)		;PAINT TILES I
+	LD	B,1
+	LD	DE,(TILE)
+	JP	DTILESI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -582,8 +611,19 @@ DT.MASK:PUSH	DE			;DE = TILE COORDENATES
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		(METAPAT) = META PATTERN Y SIZE
+;		(ACPAGE) = PAGE
+
+	CSEG
+
+MTILE:
+	LD	DE,(TILE)
+	;CONTINUE IN MARKMTILE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		(METAPAT) = META PATTERN Y SIZE
 ;		DE = INITIAL TILE
 ;		(ACPAGE) = PAGE
+	CSEG
 
 MARKMTILE:
 	LD	HL,MARKTILE
@@ -599,11 +639,16 @@ MARKMTILE:
 	CSEG
 	PUBLIC	DRAWMTILE
 
+DRAWMISOTILE:
+	LD	A,MASKTRANS
+	JR	DMTILE1
+
 DRAWMTILE:
+	LD	A,NOMASK
+
+DMTILE1:LD	(MASK),A
 	LD	A,(PATTERN)
 	LD	(I.PATTERN),A
-	LD	A,NOMASK
-	LD	(MASK),A
 	LD	HL,DT
 	JP	META
 
