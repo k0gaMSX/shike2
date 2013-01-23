@@ -1,8 +1,11 @@
-DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel iso.rel
-REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel,iso.rel
+DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel iso.rel geometry.rel
+REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel,iso.rel,geometry.rel
 ASFLAGS = -t
 
 all : shike2.com
+
+geometry.rel : geometry.asm vdp.inc bios.inc
+	as $(ASFLAGS) geometry.asm
 
 iso.rel : iso.asm iso.inc shike2.inc bios.inc
 	as $(ASFLAGS) iso.asm
@@ -19,7 +22,7 @@ bios.rel : bios.asm dos.inc
 kbd.rel : kbd.asm shike2.inc bios.inc
 	as $(ASFLAGS) kbd.asm
 
-editor.rel : editor.asm shike2.inc bios.inc iso.inc kbd.inc vdp.inc
+editor.rel : editor.asm shike2.inc bios.inc iso.inc kbd.inc
 	as $(ASFLAGS) editor.asm
 
 shike2.com : $(DEP)
