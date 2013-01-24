@@ -4,7 +4,7 @@ ASFLAGS = -t
 
 all : shike2.com
 
-geometry.rel : geometry.asm vdp.inc bios.inc
+geometry.rel : geometry.asm vdp.inc bios.inc kbd.inc geometry.inc
 	as $(ASFLAGS) geometry.asm
 
 mapper.rel : mapper.asm mapper.inc shike2.inc bios.inc

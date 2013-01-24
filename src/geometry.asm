@@ -1,3 +1,5 @@
+	INCLUDE	KBD.INC
+	INCLUDE GEOMETRY.INC
 	INCLUDE BIOS.INC
 	INCLUDE VDP.INC
 
@@ -10,8 +12,7 @@ GRIDCOLOR	EQU	6
 	PUBLIC	GRID
 	EXTRN	LINE,VDPSYNC
 
-GRID:
-	LD	A,GRIDCOLOR
+GRID:	LD	A,GRIDCOLOR
 	LD	(FORCLR),A
 	LD	A,LOGIMP
 	LD	(LOGOP),A
@@ -76,5 +77,66 @@ GRID:
 	DB	  0,131,  255,  4,      0,211,  255, 84,    0, 8,  0, 8
 	DB	 16,211,  255, 92,    240,211,  255,204,   16, 0,  0, 8
 .GDATAEND:
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = KEY
+;OUTPUT: A = DIRECTION
+;	 CF = 1 WHEN E IS NOT A DIRECTIONAL KEY
+
+	CSEG
+	PUBLIC	KEY2DIR
+
+KEY2DIR:SUB	KB_RIGTH
+	JR	C,K.NODIR
+	CP	D.NODIR
+	JR	NC,K.NODIR
+	OR	A
+	RET
+
+K.NODIR:LD	A,D.NODIR
+	OR	A
+	SCF
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = DIRECTION
+;	DE = COORDENATE
+;OUTPUT:DE = COORDENATE AFTER MOVEMENT
+
+	CSEG
+	PUBLIC	MOVISO,MOVEUC
+
+MOVISO:	LD	HL,M.ISO
+	JR	MOVE
+
+MOVEUC:	LD	HL,M.EUC
+
+MOVE:	CP	D.NODIR
+	RET	Z
+	ADD	A,A
+	ADD	A,L
+	JR	NC,M.1
+	INC	H
+M.1:	LD	L,A
+
+	LD	A,(HL)
+	ADD	A,D
+	LD	D,A
+
+	INC	HL
+	LD	A,(HL)
+	ADD	A,E
+	LD	E,A
+	RET
+
+
+;	        RIGTH   DOWN   UP     LEFT
+M.ISO:	DB	1, 1, -1, 1,  1,-1,  -1,-1
+M.EUC:	DB	1, 0,  0, 1,  0,-1,  -1, 0
+
+
+
+
 
 
