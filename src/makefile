@@ -22,7 +22,7 @@ bios.rel : bios.asm dos.inc
 kbd.rel : kbd.asm shike2.inc bios.inc
 	as $(ASFLAGS) kbd.asm
 
-editor.rel : editor.asm shike2.inc bios.inc mapper.inc kbd.inc
+editor.rel : editor.asm shike2.inc bios.inc mapper.inc kbd.inc geometry.inc
 	as $(ASFLAGS) editor.asm
 
 shike2.com : $(DEP)
