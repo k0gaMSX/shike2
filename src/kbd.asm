@@ -57,7 +57,7 @@ GETCH:
 	LD	A,B
 	CP	C
 	JR	NZ,.GETCH
-        EI
+	EI
 	XOR	A		;NO DATA IN THE QUEUE
 	RET			;Z FLAG IS RESET
 
@@ -77,7 +77,7 @@ GETCH:
 	LD	(QPOINTER),BC
 	LD	A,(HL)
 	OR	A		;SET Z FLAG
-        EI
+	EI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

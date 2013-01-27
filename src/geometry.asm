@@ -82,7 +82,7 @@ GRID:	LD	A,GRIDCOLOR
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = KEY
 ;OUTPUT: A = DIRECTION
-;	 CF = 1 WHEN E IS NOT A DIRECTIONAL KEY
+;	 CY = 1 WHEN E IS NOT A DIRECTIONAL KEY
 
 	CSEG
 	PUBLIC	KEY2DIR
@@ -95,7 +95,6 @@ KEY2DIR:SUB	KB_RIGTH
 	RET
 
 K.NODIR:LD	A,D.NODIR
-	OR	A
 	SCF
 	RET
 
