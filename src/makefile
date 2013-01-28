@@ -1,8 +1,14 @@
-DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel mapper.rel geometry.rel
-REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel,mapper.rel,geometry.rel
+DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel mapper.rel geometry.rel mob.rel game.rel
+REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel,mapper.rel,geometry.rel,mob.rel,game.rel
 ASFLAGS = -t
 
 all : shike2.com
+
+game.rel : game.asm shike2.inc bios.inc
+	as $(ASFLAGS) game.asm
+
+mob.rel : mob.asm bios.inc vdp.inc shike2.inc
+	as $(ASFLAGS) mob.asm
 
 geometry.rel : geometry.asm vdp.inc bios.inc kbd.inc geometry.inc
 	as $(ASFLAGS) geometry.asm
