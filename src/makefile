@@ -1,5 +1,3 @@
-DEP = shike2.rel vdp.rel kbd.rel bios.rel editor.rel mapper.rel geometry.rel mob.rel game.rel
-REL = shike2.rel,vdp.rel,kbd.rel,bios.rel,editor.rel,mapper.rel,geometry.rel,mob.rel,game.rel
 ASFLAGS = -t
 
 all : shike2.com
@@ -31,8 +29,9 @@ kbd.rel : kbd.asm shike2.inc bios.inc
 editor.rel : editor.asm shike2.inc bios.inc mapper.inc kbd.inc geometry.inc
 	as $(ASFLAGS) editor.asm
 
-shike2.com : $(DEP)
-	ld /R4000 /P4000 /D6000 /X /Gmain $(REL)
+shike2.com : shike2.rel vdp.rel kbd.rel bios.rel editor.rel mapper.rel
+geometry.rel mob.rel game.rel char.rel
+	ld /R4000 /P4000 /D6000 /X /Gmain & <ld.cmd
 
 clean :
 	del *.rel
