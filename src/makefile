@@ -2,6 +2,9 @@ ASFLAGS = -t
 
 all : shike2.com
 
+char.rel : char.asm
+	as $(ASFLAGS) char.asm
+
 game.rel : game.asm shike2.inc bios.inc
 	as $(ASFLAGS) game.asm
 

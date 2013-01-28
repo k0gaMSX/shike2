@@ -162,8 +162,56 @@ M.1:	LD	L,A
 M.ISO:	DB	1, 1, -1, 1,  1,-1,  -1,-1
 M.EUC:	DB	1, 0,  0, 1,  0,-1,  -1, 0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = WORLD COORDENATES
+;	BC = SCREEN COORDENATES OF P1 (S(P1))
+;OUTPUT:HL = X SCREEN COORDENATES (IT IS NEEDED 16 BIT FOR NEGATIVE NUMBERS)
+;	DE = Y SCREEN COORDENATES (IT IS NEEDED 16 BIT FOR NEGATIVE NUMBERS)
+;
+;	   W                 S
+;
+;			     1
+;			 --------
+;	1----2		 |  / \ |
+;	|    |		 | /   \|
+;	|    |	->	3| \   /| 2
+;	|    |		 |  \ / |
+;	3----4		 --------
+;			     4
+;
+; W(P1) = (0,0)
+; D(P1->P2) = Xs + 4, Ys + 2 (RIGTH)
+; D(P1->P3) = Xs - 4, Ys + 2 (DOWN)
+; Xs = S(P1x) + (Xw-Yw)*4
+; Ys = S(P1y) + (Xw+Yw)*2
 
+	CSEG
+	PUBLIC	WRLD2SCR
 
+WRLD2SCR:
+	PUSH	DE			;PUSH PARAMETER COORDENATES
+	LD	L,D
+	LD	D,0
+	LD	H,D
+	OR	A
+	SBC	HL,DE			;HL = Xw-Yw
+	ADD	HL,HL
+	ADD	HL,HL			;HL = (Xw-Yw)*4
+	LD	E,B
+	ADD	HL,DE			;HL = (Xw-Yw)*4 + S(P1x) = Xs
+	POP	DE			;POP PARAMETER COORDENATES
+
+	PUSH	HL			;PUSH Xs
+	LD	L,D
+	LD	D,0
+	LD	H,D
+	ADD	HL,DE			;HL = Xw+Yw
+	ADD	HL,HL			;HL = (Xw+Yw)*2
+	LD	E,C
+	ADD	HL,DE			;HL = (Xw+Yw)*2 + S(P1y) = Ys
+	EX	DE,HL			;DE = Ys
+	POP	HL			;HL = Xs
+	RET
 
 
 
