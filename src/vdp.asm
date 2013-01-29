@@ -265,6 +265,28 @@ DELSPR:	LD	C,32
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:       C = NUMBER SPRITE
+;             B = NUMBER PATTERN
+;             D = X
+;             E = Y
+
+	CSEG
+	PUBLIC	PUT2SPRITE
+
+PUT2SPRITE:
+	PUSH	BC
+	PUSH	DE
+	CALL	PUTSPRITE
+	POP	DE
+	LD	A,8
+	ADD	A,D
+	LD	D,A
+	POP	BC
+	INC	B
+	INC	C
+	JR	PUTSPRITE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		C = NUMBER SPRITE
 
 	CSEG
