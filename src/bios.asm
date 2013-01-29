@@ -273,12 +273,14 @@ FILVRM:	PUSH	HL
 	LD	A,(VDPW)
 	LD	C,A		;C = VDP WRITING PORT
 
+	DI
 .FILLOOP:			;IS IS SLOW?, YEAH, A LOT. IF YOU WANT
 	OUT	(C),B		;SPEED THEN DON'T USE IT AND GET AN UNROLL
 	DEC	HL		;VERSION
 	LD	A,L
 	OR	H
 	JP	NZ,.FILLOOP
+	EI
 
 	POP	HL
 	RET
@@ -312,12 +314,14 @@ CLRSPR: LD	HL,SPRITEGEN
 	LD	L,A
 	LD	H,217
 
+	DI
 .CLOOP:	OUT	(C),H		; Y = 217
 	OUT	(C),L		; X = 0
 	OUT	(C),A		; PATTERN = NUMBER OF PLANE
 	OUT	(C),L		; COLOUR = 0
 	INC	A
 	DJNZ	.CLOOP
+	EI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -342,9 +346,11 @@ LDIRVM:	EX	DE,HL		;HL = VRAM ADDRESS
 	JR	Z,.VLOOP
 	INC	D
 
+	DI
 .VLOOP:	OTIR			;IS IT SLOW? READ THE COMMENT FILVRM
 	DEC	D
 	JR	NZ,.VLOOP
+	EI
 
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -368,9 +374,11 @@ LDIRMV:	CALL	NSETRD
 	JR	Z,.MLOOP
 	INC	D
 
+	DI
 .MLOOP:	INIR			;IS IT SLOW? READ THE COMMENT FILVRM
 	DEC	D
 	JR	NZ,.MLOOP
+	EI
 
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
