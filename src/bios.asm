@@ -35,21 +35,6 @@ SPRITEATT	EQU	07600H
 SPRITECOL	EQU	07400H
 SPRITEGEN	EQU	07800H
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:		HL = ADDRESS WHERE WRITE 0
-;		BC = NUMBER OF BYTES
-;		A = BYTE TO WRITE (IN THE CASE OF MEMSET)
-	CSEG
-	PUBLIC	BZERO,MEMSET
-
-BZERO:	XOR	A
-MEMSET:	LD	E,L
-	LD	D,H
-	INC	DE
-	DEC	BC
-	LD	(HL),A
-	LDIR
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;OUTPUT:	Z = 0 WHEN EXITS SOME PROBLEM WITH THIS MSX

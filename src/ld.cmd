@@ -1,3 +1,3 @@
-shike2,vdp,kbd,bios,editor,mapper,geometry,mob,game,char
+shike2,vdp,kbd,bios,editor,mapper,geometry,mob,game,char,stdlib
 
 
