@@ -887,6 +887,7 @@ RESETMAP:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	(ZVALUE) = ACTUAL Z VALUE
 ;	(MAPCMD) = ACTUAL MAPPER COMMAND
+;	DE = ACTUAL TILE
 ;OUTPUT:A = Z VALUE
 
 	CSEG
@@ -895,13 +896,34 @@ RESETMAP:
 CALZVAL:LD	A,(MAPCMD)
 	CP	MAPXY
 	JR	Z,CZ.XY
-	LD	A,(ZVALUE)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;	X
+;	X
+;	X	IT IS A CONSTANT VALUE THAT ONLY DEPENDS OF INITIAL TILE
+;	\
+;	\
+
+CZ.TILE:LD	A,(ZVALUE)
 	LD	HL,(I.TILE)
 	ADD	A,L
-	SUB	E
+	INC	A
 	RET
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	  X
+;	 X X
+;	X   X
+;	 X X\	WE HAVE TO ADD THE ZVALUE TO THE Y OF EACH TILE
+;	  X \
+;	  \ \
+;	  \/
+
+
 CZ.XY:	LD	A,(ZVALUE)
+	ADD	A,E
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -977,13 +999,11 @@ Y.TILE:	DW	0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDENATES OF THE UPPER CORNER OF REGION
 ;	BC = SIZE
-;	A = Z VALUE
 
 	CSEG
 	PUBLIC	REMAP
 
-REMAP:	LD	(R.ZVALUE),A
-	PUSH	DE
+REMAP:	PUSH	DE
 	PUSH	DE
 
 	PUSH	BC
@@ -999,14 +1019,13 @@ REMAP:	LD	(R.ZVALUE),A
 	CALL	XY2TILE			;CONVERT COORDENATES FROM XY SPACE
 	POP	HL			;TO TILE SPACE
 	CALL	ADJUSTBC
+	LD	A,E
+	ADD	A,C
+	LD	(R.ZVALUE),A		;ADD TILE Y TO THE Z VALUE
 
 	PUSH	DE
 	CALL	ADDRZVAL		;POINT THE INITIAL TILE STACK
 	POP	DE
-
-	LD	A,(R.ZVALUE)		;Z VALUE IS INCREMENTED TO CORNER VALUE
-	ADD	A,C
-	LD	(R.ZVALUE),A
 
 R.LOOPY:PUSH	BC			;AND NOW LOOP OVER THE Y
 	PUSH	DE
@@ -1024,8 +1043,6 @@ R.LOOPX:LD	(I.TILE),DE		;AND NOW LOOP OVER THE X
 	POP	BC
 	DJNZ	R.LOOPX
 
-	LD	HL,R.ZVALUE		;DECREMENT Z VALUE
-	DEC	(HL)
 	POP	HL			;POINT HL TO NEXT ROW
 	LD	DE,ZROWSIZ
 	ADD	HL,DE
@@ -1046,7 +1063,7 @@ S.LOOP:	LD	A,(HL)
 	CP	NOZVALUE
 	RET	Z			;RETURN WHEN EMPTY STACK
 	CP	C
-	RET	C			;RETURN WHEN Z VALUE IS SMALLER
+	RET	C			;RETURN WHEN Z VALUE IS EQUAL OR SMALLER
 
 	PUSH	HL
 	PUSH	BC
