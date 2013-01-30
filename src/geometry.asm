@@ -132,12 +132,16 @@ K.NODIR:LD	A,D.NODIR
 ;OUTPUT:DE = COORDENATE AFTER MOVEMENT
 
 	CSEG
-	PUBLIC	MOVISO,MOVEUC,MOVIEUC
+	PUBLIC	MOVISO,MOVEUC,MOVIEUC,MOVIYEUC
 
 MOVISO:	LD	HL,M.ISO
 	JR	MOVE
 
-MOVIEUC:LD	HL,M.EUC_
+MOVIEUC:LD	HL,M.IEUC
+	JR	MOVE
+
+MOVIYEUC:
+	LD	HL,M.IYEUC
 	JR	MOVE
 
 MOVEUC:	LD	HL,M.EUC
@@ -164,7 +168,8 @@ M.1:	LD	L,A
 ;	        RIGTH   DOWN   UP     LEFT
 M.ISO:	DB	1, 1, -1, 1,  1,-1,  -1,-1
 M.EUC:	DB	1, 0,  0, 1,  0,-1,  -1, 0
-M.EUC_:	DB     -1, 0,  0,-1,  0, 1,   1, 0
+M.IEUC:	DB     -1, 0,  0,-1,  0, 1,   1, 0
+M.IYEUC:DB	1, 0,  0,-1,  0, 1,  -1, 0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = WORLD COORDENATES
