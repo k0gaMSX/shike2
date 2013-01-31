@@ -1,4 +1,54 @@
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL
+
+	PUBLIC	PTRCALL
+
+PTRCALL:JP	(HL)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL
+;	A
+
+	PUBLIC	ARYHL
+
+ARYHL:	ADD	A,A
+	CALL	ADDAHL
+	;CONTINUE IN PTRHL
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL
+	PUBLIC	PTRHL
+
+PTRHL:	LD	A,(HL)
+	INC	HL
+	LD	H,(HL)
+	LD	L,A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL
+;	A
+	PUBLIC	ADDAHL
+
+ADDAHL:	ADD	A,L
+	LD	L,A
+	RET	NC
+	INC	H
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = JUMP TABLE
+;       A = ELEMENT OF THE TABLE
+
+	PUBLIC	SWTCH
+
+SWTCH:	CALL	ARYHL
+	PUSH	HL
+	EX	AF,AF'
+	EXX
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		A = NUMBER
 ;		DE = OUTPUT BUFFER

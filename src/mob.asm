@@ -30,13 +30,14 @@ MOB.SIZ		EQU	14
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	CSEG
+	EXTRN	PTRCALL
 
 FOREACH:LD	IX,BUFFER
 	LD	B,NR_MOBS
 
 F.LOOP:	PUSH	BC
 	PUSH	HL
-	CALL	F.CALL
+	CALL	PTRCALL
 	POP	HL
 	POP	BC
 
@@ -44,9 +45,6 @@ F.LOOP:	PUSH	BC
 	ADD	IX,DE
 	DJNZ	F.LOOP
 	RET
-
-F.CALL:	JP	(HL)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;HL = X DESTINE
