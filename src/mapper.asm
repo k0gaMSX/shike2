@@ -886,39 +886,64 @@ RESETMAP:
 ;OUTPUT:A = Z VALUE
 
 	CSEG
-	PUBLIC	CALZVAL
 
 CALZVAL:LD	A,(MAPCMD)
 	CP	MAPXY
-	JR	Z,CZ.XY
+	JR	NZ,CZ.TILE
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	  X
+;	 X X
+;	X   X
+;	 X X|	WE HAVE TO ADD THE ZVALUE TO THE Y OF EACH TILE
+;	  X |
+;	  | |
+;	  |/
+
+	LD	A,(ZVALUE)
+	ADD	A,E
+	RET
+;
+
+CZ.TILE:CP	MAPTILE
+	JR	NZ,CZ.VERT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ;	X
 ;	X
 ;	X	IT IS A CONSTANT VALUE THAT ONLY DEPENDS OF INITIAL TILE
-;	\
-;	\
+;	|	AND INITIAL Z VALUE
+;	|
 
-CZ.TILE:LD	A,(ZVALUE)
+	LD	A,(ZVALUE)
 	LD	HL,(I.TILE)
 	ADD	A,L
 	INC	A
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;	|\
+;	| \
+;       |  |
+;	|\ |	THE ZVALUE IN THE FIRST ROW IS THE SUM OF INITIAL Z VALUE AND
+;	| \|	INITIAL Y, AND IN LATER ROWS THE ZVALUE IS INCREASED IN THE
+;       \  |	SAME VALUE THAT X IS INCREASED OR DECREASED
+;	 \ |
+;	  \|
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;	  X
-;	 X X
-;	X   X
-;	 X X\	WE HAVE TO ADD THE ZVALUE TO THE Y OF EACH TILE
-;	  X \
-;	  \ \
-;	  \/
-
-
-CZ.XY:	LD	A,(ZVALUE)
-	ADD	A,E
+CZ.VERT:LD	HL,(I.TILE)
+	LD	A,H
+	SUB	D
+	LD	DE,(METAPAT)
+	JP	M,CZ.V1
+	NEG
+CZ.V1:	ADD	A,L
+	LD	L,A
+	LD	A,(ZVALUE)
+	ADD	A,L
+	INC	A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
