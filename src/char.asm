@@ -16,22 +16,63 @@ CHAR.PAT	EQU	6
 CHAR.SIZ	EQU	7
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = FUNCTION POINTER
+
+	CSEG
+	EXTRN	PTRCALL
+
+FOREACH:LD	IX,BUFFER
+	LD	B,NR_CHARS
+
+F.LOOP:	PUSH	BC
+	PUSH	HL
+	CALL	PTRCALL
+	POP	HL
+	POP	BC
+
+	LD	DE,CHAR.SIZ
+	ADD	IX,DE
+	DJNZ	F.LOOP
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	PUBLIC	INITCHAR
-	EXTRN	MEMSET
+	EXTRN	BZERO
 
 INITCHAR:
-	LD	B,NR_CHARS
-	LD	IX,BUFFER
-	LD	DE,CHAR.SIZ
-	XOR	A
+	LD	HL,BUFFER
+	LD	BC,CHAR.SIZ*NR_CHARS
+	CALL	BZERO
+	LD	HL,I.INIT
+	CALL	FOREACH
+	JP	NEWCHAR
 
-I.LOOP:	LD	(IX+CHAR.X),A
-	LD	(IX+CHAR.Y),A
-	LD	(IX+CHAR.DIR),D.NODIR
+I.INIT:	LD	(IX+CHAR.DIR),D.NODIR
+	LD	(IX+CHAR.MAP),-1
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	NEWCHAR
+
+NEWCHAR:LD	IX,BUFFER
+	LD	B,NR_CHARS
+	LD	A,-1
+
+N.LOOP:	CP	(IX+CHAR.MAP)
+	JR	Z,N.FOUND
+	LD	DE,CHAR.SIZ
 	ADD	IX,DE
-	DJNZ	I.LOOP
+	DJNZ	N.LOOP
+	LD	HL,0
+	RET				;TODO: HANDLE OVERRUN
+
+N.FOUND:LD	(IX+CHAR.MAP),0		;REMOVE FROM FREE LIST
+	LD	L,IXL
+	LD	H,IXU
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
