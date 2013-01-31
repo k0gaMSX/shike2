@@ -377,6 +377,23 @@ D.SMALL:	DW	0
 D.ACTUAL:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO MOB
+
+	CSEG
+	EXTRN	REMAP
+
+REMAP_:
+	LD	A,(IX+MOB.Y)
+	CP	-1
+	RET	Z
+	LD	E,A
+	LD	D,(IX+MOB.X)
+	LD	E,(IX+MOB.Y)
+	LD	B,(IX+MOB.XSIZ)
+	LD	C,(IX+MOB.YSIZ)
+	JP	REMAP
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: (ACPAGE) = ACTION PAGE
 ;	(DPPAGE) = DISPLAY PAGE
 
@@ -388,6 +405,8 @@ NEWFRAME:
 	LD	HL,ERASE
 	CALL	FOREACH		;RESTORE BACKGROUND OF ALL THE MOBS
 	CALL	DRAWMOBS	;DRAW THE MOBS
+	LD	HL,REMAP_
+	CALL	FOREACH		;RESTORE PART OF BACKGROUND
 	CALL	ENGINE
 	CALL	VDPSYNC		;WAIT TO THE VDP
 
