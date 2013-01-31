@@ -128,6 +128,41 @@ K.NODIR:LD	A,D.NODIR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = DIRECTION
+;	HL = X COORDENATE
+;	DE = Y COORDENATE
+
+	CSEG
+	PUBLIC	MOV16ISO
+	EXTRN	ADDAHL
+
+MOV16ISO:
+	PUSH	DE		;THIS FUNCTION IS USED FOR MOVING THINGS IN
+	EX	DE,HL		;THE SCREEN, 1/4 OF TILE ON EACH FRAME.
+	LD	HL,M16.D	;SCREEN COORDENATES ARE 16 BIT VALUES
+	ADD	A,A		;AND THE INCREMENTS ARE DIFFERENT OF
+	ADD	A,A		;1, SO WE CAN NOT USE THE USUAL MOVE FUNCTIONS
+	CALL	ADDAHL
+	LD	C,(HL)
+	INC	HL
+	LD	B,(HL)
+	INC	HL
+	EX	DE,HL
+	ADD	HL,BC
+	EX	DE,HL
+
+	LD	C,(HL)
+	INC	HL
+	LD	B,(HL)
+	POP	HL
+	ADD	HL,BC
+	EX	DE,HL
+	RET
+
+;	        RIGTH   DOWN     UP     LEFT
+M16.D:	DW	2, 1,  -2, 1,   2,-1,  -2,-1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = DIRECTION
 ;	DE = COORDENATE
 ;OUTPUT:DE = COORDENATE AFTER MOVEMENT
 
@@ -186,10 +221,10 @@ M.IYEUC:DB	1, 0,  0,-1,  0, 1,  -1, 0
 ;			     4
 ;
 ; W(P1) = (0,0)
-; D(P1->P2) = Xs + 4, Ys + 2 (RIGTH)
-; D(P1->P3) = Xs - 4, Ys + 2 (DOWN)
-; Xs = S(P1x) + (Xw-Yw)*4
-; Ys = S(P1y) + (Xw+Yw)*2
+; D(P1->P2) = Xs + 8, Ys + 4 (RIGTH)
+; D(P1->P3) = Xs - 8, Ys + 4 (DOWN)
+; Xs = S(P1x) + (Xw-Yw)*16
+; Ys = S(P1y) + (Xw+Yw)*8
 
 	CSEG
 	PUBLIC	WRLD2SCR
@@ -202,9 +237,10 @@ WRLD2SCR:
 	OR	A
 	SBC	HL,DE			;HL = Xw-Yw
 	ADD	HL,HL
-	ADD	HL,HL			;HL = (Xw-Yw)*4
+	ADD	HL,HL
+	ADD	HL,HL			;HL = (Xw-Yw)*8
 	LD	E,B
-	ADD	HL,DE			;HL = (Xw-Yw)*4 + S(P1x) = Xs
+	ADD	HL,DE			;HL = (Xw-Yw)*8 + S(P1x) = Xs
 	POP	DE			;POP PARAMETER COORDENATES
 
 	PUSH	HL			;PUSH Xs
@@ -212,9 +248,10 @@ WRLD2SCR:
 	LD	D,0
 	LD	H,D
 	ADD	HL,DE			;HL = Xw+Yw
-	ADD	HL,HL			;HL = (Xw+Yw)*2
+	ADD	HL,HL
+	ADD	HL,HL			;HL = (Xw+Yw)*4
 	LD	E,C
-	ADD	HL,DE			;HL = (Xw+Yw)*2 + S(P1y) = Ys
+	ADD	HL,DE			;HL = (Xw+Yw)*4 + S(P1y) = Ys
 	EX	DE,HL			;DE = Ys
 	POP	HL			;HL = Xs
 	RET
