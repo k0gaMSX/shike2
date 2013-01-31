@@ -29,6 +29,8 @@ MOB.XO		EQU	13	;X COORDENATE OF THE GRAPHIC ORIGIN
 MOB.SIZ		EQU	14
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = FUNCTION POINTER
+
 	CSEG
 	EXTRN	PTRCALL
 
@@ -47,10 +49,11 @@ F.LOOP:	PUSH	BC
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;HL = X DESTINE
-;DE = Y DESTINE
-;B = PATTERN
-;C = MOB NUMBER
+;INPUT:	HL = X DESTINE
+;	DE = Y DESTINE
+;	B = PATTERN
+;	C = MOB NUMBER
+;
 
 	CSEG
 	PUBLIC	PUTMOB

@@ -8,6 +8,8 @@
 	EXTRN	HMMM,VDPPAGE,CHARACTERS,NEWFRAME,SETPAGE,VDPSYNC
 	EXTRN	INITCHAR,INITMOB
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 TIL2PAGE:
 	LD	(ACPAGE),A
 	LD	HL,0
@@ -16,6 +18,8 @@ TIL2PAGE:
 	LD	A,TILPAGE
 	LD	(VDPPAGE),A
 	JP	HMMM		;COPY TILPAGE TO TILPAGE + 1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 GAME:	LD	A,TILPAGE+1
 	CALL	TIL2PAGE
