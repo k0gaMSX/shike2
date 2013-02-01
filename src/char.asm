@@ -58,6 +58,9 @@ INITCHAR:
 	CALL	FOREACH
 
 	LD	DE,KEYBOARD
+	CALL	NEWCHAR
+
+	LD	DE,DUMMY
 	JP	NEWCHAR
 
 I.INIT:	LD	(IX+CHAR.DIRSTEP),D.NODIR
@@ -228,6 +231,44 @@ K.RELEASE:
 	DSEG
 K.KEY:		DB	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE CHARACTER
+
+	CSEG
+
+DUMMY:	LD	A,(IX+CHAR.DIR)
+	CP	D.UP
+	JR	Z,D.Y
+	CP	D.DOWN
+	JR	Z,D.Y
+
+	LD	A,(IX+CHAR.X)
+	CP	MAXX-1
+	JR	Z,D.CHANGE
+	CP	0
+	JR	Z,D.CHANGE
+	CP	MAXX/2
+	JR	Z,D.RAND
+	RET
+
+D.Y:	LD	A,(IX+CHAR.Y)
+	CP	MAXY-1
+	JR	Z,D.CHANGE
+	CP	0
+	JR	Z,D.CHANGE
+	CP	MAXY/2
+	JR	Z,D.RAND
+	RET
+
+D.RAND:	LD	A,R
+	AND	3
+	RET	Z
+
+D.CHANGE:
+	LD	A,R
+	AND	3
+	LD	(IX+CHAR.DIRSTEP),A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
