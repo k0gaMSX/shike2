@@ -146,11 +146,37 @@ C.CONTROL:
 	LD	(IX+CHAR.XR),L
 	LD	(IX+CHAR.XR+1),H
 	LD	(IX+CHAR.YR),E
-	LD	(IX+CHAR.YR+1),D
-	JP	STEP				;AND NOW MOVE YOURSELF!!!!
+	LD	(IX+CHAR.YR+1),D		;AND NOW MOVE YOURSELF!!!!
+	;CONTINUE IN STEP
 
 	DSEG
 C.COORD:	DW	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE CHARACTER
+
+	CSEG
+	EXTRN	MOV16ISO,PUTMOB
+
+STEP:	LD	A,(IX+CHAR.DIRSTEP)
+	LD	(IX+CHAR.DIR),A
+	LD	L,(IX+CHAR.XR)
+	LD	H,(IX+CHAR.XR+1)
+	LD	E,(IX+CHAR.YR)
+	LD	D,(IX+CHAR.YR+1)
+	CALL	MOV16ISO		;CALCULATE NEXT RENDER COORDENATES
+	LD	(IX+CHAR.XR),L
+	LD	(IX+CHAR.XR+1),H
+	LD	(IX+CHAR.YR),E
+	LD	(IX+CHAR.YR+1),D
+	LD	BC,0
+	PUSH	IX
+	CALL	PUTMOB			;RENDER THE CHARACTER
+	POP	IX
+	DEC	(IX+CHAR.DIRCNT)
+	RET
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE CHARACTER
@@ -191,29 +217,6 @@ K.RELEASE:
 	DSEG
 K.KEY:		DB	0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	IX = POINTER TO THE CHARACTER
-
-	CSEG
-	EXTRN	MOV16ISO,PUTMOB
-
-STEP:	LD	A,(IX+CHAR.DIRSTEP)
-	LD	(IX+CHAR.DIR),A
-	LD	L,(IX+CHAR.XR)
-	LD	H,(IX+CHAR.XR+1)
-	LD	E,(IX+CHAR.YR)
-	LD	D,(IX+CHAR.YR+1)
-	CALL	MOV16ISO		;CALCULATE NEXT RENDER COORDENATES
-	LD	(IX+CHAR.XR),L
-	LD	(IX+CHAR.XR+1),H
-	LD	(IX+CHAR.YR),E
-	LD	(IX+CHAR.YR+1),D
-	LD	BC,0
-	PUSH	IX
-	CALL	PUTMOB			;RENDER THE CHARACTER
-	POP	IX
-	DEC	(IX+CHAR.DIRCNT)
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
