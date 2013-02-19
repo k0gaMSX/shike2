@@ -35,12 +35,7 @@ INITVDP:
 
 	CALL	SPR16X16
 	CALL	SPRNDBL
-
-	LD	A,(RG8SAV)
-	RES	1,A		;ENABLE SPRITES
-	LD	B,A
-	LD	C,8
-	CALL	WRTVDP
+	CALL	ENASPR
 
 	LD	A,(RG9SAV)
 	SET	7,A		;SET 212 PIXELS IN Y
@@ -101,6 +96,22 @@ SPRDBL:	LD	A,(RG1SAV)
 
 S.WR:	LD	B,A
 	LD	C,1
+	JP	WRTVDP
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	DISSPR,ENASPR
+
+DISSPR:	LD	A,(RG8SAV)
+	SET	1,A		;DISABLE SPRITES
+	JR	SP.WR
+
+ENASPR:	LD	A,(RG8SAV)
+	RES	1,A		;ENABLE SPRITES
+
+SP.WR:	LD	B,A
+	LD	C,8
 	JP	WRTVDP
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
