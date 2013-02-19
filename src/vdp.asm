@@ -201,6 +201,22 @@ SHOWPAGE:	;INPUT: B = DISPLAY PAGE
 	LD	C,2
 	CALL	WRTVDP
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:		E = PAGE NUMBER
+
+	PUBLIC	CLRVPAGE
+
+CLRVPAGE:
+	LD	A,E
+	LD	(ACPAGE),A
+	XOR	A
+	LD	(FORCLR),A
+
+	LD	BC,00D4H
+	LD	DE,0
+	JP	HMMV
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = PATTERN NUMBER
 ;             DE = PATTERN DATA
