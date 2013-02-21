@@ -1189,6 +1189,57 @@ A.1:	LD	A,L			;REMAP REGION
 	DSEG
 R.ZVALUE:	DB	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = WORD TO PACK
+;OUTPUT:A = PACKED BYTE
+
+
+PACK:	LD	A,D
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	LD	D,A
+	LD	A,E
+	AND	0FH
+	OR	D
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = PACKED BYTE
+;	DE = UNPACKED WORD
+
+UNPACK:	LD	D,A
+	AND	0FH
+	LD	E,A
+	LD	A,D
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	LD	D,A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = BYTES WITHOUT SIGN EXPANSION
+;	DE = BYTES WITH SIGN EXPANSION
+
+
+SEXPAND:LD	A,E
+	CALL	E.HELP
+	LD	E,A
+	LD	A,D
+	CALL	E.HELP
+	LD	D,A
+	RET
+
+E.HELP:	BIT	3,A
+	RET	Z
+	OR	0F0H
+	RET
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = POINTER TO THE OUTPUT BUFFER
@@ -1205,41 +1256,6 @@ R.ZVALUE:	DB	0
 	CSEG
 	PUBLIC	CRUNCH
 
-PACK:	LD	A,D
-	RLCA
-	RLCA
-	RLCA
-	RLCA
-	LD	D,A
-	LD	A,E
-	AND	0FH
-	OR	D
-	RET
-
-UNPACK:	LD	D,A
-	AND	0FH
-	LD	E,A
-	LD	A,D
-	AND	0F0H
-	RRCA
-	RRCA
-	RRCA
-	RRCA
-	LD	D,A
-	RET
-
-SEXPAND:LD	A,E
-	CALL	E.HELP
-	LD	E,A
-	LD	A,D
-	CALL	E.HELP
-	LD	D,A
-	RET
-
-E.HELP:	BIT	3,A
-	RET	Z
-	OR	0F0H
-	RET
 
 CRUNCH:	EX	DE,HL
 	LD	A,(MAPREP)
