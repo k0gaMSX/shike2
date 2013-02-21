@@ -245,6 +245,26 @@ SPRITE:
 	POP	BC
 	CALL	LDIRVM
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:       C = SPRITE NUMBER
+;             DE = COLOUR DATA
+;             B = NUMBER SPRITES
+
+	CSEG
+	PUBLIC	COLORNSPRITE
+
+COLORNSPRITE:
+	PUSH	BC
+        PUSH	DE
+	LD	B,1
+	CALL	COLORSPRITE
+	POP	DE
+	POP	BC
+	INC	C
+	DJNZ	COLORNSPRITE
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = SPRITE NUMBER
 ;             DE = COLOUR DATA
