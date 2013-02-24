@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel editor.rel mapper.rel geometry.rel mob.rel game.rel char.rel stdlib.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel edmapper.rel mapper.rel geometry.rel mob.rel game.rel char.rel stdlib.rel
 
 all : shike2.com
 
@@ -33,8 +33,8 @@ bios.rel : bios.asm dos.inc
 kbd.rel : kbd.asm shike2.inc bios.inc
 	as $(ASFLAGS) kbd.asm
 
-editor.rel : editor.asm shike2.inc bios.inc mapper.inc kbd.inc geometry.inc
-	as $(ASFLAGS) editor.asm
+edmapper.rel : edmapper.asm shike2.inc bios.inc mapper.inc kbd.inc geometry.inc
+	as $(ASFLAGS) edmapper.asm
 
 shike2.com : $(REL)
 	ld /R4000 /P4000 /D6000 /X /Gmain & <ld.cmd
