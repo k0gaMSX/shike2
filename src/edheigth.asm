@@ -4,6 +4,9 @@
 	INCLUDE	EDITOR.INC
 	INCLUDE	GEOMETRY.INC
 	INCLUDE	KBD.INC
+	INCLUDE	VDP.INC
+
+MASKX	EQU	40H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -41,9 +44,11 @@ EDLOOP: CALL	VDPSYNC			;WAIT TO THE VDP
 HEIGTHBUF:	DS	HEIGTHSIZ
 H.TILE:		DW	0
 H.ZVAL:		DB	0
+H.SQRSIZ:	DW	0
 EDSTACK:	DW	0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 	CSEG
 
 EXIT:	LD	HL,(EDSTACK)		;LONGJMP FOR EXITING OF EDITOR.
@@ -128,6 +133,95 @@ SELZVAL:LD	DE,(H.TILE)
 	JR	Z,SELZVAL
 	LD	(H.ZVAL),A
 	JR	SELZVAL
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: (H.TILE) = LEFT-UPCORNER
+;OUTPUT:(H.SQRSIZ) = SIZE OF THE REGION
+
+	CSEG
+	EXTRN	VDPSYNC,GETCHAR,KEY2DIR,MOVEUC
+
+SELREGION:
+	LD	DE,0101H
+	LD	(H.SQRSIZ),DE
+
+R.LOOP:	CALL	MARKREGION
+	CALL	VDPSYNC
+	CALL	GETCHAR
+	PUSH	AF
+	CALL	MARKREGION
+	POP	AF
+
+	CP	KB_SPACE		;SPACE SELECTS THE ACTUAL SIZE
+	JR	NZ,R.DIR
+	CALL	VDPSYNC
+	RET
+
+R.DIR:	CALL	KEY2DIR
+	JR	C,R.LOOP
+	LD	DE,(H.SQRSIZ)
+	CALL	MOVEUC			;EUCLIDEAN MOVEMENT
+
+	XOR	A			;CHECK LIMITS
+	CP	D
+	JR	Z,R.LOOP
+	CP	E
+	JR	Z,R.LOOP
+	LD	BC,(H.TILE)		;DON'T SELECT FAR AWAY OF MAXIMUM
+	LD	A,D			;VALUES
+	ADD	A,B
+	CP	MAXISOX+1
+	JR	Z,R.LOOP
+	LD	A,E
+	ADD	A,C
+	CP	MAXISOY+1
+	JR	Z,R.LOOP
+	LD	(H.SQRSIZ),DE
+	JR	R.LOOP
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = UP-LEFT CORNER OF REGION
+;	BC = SQUARE SIZE
+
+	CSEG
+
+MARKREGION:
+	LD	DE,(H.TILE)
+	LD	BC,(H.SQRSIZ)
+
+MR.Y:	PUSH	BC
+	PUSH	DE
+
+MR.X:	PUSH	BC
+	PUSH	DE
+	CALL	MARKTILE
+	POP	DE
+	INC	D
+	POP	BC
+	DJNZ	MR.X
+
+	POP	DE
+	INC	E
+	POP	BC
+	DEC	C
+	JR	NZ,MR.Y
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = ACTUAL TILE
+
+	CSEG
+	EXTRN	LMMM,VDPPAGE
+
+MARKTILE:
+	CALL	TIL2SCR
+	LD	A,MASKPAGE
+	LD	(VDPPAGE),A
+	LD	A,LOGXOR
+	LD	(LOGOP),A
+	LD	HL,MASKX*256 + MASKY
+	LD	BC,16*256 + 8
+	JP	LMMM
 
 
 
