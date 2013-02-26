@@ -248,6 +248,28 @@ SPRITE:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = SPRITE NUMBER
+;             E = COLOUR NUMBER
+;             B = NUMBER SPRITES
+
+	CSEG
+	PUBLIC	SETCOLSPR
+	EXTRN	MEMSET
+
+SETCOLSPR:
+	PUSH	BC
+	LD	BC,16
+	LD	A,E
+	LD	HL,S.COL
+	CALL	MEMSET
+	POP	BC
+	LD	DE,S.COL
+	; CONTINUE IN COLORNSPRITE
+
+	DSEG
+S.COL:	DS	16
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:       C = SPRITE NUMBER
 ;             DE = COLOUR DATA
 ;             B = NUMBER SPRITES
 

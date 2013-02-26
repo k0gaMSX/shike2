@@ -18,7 +18,7 @@ mob.rel : mob.asm bios.inc vdp.inc shike2.inc
 geometry.rel : geometry.asm vdp.inc bios.inc kbd.inc geometry.inc
 	as $(ASFLAGS) geometry.asm
 
-mapper.rel : mapper.asm mapper.inc shike2.inc bios.inc
+mapper.rel : mapper.asm editor.inc shike2.inc bios.inc
 	as $(ASFLAGS) mapper.asm
 
 vdp.rel : vdp.asm shike2.inc bios.inc vdp.inc
@@ -33,7 +33,10 @@ bios.rel : bios.asm dos.inc
 kbd.rel : kbd.asm shike2.inc bios.inc
 	as $(ASFLAGS) kbd.asm
 
-edmapper.rel : edmapper.asm shike2.inc bios.inc mapper.inc kbd.inc geometry.inc
+editor.rel: editor.asm bios.inc editor.inc
+	as $(ASFLAGS) editor.asm
+
+edmapper.rel : edmapper.asm shike2.inc bios.inc editor.inc kbd.inc geometry.inc
 	as $(ASFLAGS) edmapper.asm
 
 shike2.com : $(REL)
