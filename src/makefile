@@ -27,7 +27,7 @@ vdp.rel : vdp.asm shike2.inc bios.inc vdp.inc
 shike2.rel : shike2.asm shike2.inc bios.inc
 	as $(ASFLAGS) shike2.asm
 
-edheigth.rel : edheigth.asm shike2.inc editor.inc bios.inc
+edheigth.rel : edheigth.asm shike2.inc editor.inc bios.inc geometry.inc kbd.inc
 	as $(ASFLAGS) edheigth.asm
 
 heigth.rel : heigth.asm shike2.inc editor.inc

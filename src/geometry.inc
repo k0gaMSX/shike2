@@ -5,5 +5,5 @@ D.UP		EQU	2
 D.LEFT		EQU	3
 D.NODIR		EQU	4
 
-
-
+CENTRAL.P1	EQU	7814H
+
