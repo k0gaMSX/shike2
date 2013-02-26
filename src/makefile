@@ -55,7 +55,7 @@ kbd.rel : kbd.asm shike2.inc bios.inc
 	echo kbd.asm
 	as $(ASFLAGS) kbd.asm
 
-editor.rel: editor.asm bios.inc editor.inc shike2.inc
+editor.rel : editor.asm bios.inc editor.inc shike2.inc
 	as $(ASFLAGS) editor.asm
 
 edmapper.rel : edmapper.asm shike2.inc bios.inc editor.inc kbd.inc geometry.inc
