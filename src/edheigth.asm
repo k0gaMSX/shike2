@@ -7,6 +7,7 @@
 	INCLUDE	VDP.INC
 
 MASKX	EQU	40H
+NUMCOORD	EQU	00C8H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -154,6 +155,7 @@ SELREGION:
 	LD	(H.SQRSIZ),DE
 
 R.LOOP:	CALL	MARKREGION
+	CALL	SQR2SPR
 	CALL	VDPSYNC
 	CALL	GETCHAR
 	PUSH	AF
@@ -248,6 +250,19 @@ NEWHEIGTH:
 	INC	HL
 	LD	(SQR.PTR),HL
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	NUM2SPR
+
+SQR2SPR:LD	HL,(SQR.PTR)
+	LD	DE,(SQR.BUF)
+	OR	A
+	SBC	HL,DE
+	LD	E,L
+	LD	BC,NUMCOORD
+	JP	NUM2SPR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
