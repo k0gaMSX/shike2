@@ -43,7 +43,7 @@ heigth.rel : heigth.asm shike2.inc editor.inc
 	echo height.asm
 	as $(ASFLAGS) heigth.asm
 
-editor.rel : editor.asm bios.inc editor.inc shike2.inc
+editor.rel : editor.asm bios.inc editor.inc shike2.inc vdp.inc
 	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
