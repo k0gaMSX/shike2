@@ -12,7 +12,7 @@ MASKX	EQU	40H
 
 	CSEG
 	PUBLIC	EDHEIGTH
-	EXTRN	VDPSYNC,EDINIT,NEWHEIGTH,GRID
+	EXTRN	VDPSYNC,EDINIT,GRID
 
 EDHEIGTH:
 	CALL	EDINIT
@@ -224,6 +224,40 @@ MARKTILE:
 	LD	HL,MASKX*256 + MASKY
 	LD	BC,16*256 + 8
 	JP	LMMM
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = POINTER TO HEIGTH BUFFER
+
+	CSEG
+	EXTRN	RESETHEIGTH
+
+NEWHEIGTH:
+	PUSH	DE
+	CALL	RESETHEIGTH
+	POP	HL
+	LD	(SQR.BUF),HL
+	INC	HL
+	LD	(SQR.PTR),HL
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	H.CRUNCH
+
+ADDSQUARE:
+	LD	HL,(SQR.BUF)
+	INC	(HL)
+	LD	HL,(SQR.BUF)
+	LD	DE,(H.TILE)
+	LD	BC,(H.SQRSIZ)
+	LD	A,(H.ZVAL)
+	CALL	H.CRUNCH
+	RET
+
+	DSEG
+SQR.PTR:	DW	0
+SQR.BUF:	DW	0
 
 
 
