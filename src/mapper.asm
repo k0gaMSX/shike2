@@ -1334,41 +1334,6 @@ DRAWZTILE:
 	LD	(I.PATTERN),A		;PATTERN
 	JP	DRAWTILE_		;AND REDRAW THE PATTERN
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT: DE = WORD TO PACK
-;OUTPUT:A = PACKED BYTE
-
-	CSEG
-
-PACK:	LD	A,D
-	AND	0FH
-	RLCA
-	RLCA
-	RLCA
-	RLCA
-	LD	D,A
-	LD	A,E
-	AND	0FH
-	OR	D
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT: A = PACKED BYTE
-;	DE = UNPACKED WORD
-
-	CSEG
-
-UNPACK:	LD	D,A
-	AND	0FH
-	LD	E,A
-	LD	A,D
-	AND	0F0H
-	RRCA
-	RRCA
-	RRCA
-	RRCA
-	LD	D,A
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = BYTES WITHOUT SIGN EXPANSION
@@ -1405,7 +1370,7 @@ E.HELP:	BIT	3,A
 
 	CSEG
 	PUBLIC	CRUNCH
-
+	EXTRN	PACK
 
 CRUNCH:	EX	DE,HL
 	LD	A,(MAPCMD)
@@ -1478,6 +1443,7 @@ C.MPAT:	LD	DE,(METAPAT)		;6 BYTE: PACKED METAPAT
 ;	(METAPAT)
 
 	CSEG
+	EXTRN	UNPACK
 
 DECRUNCH:
 	EX	DE,HL

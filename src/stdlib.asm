@@ -1,3 +1,40 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = WORD TO PACK
+;OUTPUT:A = PACKED BYTE
+
+	CSEG
+	PUBLIC	PACK
+
+PACK:	LD	A,D
+	AND	0FH
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	LD	D,A
+	LD	A,E
+	AND	0FH
+	OR	D
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = PACKED BYTE
+;	DE = UNPACKED WORD
+
+	CSEG
+	PUBLIC	UNPACK
+
+UNPACK:	LD	D,A
+	AND	0FH
+	LD	E,A
+	LD	A,D
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	LD	D,A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL
