@@ -93,7 +93,12 @@ SELTILE:LD	DE,(H.TILE)
 	CP	KB_SPACE		;SPACE SELECTS THE TILE
 	RET	Z
 
-	CALL	KEY2DIR
+	CP	KB_DEL			;DEL DELETE LAST SQUARE
+	JR	NZ,T.KEY
+	CALL	DELSQUARE
+	JR	SELTILE
+
+T.KEY:	CALL	KEY2DIR
 	JR	C,SELTILE
 	LD	DE,(H.TILE)
 	CALL	MOVEUC
@@ -286,6 +291,24 @@ SQR2SPR:LD	HL,(SQR.PTR)
 	LD	E,L
 	LD	BC,NUMCOORD
 	JP	NUM2SPR
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+DELSQUARE:
+	LD	HL,(SQR.BUF)
+	LD	A,(HL)
+	OR	A
+	RET	Z			;THERE IS NOTHING TO DELETE
+
+	DEC	(HL)			;DECREMENT COUNT
+	LD	HL,(SQR.PTR)
+	LD	DE,HEIGTHCMD
+	OR	A
+	SBC	HL,DE
+	LD	(SQR.PTR),HL		;DECREMENT POINTER TO 1ST FREE POS
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
