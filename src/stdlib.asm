@@ -1,3 +1,6 @@
+
+	INCLUDE	SHIKE2.INC
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = WORD TO PACK
 ;OUTPUT:A = PACKED BYTE
@@ -134,5 +137,93 @@ MEMSET:	LD	E,L
 	LD	(HL),A
 	LDIR
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = LOCATION WHERE WE WANT TO PUT THE CURSOR (IN FONT UNITS)
+
+	CSEG
+	PUBLIC	LOCATE
+
+LOCATE:	LD	A,D
+	ADD	A,A
+	ADD	A,A
+	LD	D,A
+	LD	A,E
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	LD	E,A
+	LD	(CURSOR),DE
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = POINTER TO ASCIINUL STRING
+
+	CSEG
+	PUBLIC	PUTS
+
+PUTS:	LD	A,(DE)
+	OR	A
+	RET	Z
+	INC	DE
+	PUSH	DE
+	CALL	PUTCHAR
+	POP	DE
+	JR	PUTS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = ASCII CODE
+
+	CSEG
+	PUBLIC	PUTCHAR
+	EXTRN	VDPPAGE,HMMM
+
+PUTCHAR:CP	10		;NEW LINE?
+	JR	NZ,P.TAB
+	LD	HL,(CURSOR)
+	LD	H,0
+	LD	A,8
+	ADD	A,L
+	LD	L,A
+	LD	(CURSOR),HL
+	RET
+
+P.TAB:	CP	9		;TABULATION?
+	JR	NZ,P.NL
+P.TLOOP:LD	A,' '		;PRINT SPACES UNTIL WE ARE IN 8 COLUMN (8*4=32)
+	CALL	PUTCHAR
+	LD	DE,(CURSOR)
+	LD	A,31
+	AND	D
+	JR	NZ,P.TLOOP
+	RET
+
+P.NL:	CP	31		;SMALLER THAN SPACE?
+	RET	C
+
+	CP	95		;BIGGER THAN _?
+	RET	NC
+
+	SUB	32		;REMOVE ASCII OFFSET
+	ADD	A,A
+	ADD	A,A		;CALCULATE X COORDENATE FOR THE COPY
+
+	LD	H,A
+	LD	L,FONTY
+	LD	A,FONTPAGE
+	LD	(VDPPAGE),A
+	LD	DE,(CURSOR)
+	LD	BC,4*256 + 8
+	PUSH	DE
+	CALL	HMMM
+	POP	DE
+	LD	A,4
+	ADD	A,D
+	LD	D,A
+	LD	(CURSOR),DE
+	RET
+
+	DSEG
+CURSOR:	DW	0
 
 
