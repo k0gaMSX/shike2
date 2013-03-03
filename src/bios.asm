@@ -1,4 +1,3 @@
-	INCLUDE	DOS.INC
 
 ;ALL THESE DEFINITIONS ARE DUPLICATED IN BIOS.INC. BE CAREFULL WITH
 ;THE DIFFERENCE BETWEEN THEM
@@ -29,6 +28,9 @@ FORCLR		EQU	0F3E9H
 BAKCLR		EQU	0F3EAH
 BDRCLR		EQU	0F3EBH
 
+KEYBUF		EQU	0FBF0H
+PUTPNT		EQU	0F3F8H
+GETPNT		EQU	0F3FAH
 H.TIMI		EQU	0FD9FH
 
 SPRITEATT	EQU	07600H
@@ -59,20 +61,6 @@ CHKMSX:	LD	A,(EXPTBL)
 	DSEG
 VDPR:		DB	0	;VDP PORT READING
 VDPW:		DB	0	;VDP PORT WRITING
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	CSEG
-	PUBLIC	MSXTERM
-
-MSXTERM:LD	C,CONST
-	CALL	BDOS
-	OR	A
-	LD	C,TERM0
-	JP	Z,BDOS
-
-	LD	C,INNOE
-	CALL	BDOS
-	JR	MSXTERM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		C = REGISTER NUMBER
@@ -363,6 +351,19 @@ LDIRMV:	CALL	NSETRD
 	EI
 
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	KILBUF
+
+KILBUF:	DI
+	LD	HL,KEYBUF
+	LD	(PUTPNT),HL
+	LD	(GETPNT),HL
+	EI
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		A = ROW NUMBER
 

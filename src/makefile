@@ -55,7 +55,7 @@ editor.rel : editor.asm bios.inc editor.inc shike2.inc vdp.inc
 	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
-bios.rel : bios.asm dos.inc
+bios.rel : bios.asm
 	echo bios.asm
 	as $(ASFLAGS) bios.asm
 
