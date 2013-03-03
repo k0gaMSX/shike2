@@ -15,6 +15,7 @@ INITLEVELS:
 	JP	MEMSET
 
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE LEVEL
 ;	DE = POSITION OF THE MAP INTO THE LEVEL
