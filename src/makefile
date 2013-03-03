@@ -71,10 +71,11 @@ edmapper.rel : edmapper.asm shike2.inc bios.inc editor.inc kbd.inc geometry.inc
 	as $(ASFLAGS) edmapper.asm
 
 shike2.com : $(REL)
-	ld /R4000 /P4000 /D6000 /X /Gmain & <ld.cmd
+	ld /R4000 /P4000 /D8000 /X /Gmain & <ld.cmd
 
 clean :
 	del *.rel
 	del *.sym
 	del *.com
 
+
