@@ -199,6 +199,9 @@ M.LOOP:	PUSH	BC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = TILE POSITION
 ;	BC = MATRIX POINTER
+;OUTPUT:A = HEIGTH
+;	HL = POINTER TO HEIGTH BYTE
+;	DE = TILE POSITION
 
 	CSEG
 	PUBLIC	HEIGTH
