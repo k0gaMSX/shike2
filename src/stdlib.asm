@@ -40,9 +40,27 @@ UNPACK:	LD	D,A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = 1ST OPERAND
+;	A = 2ND OPERAND
+;OUTPUT:HL = DE*A
+
+	PUBLIC	MULTDEA
+
+MULTDEA:LD	HL,0
+	LD	B,8
+
+DE.LOOP:RRCA
+	JP	NC,DE.NOT
+	ADD	HL,DE
+DE.NOT:	SLA	E
+	RL	D
+	DJNZ	DE.LOOP
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: E = 1ST OPERAND
-;	A = 2ST OPERAND
-;OUTPUT:HL = HL*DE
+;	A = 2ND OPERAND
+;OUTPUT:HL = E*A
 
 	PUBLIC	MULTEA
 
