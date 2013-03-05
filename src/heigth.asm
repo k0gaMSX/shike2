@@ -3,19 +3,6 @@
 	INCLUDE	EDITOR.INC
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT: DE = POINTER TO HEIGTH BUFFER
-
-	CSEG
-	PUBLIC	RESETHEIGTH
-	EXTRN	BZERO
-
-RESETHEIGTH:
-	EX	DE,HL
-	LD	BC,HEIGTHSIZ
-	JP	BZERO
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = POINTER TO THE OUTPUT BUFFER
 ;	DE = TILE POSITION OF LEFT-UP CORNER
@@ -171,6 +158,7 @@ S.LOOP:	PUSH	BC
 
 	CSEG
 	PUBLIC	HMATRIX
+	EXTRN	BZERO
 
 HMATRIX:LD	(H.MATRIX),BC
 	PUSH	DE
