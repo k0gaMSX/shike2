@@ -14,7 +14,7 @@ MAPPAT		EQU	PTRPAT+4
 LISTCOORD	EQU	00003H
 MAPCOORD	EQU	03050H
 TEXTCOORD	EQU	03010H
-
+ERRORCOORD	EQU	00000H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -51,6 +51,30 @@ ROOM2XY:LD	A,D
 	ADD	HL,DE
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = ERROR STRING
+
+	CSEG
+	EXTRN	PUTCHAR,VDPSYNC,LOCATE,PRINTF,KPRESS
+
+ERROR:	LD	DE,ERRORCOORD
+	CALL	LOCATE
+	LD	DE,NEW.ERR
+	CALL	PRINTF			;PRINT THE ERROR CODE
+	CALL	VDPSYNC			;WAIT TO THE VDP
+	CALL	KPRESS			;WAIT KEY PRESS
+
+	LD	DE,ERRORCOORD
+	CALL	LOCATE
+	LD	B,64
+
+E.LOOP:	PUSH	BC			;CLEAN THE ERROR LINE
+	LD	A,' '
+	CALL	PUTCHAR
+	POP	BC
+	DJNZ	E.LOOP
+	CALL	VDPSYNC
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = LOCATION OF THE MAP IN THE LEVEL
