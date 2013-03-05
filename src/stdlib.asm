@@ -282,6 +282,8 @@ P.FORMAT:
 	JR	NZ,P.F1
 	LD	A,1
 	LD	(P.PAD),A
+	LD	A,(DE)
+	INC	DE
 P.F1:	PUSH	DE
 
 	CP	's'			;STRING?
