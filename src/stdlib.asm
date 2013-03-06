@@ -174,6 +174,9 @@ MEMSET:	LD	E,L
 	INC	DE
 	DEC	BC
 	LD	(HL),A
+	LD	A,B
+	OR	C
+	RET	Z
 	LDIR
 	RET
 
