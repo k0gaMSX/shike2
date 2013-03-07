@@ -15,11 +15,11 @@ game.rel : game.asm shike2.inc bios.inc
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
-mob.rel : mob.asm bios.inc vdp.inc shike2.inc
+mob.rel : mob.asm bios.inc  shike2.inc
 	echo mob.asm
 	as $(ASFLAGS) mob.asm
 
-geometry.rel : geometry.asm vdp.inc bios.inc kbd.inc geometry.inc
+geometry.rel : geometry.asm  bios.inc kbd.inc geometry.inc
 	echo geometry.asm
 	as $(ASFLAGS) geometry.asm
 
@@ -27,7 +27,7 @@ mapper.rel : mapper.asm editor.inc shike2.inc bios.inc
 	echo mapper.asm
 	as $(ASFLAGS) mapper.asm
 
-vdp.rel : vdp.asm shike2.inc bios.inc vdp.inc
+vdp.rel : vdp.asm shike2.inc bios.inc
 	echo vdp.asm
 	as $(ASFLAGS) vdp.asm
 
@@ -51,7 +51,7 @@ heigth.rel : heigth.asm shike2.inc editor.inc
 	echo height.asm
 	as $(ASFLAGS) heigth.asm
 
-editor.rel : editor.asm bios.inc editor.inc shike2.inc vdp.inc
+editor.rel : editor.asm bios.inc editor.inc shike2.inc 
 	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
