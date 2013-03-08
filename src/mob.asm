@@ -210,6 +210,28 @@ C.NOVIS:XOR	A
 	DSEG
 C.MAX:	DW	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: E = MOB NUMBER
+;OUTPUT:IX = MOB ADDRESS
+
+	CSEG
+
+MOBADDR:EX	DE,HL
+	LD	H,0			;CALCULATE MOB ADDRESS
+	ADD	HL,HL			;HL = E*2
+	PUSH	HL
+	ADD	HL,HL			;HL = E*4
+	PUSH	HL
+	ADD	HL,HL			;HL = E*8
+	POP	DE
+	ADD	HL,DE			;HL = E*8 + E*4
+	POP	DE
+	ADD	HL,DE			;HL = E*8 + E*4 +E*2
+	EX	DE,HL
+	LD	IX,BUFFER
+	ADD	IX,DE
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	D = X
 ;	E = Y
@@ -222,24 +244,10 @@ C.MAX:	DW	0
 	CSEG
 	EXTRN	VDPEND
 
-MOB:	PUSH	HL			;INCREMENT MOB COUNT
-	PUSH	DE
-	LD	L,A
-	LD	H,0			;CALCULATE MOB ADDRESS
-	ADD	HL,HL			;HL = A*2
-	PUSH	HL
-	ADD	HL,HL			;HL = A*4
-	PUSH	HL
-	ADD	HL,HL			;HL = A*8
-	POP	DE
-	ADD	HL,DE			;HL = A*8 + A*4
-	POP	DE
-	ADD	HL,DE			;HL = A*8 + A*4 +A*2
-	EX	DE,HL
-	LD	IX,BUFFER
-	ADD	IX,DE
-	POP	DE
-	POP	HL
+MOB:	EXX
+	LD	E,A
+	CALL	MOBADDR			;IX = MOB ADDRESS
+	EXX
 
 	LD	(IX+MOB.Y),E		;STORE Y COORDENATE
 	LD	(IX+MOB.X),D		;STORE X COORDENATE
