@@ -44,6 +44,29 @@ ROOMADDR:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = LOCATION OF THE MAP IN THE LEVEL
+;OUTPUT:A = ACCESS BYTE
+
+	CSEG
+	PUBLIC	GETACC
+
+GETACC:	CALL	ACCADDR
+	LD	A,(HL)
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = LOCATION OF THE MAP IN THE LEVEL
+;OUTPUT:HL = ADRESS OF THE ACCESS BYTE
+
+	CSEG
+	PUBLIC	ACCADDR
+
+ACCADDR:CALL	ROOMADDR
+	LD	DE,LVLACC-LVLROOM	;ROOM MATRIX AND ACCESS MATRIX
+	ADD	HL,DE			;HAVE THE SAME SIZE AND THEY
+	RET				;CONTIGUOUS
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = POSIITON OF THE ROOM
 ;OUTPUT:A = ROOM NUMBER
 
@@ -62,7 +85,6 @@ G.1:	CALL	ROOMADDR
 	LD	A,(HL)
 G.RET:	CP	-1
 	RET
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = POSITION OF ROOM
