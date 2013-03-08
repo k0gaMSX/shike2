@@ -39,7 +39,7 @@ edlevel.rel : edlevel.asm editor.inc shike2.inc bios.inc kbd.inc
 	echo edlevel.asm
 	as $(ASFLAGS) edlevel.asm
 
-level.rel : level.asm editor.inc shike2.inc
+level.rel : level.asm editor.inc shike2.inc geometry.inc
 	echo level.rel
 	as $(ASFLAGS) level.asm
 
