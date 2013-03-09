@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel editor.rel level.rel edlevel.rel edheigth.rel heigth.rel edmapper.rel mapper.rel geometry.rel mob.rel game.rel stdlib.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel movable.rel editor.rel level.rel edlevel.rel edheigth.rel heigth.rel edmapper.rel mapper.rel geometry.rel mob.rel game.rel stdlib.rel
 
 all : shike2.com
 
@@ -11,7 +11,7 @@ stdlib.rel : stdlib.asm
 	echo stdlib.asm
 	as $(ASFLAGS) stdlib.asm
 
-game.rel : game.asm shike2.inc bios.inc
+game.rel : game.asm shike2.inc kbd.inc
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
@@ -30,6 +30,10 @@ mapper.rel : mapper.asm editor.inc shike2.inc bios.inc
 vdp.rel : vdp.asm shike2.inc bios.inc
 	echo vdp.asm
 	as $(ASFLAGS) vdp.asm
+
+movable.rel : movable.asm geometry.inc bios.inc movable.inc
+	echo movable.asm
+	as $(ASFLAGS) movable.asm
 
 shike2.rel : shike2.asm shike2.inc bios.inc
 	echo shike2.asm
