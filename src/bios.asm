@@ -68,6 +68,21 @@ WRTVDP:	PUSH	HL
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = 1ST OPERAND
+;	DE = 2ND OPERAND
+;OUTPUT:Z = 1 WHEN HL = DE, CY = 1 WHEN HL < DE
+
+	CSEG
+	PUBLIC	DCOMPR
+
+DCOMPR:	LD	A,H
+	CP	D
+	RET	C
+	LD	A,L
+	CP	E
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		A = SCREEN MODE
 
 	CSEG
