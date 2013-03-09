@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel editor.rel level.rel edlevel.rel edheigth.rel heigth.rel edmapper.rel mapper.rel geometry.rel mob.rel game.rel char.rel stdlib.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel editor.rel level.rel edlevel.rel edheigth.rel heigth.rel edmapper.rel mapper.rel geometry.rel mob.rel game.rel stdlib.rel
 
 all : shike2.com
 
