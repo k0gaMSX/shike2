@@ -22,7 +22,7 @@ PACK:	LD	A,D
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: A = PACKED BYTE
-;	DE = UNPACKED WORD
+;OUTPUT:DE = UNPACKED WORD
 
 	CSEG
 	PUBLIC	UNPACK
@@ -44,6 +44,7 @@ UNPACK:	LD	D,A
 ;	A = 2ND OPERAND
 ;OUTPUT:HL = DE*A
 
+	CSEG
 	PUBLIC	MULTDEA
 
 MULTDEA:LD	HL,0
@@ -62,6 +63,7 @@ DE.NOT:	SLA	E
 ;	A = 2ND OPERAND
 ;OUTPUT:HL = E*A
 
+	CSEG
 	PUBLIC	MULTEA
 
 MULTEA:	LD	H,A
@@ -83,9 +85,21 @@ E.NOT:	DJNZ	E.LOOP
 PTRCALL:JP	(HL)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	HL
-;	A
+;INPUT:	DE=POINTER
+;	A=INDEX
+;OUTPUT:DE=DE[A*2]
 
+ARYDE:	EX	DE,HL
+	CALL	ARYHL
+	EX	DE,HL
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL=POINTER
+;	A=INDEX
+;OUTPUT:HL=HL[A*2]
+
+	CSEG
 	PUBLIC	ARYHL
 
 ARYHL:	ADD	A,A
@@ -93,7 +107,10 @@ ARYHL:	ADD	A,A
 	;CONTINUE IN PTRHL
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	HL
+;INPUT:	HL=POINTER
+;OUTPUT:HL=*HL
+
+	CSEG
 	PUBLIC	PTRHL
 
 PTRHL:	LD	A,(HL)
@@ -104,6 +121,9 @@ PTRHL:	LD	A,(HL)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE
+;OUTPUT:DE=*DE
+
+	CSEG
 	PUBLIC	PTRDE
 
 PTRDE:	EX	DE,HL
@@ -112,8 +132,11 @@ PTRDE:	EX	DE,HL
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	HL
-;	A
+;INPUT:	HL=16 BIT VALUE
+;	A=8 BIY VALUE
+;OUTPUT:HL=HL+A
+
+	CSEG
 	PUBLIC	ADDAHL
 
 ADDAHL:	ADD	A,L
@@ -126,6 +149,7 @@ ADDAHL:	ADD	A,L
 ;INPUT:	HL = JUMP TABLE
 ;       A = ELEMENT OF THE TABLE
 
+	CSEG
 	PUBLIC	SWTCH
 
 SWTCH:	CALL	ARYHL
@@ -135,8 +159,8 @@ SWTCH:	CALL	ARYHL
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:		A = NUMBER
-;		DE = OUTPUT BUFFER
+;INPUT:	A = NUMBER
+;	DE = OUTPUT BUFFER
 
 	CSEG
 	PUBLIC	ITOA
@@ -171,9 +195,10 @@ I.POT10:	DB	100,10,1,0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:		HL = ADDRESS WHERE WRITE 0
-;		BC = NUMBER OF BYTES
-;		A = BYTE TO WRITE (IN THE CASE OF MEMSET)
+;INPUT:	HL = ADDRESS WHERE WRITE 0
+;	BC = NUMBER OF BYTES
+;	A = BYTE TO WRITE (IN THE CASE OF MEMSET)
+
 	CSEG
 	PUBLIC	BZERO,MEMSET
 
