@@ -89,52 +89,24 @@ MT.LOOP:PUSH	BC
 MT.COORD:	DW	0
 MT.ZVAL:	DB	0
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;		(ACPAGE) = PAGE
+
 	CSEG
 	EXTRN	LINE
 
 SHOWLIMITS:
 	LD	A,LIMITCOLOR
-	LD	(FORCLR),A
-	LD	B,4
-	LD	HL,L.DATA
-
-L.LOOP:	PUSH	BC			;PAINT THE SCREEN LIMITS
-	LD	D,(HL)
-	INC	HL
-	LD	E,(HL)
-	INC	HL
-	LD	B,(HL)
-	INC	HL
-	LD	C,(HL)
-	INC	HL
-	PUSH	HL
-	CALL	LINE
-	POP	HL
-	POP	BC
-	DJNZ	L.LOOP
-	RET
-
-;		X0  Y0   - X1  Y1
-L.DATA:	DB	215,  0,    0,107
-	DB	0  ,108,  199,207
-	DB	56 ,207,  255,108
-	DB	255,107,   40,  0
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;		(ACPAGE) = PAGE
-
-	CSEG
-	EXTRN	LINE
+	LD	IY,L.DATA
+	JR	S.AUX	
 
 SHOWGRID:
 	LD	A,GRIDCOLOR
-	LD	(FORCLR),A
+	LD	IY,G.DATA
+
+S.AUX:	LD	(FORCLR),A
 	LD	A,LOGIMP
 	LD	(LOGOP),A
-	LD	IY,G.DBASE
 
 G.NEXT:	LD	A,(IY+0)
 	OR	A
@@ -174,12 +146,18 @@ G.LINE:	PUSH	AF
 	JR	G.NEXT
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
-G.DBASE:DB	16,248,  0,  255,  3,-16,  0,  0,  8
+G.DATA:	DB	16,248,  0,  255,  3,-16,  0,  0,  8
 	DB	10,  0,  4,  255,131,  0,  8,  0,  8
 	DB	16,  0, 84,  247,207,  0,  8,-16,  0
 	DB	16,248,207,  255,204,-16,  0,  0, -8
 	DB	10,  0,203,  255, 76,  0, -8,  0, -8
 	DB	16,  0,123,  247,  0,  0, -8,-16,  0
+	DB	0
+
+L.DATA:	DB	1, 215,  0,    0,107,  0,  0,  0,  0
+	DB	1,   0,108,  199,207,  0,  0,  0,  0
+	DB	1,  56,207,  255,108,  0,  0,  0,  0
+	DB	1, 255,107,   40,  0,  0,  0,  0,  0
 	DB	0
 
 
