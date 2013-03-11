@@ -336,13 +336,5 @@ NUMBERGEN:
 	DB	000H,000H,000H,000H,000H,000H,000H,000H
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	DSEG
-	PUBLIC	HGTHBUF,HGTHMATRIX
-
-HGTHBUF:	DS	HEIGTHSIZ
-HGTHMATRIX:	DS	HEIGTHMATRIXSIZ
-
 
 
