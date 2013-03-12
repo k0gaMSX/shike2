@@ -326,6 +326,10 @@ DELSQUARE:
 	OR	A
 	SBC	HL,DE
 	LD	(SQR.PTR),HL		;DECREMENT POINTER TO 1ST FREE POS
+
+	LD	BC,HGTHMATRIX		;UPDATE HEIGTH MATRIX
+	LD	DE,(SQR.BUF)
+	CALL	HMATRIX
 	JP	ED.SCREEN
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
