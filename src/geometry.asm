@@ -1,8 +1,8 @@
-	INCLUDE GEOMETRY.INC
+
 	INCLUDE BIOS.INC
+	INCLUDE SHIKE2.INC
 	INCLUDE KBD.INC
-
-
+	INCLUDE GEOMETRY.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = KEY
@@ -101,6 +101,48 @@ M.ISO:	DB	1, 1, -1, 1,  1,-1,  -1,-1
 M.EUC:	DB	1, 0,  0, 1,  0,-1,  -1, 0
 M.IEUC:	DB     -1, 0,  0,-1,  0, 1,   1, 0
 M.IYEUC:DB	1, 0,  0,-1,  0, 1,  -1, 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = ORIGIN X,Y
+;	BC = ORIGIN ROOM
+;	A = DIRECTION
+;OUTPUT:DE = DESTINATION XY
+;	BC = ORIGIN ROOM
+
+	CSEG
+	PUBLIC	NEXTPOINT
+
+NEXTPOINT:
+	PUSH	BC
+	CALL	MOVEUC
+	POP	BC
+
+	LD	A,D
+N.RIGTH:CP	MAXISOX
+	JR	NZ,N.LEFT
+	LD	D,0
+	INC	B
+	RET
+
+N.LEFT:	CP	-1
+	JR	NZ,N.DOWN
+	LD	D,MAXISOX-1
+	DEC	B
+	RET
+
+N.DOWN:	LD	A,E
+	CP	MAXISOY
+	JR	NZ,N.UP
+	LD	E,0
+	INC	C
+	RET
+
+N.UP:	CP	-1
+	RET	NZ			;IF WE RETRUN HERE IT MEANS A BUG
+	LD	E,MAXISOY-1
+	DEC	C
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = WORLD COORDENATES

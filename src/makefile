@@ -19,7 +19,7 @@ mob.rel : mob.asm bios.inc  shike2.inc
 	echo mob.asm
 	as $(ASFLAGS) mob.asm
 
-geometry.rel : geometry.asm  bios.inc kbd.inc geometry.inc
+geometry.rel : geometry.asm  bios.inc kbd.inc geometry.inc shike2.inc
 	echo geometry.asm
 	as $(ASFLAGS) geometry.asm
 
