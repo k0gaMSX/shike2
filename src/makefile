@@ -31,7 +31,7 @@ vdp.rel : vdp.asm shike2.inc bios.inc
 	echo vdp.asm
 	as $(ASFLAGS) vdp.asm
 
-movable.rel : movable.asm geometry.inc bios.inc movable.inc
+movable.rel : movable.asm shike2.inc geometry.inc bios.inc movable.inc
 	echo movable.asm
 	as $(ASFLAGS) movable.asm
 
@@ -43,7 +43,7 @@ edlevel.rel : edlevel.asm editor.inc shike2.inc bios.inc kbd.inc
 	echo edlevel.asm
 	as $(ASFLAGS) edlevel.asm
 
-level.rel : level.asm editor.inc shike2.inc geometry.inc
+level.rel : level.asm editor.inc shike2.inc geometry.inc movable.inc
 	echo level.rel
 	as $(ASFLAGS) level.asm
 
@@ -68,6 +68,7 @@ kbd.rel : kbd.asm shike2.inc bios.inc
 	as $(ASFLAGS) kbd.asm
 
 editor.rel : editor.asm bios.inc editor.inc shike2.inc
+	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
 edmapper.rel : edmapper.asm shike2.inc bios.inc editor.inc kbd.inc geometry.inc
