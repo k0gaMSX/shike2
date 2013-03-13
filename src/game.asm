@@ -2,6 +2,9 @@
 	INCLUDE	SHIKE2.INC
 	INCLUDE	KBD.INC
 
+	INCLUDE	GEOMETRY.INC
+	INCLUDE MOVABLE.INC
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
@@ -19,12 +22,14 @@ GAME:   CALL	DISSCR
 
 	LD	IX,MOV1
 	LD	DE,POINT1
-	LD	C,1
+	LD	C,0
+	LD	B,4
 	CALL	NEWMOV
 
 	LD	IX,MOV2
 	LD	DE,POINT2
-	LD	C,0
+	LD	C,1
+	LD	B,4
 	CALL	NEWMOV
 
 	LD	DE,MOV1
@@ -38,16 +43,16 @@ G.LOOP: CALL	NEWFRAME
 
 
 POINT1:	DB	0		;LEVEL=0
-	DW	0000H		;ROOM=0
-	DB	0,0,0		;Y=X=Z=0
+	DW	0101H		;ROOM=0
+	DB	15,0,0		;Y=X=Z=0
 
 POINT2:	DB	0		;LEVEL=0
-	DW	0100H		;ROOM=1
-	DB	15,0,0		;Y=15,X=Z=0
+	DW	0202H		;ROOM=0
+	DB	0,0,0		;Y=15,X=Z=0
 
 	DSEG
-MOV1:	DS	50		;TODO: TEMPORAL BUFFER
-MOV2:	DS	50		;TODO: TEMPORAL BUFFER
+MOV1:	DS	MOV.SIZ		;TODO: TEMPORAL BUFFER
+MOV2:	DS	MOV.SIZ		;TODO: TEMPORAL BUFFER
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
