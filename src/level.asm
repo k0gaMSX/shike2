@@ -6,7 +6,6 @@
 
 NR_RINFO	EQU	7		;4 DIRECTIONS,2 DIAGONALS AND CENTER
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
@@ -296,7 +295,7 @@ M.NEXT:	POP	IY
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
-
+	PUBLIC	HGTHMATRIX
 
 LEVEL:		DB	0
 ROOM:		DW	0
