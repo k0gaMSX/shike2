@@ -23,42 +23,42 @@ K.NODIR:LD	A,D.NODIR
 	SCF
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	A = DIRECTION
-;	HL = X COORDENATE
-;	DE = Y COORDENATE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = DIRECTION
+;	C = COUNT
+;OUTPUT:DE = Y INCREMENT
+;	BC = X INCREMENT
 
 	CSEG
-	PUBLIC	MOV16ISO
-	EXTRN	ADDAHL
+	PUBLIC	ISOINC
 
-MOV16ISO:
-	CP	D.NODIR
-	RET	Z
-	PUSH	DE		;THIS FUNCTION IS USED FOR MOVING THINGS IN
-	EX	DE,HL		;THE SCREEN, 1/4 OF TILE ON EACH FRAME.
-	LD	HL,M16.D	;SCREEN COORDENATES ARE 16 BIT VALUES
-	ADD	A,A		;AND THE INCREMENTS ARE DIFFERENT OF
-	ADD	A,A		;1, SO WE CAN NOT USE THE USUAL MOVE FUNCTIONS
-	CALL	ADDAHL
+ISOINC:	LD	A,E			;THIS FUNCTION RETURNS THE ISOMETRIC
+	ADD	A,A			;INCREMENT DUE TO A NUMBER OF MINIMAL
+	ADD	A,A			;STEPS (2X1) IN A DIRECTION
+	ADD	A,A
+	ADD	A,A
+	LD	E,A
+	LD	A,C
+	ADD	A,A
+	ADD	A,A
+	ADD	A,E
+	LD	E,A
+	LD	D,0
+	LD	HL,I.DATA
+	ADD	HL,DE
 	LD	C,(HL)
 	INC	HL
 	LD	B,(HL)
 	INC	HL
-	EX	DE,HL
-	ADD	HL,BC
-	EX	DE,HL
-
-	LD	C,(HL)
+	LD	E,(HL)
 	INC	HL
-	LD	B,(HL)
-	POP	HL
-	ADD	HL,BC
-	EX	DE,HL
+	LD	D,(HL)
 	RET
 
-;	        RIGTH   DOWN     UP     LEFT
-M16.D:	DW	2, 1,  -2, 1,   2,-1,  -2,-1
+I.DATA:	DW	 2, 1,	 4, 2,	 6, 3,	 8, 4	;RIGTH
+	DW	-2, 1,	-4, 2,	-6, 3,	-8, 4	;DOWN
+	DW	 2,-1,	 4,-2,	 6,-3,	 8,-4	;UP
+	DW	-2,-1,	-4,-2,	-6,-3,	-8,-4	;LEFT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = DIRECTION
