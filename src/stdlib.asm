@@ -80,6 +80,7 @@ E.NOT:	DJNZ	E.LOOP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL
 
+	CSEG
 	PUBLIC	PTRCALL
 
 PTRCALL:JP	(HL)
@@ -88,6 +89,9 @@ PTRCALL:JP	(HL)
 ;INPUT:	DE=POINTER
 ;	A=INDEX
 ;OUTPUT:DE=DE[A*2]
+
+	CSEG
+	PUBLIC	ARYDE
 
 ARYDE:	EX	DE,HL
 	CALL	ARYHL
