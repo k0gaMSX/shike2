@@ -1176,6 +1176,29 @@ G.TILE:	DW	0
 G.ADDR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = ACTUAL TILE
+
+	CSEG
+	PUBLIC	STACKSIZ
+
+STACKSIZ:
+	CALL	ADDRZVAL	;TAKE THE DIRECTION OF THE TILE STACK
+	LD	B,NR_PATTIL
+
+T.LOOP:	LD	A,(HL)
+	AND	1FH
+	CP	NOZVALUE
+	JR	Z,T.END
+	INC	HL
+	INC	HL
+	DJNZ	T.LOOP
+
+T.END:	LD	A,NR_PATTIL
+	SUB	B
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = ACTUAL TILE
 ;IT DOESN'T MODIFY THE DE VALUE
 
