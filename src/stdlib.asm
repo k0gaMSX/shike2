@@ -391,5 +391,30 @@ P.RET:	DW	0
 P.BUF:	DS	4
 P.PAD:	DB	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	PERROR
+
+PERROR:	LD	DE,(ERRNO)
+	;CONTINUE IN STRERROR
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = ERROR NUMBER
+
+	CSEG
+	PUBLIC	STRERROR
+	EXTRN	ERRSTR
+
+STRERROR:
+	LD	A,E
+	LD	DE,ERRSTR
+	DEC	A
+	CALL	ARYDE			;TAKE THE POINTER TO THE STRING
+	JP	PUTS			;PRINT IT
+
+	DSEG
+	PUBLIC	ERRNO
+ERRNO:	DB	0
 
 
