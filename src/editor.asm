@@ -28,6 +28,8 @@ L.AUX:	LD	(ENAGRID),A
 	LD	(ENAHEIGTHS),A
 	LD	A,1
 	LD	(ENAMAP),A
+	XOR	A
+	LD	(GRIDTYPE),A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -95,10 +97,17 @@ K.F3:	CP	KB_F3
 	JR	K.RET
 
 K.F4:	CP	KB_F4
-	JR	NZ,K.NOFUN
+	JR	NZ,K.TAB
 	LD	A,(ENAHEIGTHS)
 	XOR	1
 	LD	(ENAHEIGTHS),A
+	JR	K.RET
+
+K.TAB:	CP	KB_TAB
+	JR	NZ,K.NOFUN
+	LD	A,(GRIDTYPE)
+	XOR	1
+	LD	(GRIDTYPE),A
 	JR	K.RET
 
 K.NOFUN:CP	A			;SET Z = 1
@@ -185,8 +194,13 @@ SHOWLIMITS:
 	JR	S.AUX	
 
 SHOWGRID:
-	LD	A,GRIDCOLOR
-	LD	IY,G.DATA
+	LD	IY,GT.DATA
+	LD	A,(GRIDTYPE)
+	OR	A
+	JR	Z,G.1
+	LD	IY,GS.DATA
+G.1:	LD	A,GRIDCOLOR
+
 
 S.AUX:	LD	(FORCLR),A
 	LD	A,LOGIMP
@@ -230,7 +244,12 @@ G.LINE:	PUSH	AF
 	JR	G.NEXT
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
-G.DATA:	DB	16,248,  0,  255,  3,-16,  0,  0,  8
+
+GS.DATA:DB	16, 15,  0,   15,207, 16,  0, 16,  0
+	DB	26,  0,  7,  255,  7,  0,  8,  0,  8
+	DB	0
+
+GT.DATA:DB	16,248,  0,  255,  3,-16,  0,  0,  8
 	DB	10,  0,  4,  255,131,  0,  8,  0,  8
 	DB	16,  0, 84,  247,207,  0,  8,-16,  0
 	DB	16,248,207,  255,204,-16,  0,  0, -8
@@ -490,6 +509,7 @@ ENAGRID:	DB	0
 ENAMAP:		DB	0
 ENALIMITS:	DB	0
 ENAHEIGTHS:	DB	0
+GRIDTYPE:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
