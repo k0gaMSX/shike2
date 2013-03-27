@@ -214,7 +214,6 @@ CPVPAGE:LD	A,C
 	LD	HL,0
 	LD	DE,0
 	LD	BC,000D4H
-	LD	A,TILPAGE
 	JP	HMMM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
