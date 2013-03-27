@@ -1,7 +1,11 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel zbuffer.rel
 
 all : shike2.com
+
+zbuffer.rel : zbuffer.asm
+	echo zbuffer
+	as $(ASFLAGS) zbuffer.asm
 
 stdlib.rel : stdlib.asm
 	echo stdlib.asm

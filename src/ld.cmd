@@ -1,3 +1,3 @@
-shike2,vdp,kbd,bios,stdlib
+shike2,vdp,kbd,bios,stdlib,zbuffer
 
 
