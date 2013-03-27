@@ -1,5 +1,6 @@
 
 	INCLUDE	SHIKE2.INC
+	INCLUDE	BIOS.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = WORD TO PACK
@@ -197,6 +198,27 @@ I.END:	LD	(HL),0		;PUT END OF STRING
 
 I.POT10:	DB	100,10,1,0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = SOURCE ADDRESS
+;	DE = DESTINE ADDRESS
+;	BC = BUFFER SIZE
+
+	CSEG
+	PUBLIC	MEMMOVE,MEMCPY
+
+MEMMOVE:CALL	DCOMPR
+	JR	C,M.SMALL
+MEMCPY:	LDIR
+	RET
+
+M.SMALL:EX	DE,HL
+	ADD	HL,BC
+	EX	DE,HL
+	ADD	HL,BC
+	DEC	HL
+	DEC	DE
+	LDDR
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = ADDRESS WHERE WRITE 0

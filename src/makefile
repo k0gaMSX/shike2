@@ -7,7 +7,7 @@ zbuffer.rel : zbuffer.asm
 	echo zbuffer
 	as $(ASFLAGS) zbuffer.asm
 
-stdlib.rel : stdlib.asm
+stdlib.rel : stdlib.asm shike2.inc bios.inc
 	echo stdlib.asm
 	as $(ASFLAGS) stdlib.asm
 
