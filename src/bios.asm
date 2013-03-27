@@ -13,6 +13,18 @@ KBDOLD		EQU	KBDQUEUE+2	;OLD MATRIX STATUS
 KBDBUF		EQU	KBDOLD+11	;QUEUE BUFFER
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: E = CARTRIDGE PAGE
+
+	CSEG
+	PUBLIC	CARTPAGE
+
+CARTPAGE:
+	LD	A,7
+	ADD	A,E
+	OUT	(0FDH),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;OUTPUT:	Z = 0 WHEN EXITS SOME PROBLEM WITH THIS MSX
 
 	CSEG
