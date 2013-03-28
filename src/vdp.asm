@@ -207,14 +207,20 @@ SHOWPAGE:	;INPUT: B = DISPLAY PAGE
 	CSEG
 	PUBLIC	CPVPAGE
 
-CPVPAGE:LD	A,C
+CPVPAGE:LD	A,(ACPAGE)
+	PUSH	AF
+	LD	A,C
 	LD	(ACPAGE),A		;COPY A FULL PAGE
 	LD	A,E
 	LD	(VDPPAGE),A
 	LD	HL,0
 	LD	DE,0
 	LD	BC,000D4H
-	JP	HMMM
+	CALL	HMMM
+	POP	AF
+	LD	(ACPAGE),A
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:		E = PAGE NUMBER
@@ -223,6 +229,8 @@ CPVPAGE:LD	A,C
 	PUBLIC	CLRVPAGE
 
 CLRVPAGE:
+	LD	A,(ACPAGE)
+	PUSH	AF
 	LD	A,E
 	LD	(ACPAGE),A
 	XOR	A
@@ -230,7 +238,10 @@ CLRVPAGE:
 
 	LD	BC,00D4H
 	LD	DE,0
-	JP	HMMV
+	CALL	HMMV
+	POP	AF
+	LD	(ACPAGE),A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = PATTERN NUMBER

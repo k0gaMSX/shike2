@@ -325,6 +325,19 @@ MEMSET:	LD	E,L
 	LDIR
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	CLS
+	EXTRN	CLRVPAGE
+
+CLS:	LD	A,(ACPAGE)
+	LD	E,A
+	CALL	CLRVPAGE
+	LD	DE,0
+
+	; CONTINUE IN CLRVPAGE
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = LOCATION WHERE WE WANT TO PUT THE CURSOR (IN FONT UNITS)
 
