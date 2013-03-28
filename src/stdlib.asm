@@ -231,39 +231,41 @@ A.LOOP:	DEC	HL			;VAL += (*--PTR - '0') * FACTOR
 A.VAL:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	A = NUMBER
+;INPUT:	BC = NUMBER
 ;	DE = OUTPUT BUFFER
 
 	CSEG
 	PUBLIC	ITOA
 
-ITOA:	EX	DE,HL
-	LD	DE,I.POT10
+ITOA:	LD	L,C		;HL = INPUT NUMBER
+	LD	H,B		;DE = OUTPUT BUFFER
+	LD	IY,I.POW10	;IY = POW ARRAY
 
-I.NEXT:	EX	AF,AF'
-	LD	A,(DE)
-	OR	A
-	RET	Z		;0 MARKS END OF POT10 ARRAY
-	LD	B,A
-	LD	C,'0'
-        EX	AF,AF'
+I.NEXT:	LD	C,(IY)
+	INC	IY
+	LD	B,(IY)		;BC = FACTOR
+	INC	IY
+	LD	A,B
+	OR	C
+	JR	Z,I.END		;0 MARKS END OF POT10 ARRAY
 
-I.LOOP:	SUB	B
-	JR	C,I.BIGGER
-	INC	C
+	LD	A,'0'
+I.LOOP:	OR	A
+	SBC	HL,BC
+	JR	C,I.BIG
+	INC	A
 	JR	I.LOOP
 
-I.BIGGER:			;THE POT10 ELEMENT IS BIGGER THAN OUR NUMBER
-	ADD	A,B		;SO RESTORE VALUE AND PASS TO THE NEXT ELEMENT
-	LD	(HL),C
+I.BIG:	ADD	HL,BC		;THE POW10 ELEMENT IS BIGGER THAN OUR NUMBER
+	LD	(DE),A		;SO RESTORE VALUE AND PASS TO THE NEXT ELEMENT
 	INC	DE
-	INC	HL
 	JR	I.NEXT
 
-I.END:	LD	(HL),0		;PUT END OF STRING
+I.END:	XOR	A
+	LD	(DE),A		;PUT END OF STRING
 	RET
 
-I.POT10:	DB	100,10,1,0
+I.POW10:DW	10000,1000,100,10,1,0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = INPUT STRING
@@ -547,7 +549,8 @@ P.CHAR:	CP	'c'			;CHARACTER?
 
 P.INT:	CP	'd'			;DECIMAL?
 	JR	NZ,P.END
-	LD	A,L
+	LD	C,L
+	LD	B,H
 	LD	DE,P.BUF
 	CALL	ITOA
 	CALL	SKIP
@@ -576,7 +579,7 @@ S.0:	CP	'0'
 
 	DSEG
 P.RET:	DW	0
-P.BUF:	DS	4
+P.BUF:	DS	6
 P.PAD:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
