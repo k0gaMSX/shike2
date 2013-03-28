@@ -497,6 +497,42 @@ P.NL:	CP	31		;SMALLER THAN SPACE?
 CURSOR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	BC = 16 BIT NUMBER
+;	DE = OUTPUT BUFFER
+
+	CSEG
+
+HEX:	CALL	H.BYTE
+	LD	C,B
+
+H.BYTE:	LD	A,C
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	CALL	H.NIBBLE
+	LD	(DE),A
+	INC	DE
+
+	LD	A,C
+	AND	0FH
+	CALL	H.NIBBLE
+	LD	(DE),A
+	INC	DE
+	RET
+
+H.NIBBLE:
+	CP	10
+	JR	C,H.DEC
+	SUB	10
+	ADD	A,'A'
+	RET
+
+H.DEC:	ADD	A,'0'
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = POINTER TO FORMAT STRING
 ;	(SP-2) ... = ARGUMENTS
 
@@ -548,11 +584,20 @@ P.CHAR:	CP	'c'			;CHARACTER?
 	JR	P.END
 
 P.INT:	CP	'd'			;DECIMAL?
-	JR	NZ,P.END
+	JR	NZ,P.HEX
 	LD	C,L
 	LD	B,H
 	LD	DE,P.BUF
 	CALL	ITOA
+	CALL	SKIP
+	CALL	PUTS
+	JR	P.END
+
+P.HEX:	CP	'x'
+	JR	NZ,P.END
+	LD	C,L
+	LD	B,H
+	CALL	HEX
 	CALL	SKIP
 	CALL	PUTS
 
