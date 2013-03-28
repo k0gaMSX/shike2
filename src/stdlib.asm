@@ -164,6 +164,73 @@ SWTCH:	CALL	ARYHL
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = CHARACTER
+;OUTPUT:Z = 1 WHEN A IS NOT A CHARACTER
+
+	CSEG
+	PUBLIC	ISDIGIT
+
+ISDIGIT:CP	'0'
+	JR	Z,I.OK
+	JR	C,I.NOK
+	CP	'9'+1
+	JR	NC,I.NOK
+
+I.OK:	OR	1
+	RET
+
+I.NOK:	XOR	A
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = INPUT STRING
+
+	CSEG
+	PUBLIC	ATOI
+
+ATOI:	LD	B,0
+A.LOOP1:LD	A,(DE)			;LOOK FOR THE FIRST CHARACTER WHICH
+	CALL	ISDIGIT			;IS NOT A DIGIT
+	JR	Z,A.EOS
+	INC	DE
+	INC	B
+	JR	A.LOOP1
+
+A.EOS:	LD	A,B			;END OF STRING
+	OR	A
+	RET	Z
+	EX	DE,HL
+	LD	E,1
+	XOR	A
+	LD	(A.VAL),A
+
+A.LOOP:	DEC	HL			;VAL += (*--PTR - '0') * FACTOR
+	LD	A,(HL)
+	PUSH	BC
+	PUSH	HL
+
+	SUB	'0'
+	CALL	MULTEA
+	LD	A,(A.VAL)
+	CALL	ADDAHL
+	LD	A,L
+	LD	(A.VAL),A
+
+	LD	A,10			;FACTOR *= 10
+	CALL	MULTEA
+	LD	E,L
+
+	POP	HL
+	POP	BC
+	DJNZ	A.LOOP
+	LD	A,(A.VAL)
+	RET
+
+	DSEG
+A.VAL:	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = NUMBER
 ;	DE = OUTPUT BUFFER
 
