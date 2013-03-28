@@ -199,6 +199,24 @@ I.END:	LD	(HL),0		;PUT END OF STRING
 I.POT10:	DB	100,10,1,0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = INPUT STRING
+;OUTPUT:A = LEN
+
+	CSEG
+	PUBLIC	STRLEN
+
+STRLEN:	LD	L,E			;IT ASSUMES STRING OF ONLY 256 BYTES
+	LD	H,D
+	XOR	A
+	LD	BC,0
+	CPIR
+	DEC	HL
+	OR	A
+	SBC	HL,DE
+	LD	A,L
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = SOURCE ADDRESS
 ;	DE = DESTINE ADDRESS
 ;	BC = BUFFER SIZE
