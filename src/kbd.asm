@@ -75,6 +75,36 @@ KPRESS:	CALL	KEVENT
 	JR	NZ,KPRESS      ;KEY RELEASE, WE ONLY WANT PRESS
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;OUTPUT:A = ASCII CODE
+
+	CSEG
+	PUBLIC	GETCHAR
+	EXTRN	ADDAHL
+
+GETCHAR:CALL	KPRESS
+	LD	HL,KMATRIX
+	DEC	A
+	CALL	ADDAHL
+	LD	A,(HL)
+	OR	A
+	JR	Z,GETCHAR
+	RET
+
+;;;JAPANESSE KEY MATRIX
+
+KMATRIX:DB	'7','6','5','4','3','2','1','0'		;ROW 0
+	DB	  0,  0,  0,  0,  0,  0,'9','8'		;ROW 1
+	DB	'B','A',  0,  0,  0,  0,  0,  0		;ROW 2
+	DB	'J','I','H','G','F','E','D','C'		;ROW 3
+	DB	'R','Q','P','O','N','M','L','K'		;ROW 4
+	DB	'Z','Y','X','W','V','U','T','S'		;ROW 5
+	DB	  0,  0,  0,  0,  0,  0,  0,  0		;ROW 6
+	DB	 10,  0,  8,  0,  9,  0,  0,  0		;ROW 7
+	DB	  0,  0,  0,  0,  0,  0,  0,' '		;ROW 8
+	DB	  0,  0,  0,  0,  0,  0,  0,  0		;ROW 9
+	DB	  0,  0,  0,  0,  0,  0,  0,  0		;ROW 10
+	DB	  0,  0,  0,  0,  0,  0,  0,  0		;ROW 11
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
