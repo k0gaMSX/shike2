@@ -259,6 +259,57 @@ LOCATE:	LD	A,D
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = POINTER TO OUTPUT BUFFER
+;	 C = SIZE OF OUTPUT BUFFER
+
+	CSEG
+	PUBLIC	GETS
+	EXTRN	GETCHAR,VDPSYNC
+
+GETS:	LD	(G.PTR),DE
+	LD	A,C
+	LD	(G.LEN),A
+	LD	(G.CNT),A
+
+G.LOOP:	CALL	VDPSYNC
+	CALL	GETCHAR
+	PUSH	AF
+	CALL	PUTCHAR
+	POP	AF
+	LD	HL,(G.PTR)
+	LD	DE,(G.CNT)
+
+	CP	10
+	JR	NZ,G.BS
+	LD	HL,(G.PTR)
+	LD	(HL),0
+	RET
+
+G.BS:	CP	8
+	JR	NZ,G.ADD
+	LD	A,(G.LEN)
+	CP	E
+	JR	Z,G.LOOP
+	INC	E
+	DEC	HL
+	JR	G.SET
+
+G.ADD:	DEC	E
+	JR	Z,G.LOOP
+	LD	(HL),A
+	INC	HL
+
+G.SET:	LD	A,E
+	LD	(G.CNT),A
+	LD	(G.PTR),HL
+	JR	G.LOOP
+
+	DSEG
+G.PTR:	DW	0
+G.LEN:	DB	0
+G.CNT:	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = POINTER TO ASCIINUL STRING
 
 	CSEG
