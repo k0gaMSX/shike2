@@ -79,22 +79,22 @@ KPRESS:	CALL	KEVENT
 ;OUTPUT:A = ASCII CODE
 
 	CSEG
-	PUBLIC	GETCHAR
+	PUBLIC	GETCH
 	EXTRN	ADDAHL
 
-GETCHAR:CALL	KPRESS
+GETCH:	CALL	KPRESS
 	LD	HL,KMATRIX
 	DEC	A
 	CALL	ADDAHL
 	LD	A,(HL)
 	OR	A
-	JR	Z,GETCHAR
+	JR	Z,GETCH
 	RET
 
 ;;;JAPANESSE KEY MATRIX
 
 KMATRIX:DB	'7','6','5','4','3','2','1','0'		;ROW 0
-	DB	  0,  0,  0,  0,  0,  0,'9','8'		;ROW 1
+	DB	  0,  0,"'",  0,  0,'-','9','8'		;ROW 1
 	DB	'B','A',  0,  0,  0,  0,  0,  0		;ROW 2
 	DB	'J','I','H','G','F','E','D','C'		;ROW 3
 	DB	'R','Q','P','O','N','M','L','K'		;ROW 4

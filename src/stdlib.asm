@@ -359,23 +359,32 @@ LOCATE:	LD	A,D
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;OUTPUT:A = ASCII CODE
+
+	CSEG
+	PUBLIC	GETCHAR
+	EXTRN	GETCH,VDPSYNC
+
+GETCHAR:CALL	GETCH
+	PUSH	AF
+	CALL	PUTCHAR
+	CALL	VDPSYNC
+	POP	AF
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = POINTER TO OUTPUT BUFFER
 ;	 C = SIZE OF OUTPUT BUFFER
 
 	CSEG
 	PUBLIC	GETS
-	EXTRN	GETCHAR,VDPSYNC
 
 GETS:	LD	(G.PTR),DE
 	LD	A,C
 	LD	(G.LEN),A
 	LD	(G.CNT),A
 
-G.LOOP:	CALL	VDPSYNC
-	CALL	GETCHAR
-	PUSH	AF
-	CALL	PUTCHAR
-	POP	AF
+G.LOOP:	CALL	GETCHAR
 	LD	HL,(G.PTR)
 	LD	DE,(G.CNT)
 
