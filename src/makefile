@@ -1,10 +1,15 @@
 ASFLAGS = -t
 REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel zbuffer.rel
 
-all : shike2.com
+all : shike2.com leveldef.bin
+
+leveldef.bin : leveldef.asm loader.asm
+	echo leveldef.asm
+	as $(ASFLAGS) leveldef.asm
+	ld /B8000 /R8000 /Gmain leveldef.bin=leveldef.rel
 
 zbuffer.rel : zbuffer.asm
-	echo zbuffer
+	echo zbuffer.asm
 	as $(ASFLAGS) zbuffer.asm
 
 stdlib.rel : stdlib.asm shike2.inc bios.inc
@@ -34,5 +39,6 @@ clean :
 	del *.rel
 	del *.sym
 	del *.com
+	del *.bin
 
 
