@@ -1,0 +1,6 @@
+
+
+MOUSESPR	EQU	0
+MOUSEPAT	EQU	0
+
+
