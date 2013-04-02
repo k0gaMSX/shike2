@@ -4,6 +4,57 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	PUBLIC	INITMOUSE
+
+MOUSE1	EQU	12			;DEVICE ID FOR MOUSE 1
+MOUSE2	EQU	16			;DEVICE ID FOR MOUSE 2
+
+INITMOUSE:
+	LD	A,MOUSE1
+	LD	(MPORT),A
+	CALL	ISCONN			;IS IT CONNECTED?
+	RET	NZ
+
+	LD	A,MOUSE2
+	LD	(MPORT),A
+	CALL	ISCONN			;IS IT CONNECTED?
+	RET	NZ
+
+	XOR	A
+	LD	(MPORT),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = MOUSE PORT
+;OUTPUT:ZF = 1 WHEN IT IS NOT CONNECTED
+
+	CSEG
+
+ISCONN:	LD	B,3
+	LD	E,A
+
+I.LOOP:	PUSH	DE			;READ THE MOUSE INCREMENT
+	PUSH	BC			;IF YOU GET XINC=1 AT LEAST
+
+	LD	A,E			;3 TIMES, WE CAN THINK IT IS
+	PUSH	AF			;DISCONNECTED
+	CALL	GTPAD
+	POP	AF
+	INC	A
+	CALL	GTPAD
+	POP	BC
+	POP	DE
+
+	CP	1
+	RET	NZ
+	EI
+	HALT
+	DJNZ	I.LOOP
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
 	PUBLIC	MOUSEHOOK,MOUSEX,MOUSEY
 	EXTRN	SEXPAND
 
@@ -54,9 +105,8 @@ A.BIG:	LD	A,E
 	RET
 
 
-MPORT:	DB	16
-
 	DSEG
+MPORT:	DB	0
 MOUSEX:	DB	0
 MOUSEY:	DB	0
 
