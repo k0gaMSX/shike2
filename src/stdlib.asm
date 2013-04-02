@@ -5,6 +5,18 @@
 NR_NUMLINES	EQU	212/8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	SEXPAND
+
+SEXPAND:LD	A,E
+	RLCA
+	SBC	A,A
+	LD	D,A
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = WORD TO PACK
 ;OUTPUT:A = PACKED BYTE
 
