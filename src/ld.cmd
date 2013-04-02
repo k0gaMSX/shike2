@@ -1,3 +1,3 @@
-shike2,vdp,kbd,bios,stdlib,zbuffer
+shike2,vdp,kbd,bios,stdlib,zbuffer,mouse
 
 
