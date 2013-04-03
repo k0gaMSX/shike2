@@ -8,7 +8,7 @@ leveldef.bin : leveldef.asm loader.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /B8000 /R8000 /Gmain leveldef.bin=leveldef.rel
 
-mouse.rel : mouse.asm bios.inc sprite.inc
+mouse.rel : mouse.asm bios.inc sprite.inc shike2.inc
 	echo mouse.asm
 	as $(ASFLAGS) mouse.asm
 
