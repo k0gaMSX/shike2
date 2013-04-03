@@ -16,10 +16,6 @@ MOUSE1	EQU	12			;DEVICE ID FOR MOUSE 1
 MOUSE2	EQU	16			;DEVICE ID FOR MOUSE 2
 
 INITMOUSE:
-	LD	HL,8080H
-	LD	(BUTTON1),HL
-	LD	(BUTTON1OLD),HL		;MARK ALL BUTTON AS NO PRESSED
-
 	LD	A,MOUSEPAT
 	LD	(PATTERN),A
 	LD	C,A
@@ -291,7 +287,7 @@ MEVENT:	CALL	MSHIT
 	JR	MEVENT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;OUTPUT:A = BUTTON NUMBER (UPPER BIT=1 WHEN RELEASING). A = 0 WHEN NO EVENT
+;OUTPUT:A = BUTTON NUMBER
 ;	HL = MOUSE COORDENATES
 
 	CSEG
@@ -302,7 +298,16 @@ MPRESS:	CALL	MEVENT
 	JR	NZ,MPRESS      ;KEY RELEASE, WE ONLY WANT PRESS
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+	CSEG
+	PUBLIC	MSCLR
+
+MSCLR:	LD	HL,0
+	LD	(MOUSEQUEUE),HL
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
 ENABLE:		DB	0
