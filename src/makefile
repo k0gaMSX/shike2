@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
 all : shike2.com leveldef.bin
 
@@ -7,6 +7,14 @@ leveldef.bin : leveldef.asm loader.asm
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /B8000 /R8000 /Gmain leveldef.bin=leveldef.rel
+
+edfloor.rel : edfloor.asm bios.inc
+	echo edfloor.asm
+	as $(ASFLAGS) edfloor.asm
+
+editor.rel : editor.asm bios.inc
+	echo editor.asm
+	as $(ASFLAGS) editor.asm
 
 mouse.rel : mouse.asm bios.inc sprite.inc shike2.inc
 	echo mouse.asm
