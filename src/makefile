@@ -3,7 +3,7 @@ REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel editor.rel edfloor.rel zbuf
 
 all : shike2.com leveldef.bin
 
-leveldef.bin : leveldef.asm loader.asm
+leveldef.bin : leveldef.asm loader.asm level.inc
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /B8000 /R8000 /Gmain leveldef.bin=leveldef.rel

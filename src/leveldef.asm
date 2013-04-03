@@ -1,8 +1,52 @@
 
 	INCLUDE	SHIKE2.INC
+	INCLUDE	LEVEL.INC
 
 	ASEG
 	ORG	08000H
+
+JTABLE:	JP	GETFLOOR_
+	JP	GETTILE_
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = NUMBER OF FLOOR
+;OUTPUT:HL = ADDRESS
+
+GETFLOOR_:
+	LD	L,E
+	LD	H,0
+	ADD	HL,HL			;HL = NFLOOR*2
+	ADD	HL,HL			;HL = NFLOOR*4
+	LD	E,L
+	LD	D,H			;DE = NFLOOR*4
+	ADD	HL,HL			;HL = NFLOOR*8
+	ADD	HL,DE			;HL = NFLOOR*8 + NFLOOR*4
+	LD	DE,FLOOR
+	ADD	HL,DE			;HL = NFLOOR*12 + FLOOR
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = NUMBER OF TILE
+;OUTPUT:HL = ADDRESS
+
+GETTILE_:
+	LD	L,E
+	LD	H,0
+	ADD	HL,HL			;HL = NTILE*2
+	ADD	HL,HL			;HL = NTILE*4
+	LD	E,L
+	LD	D,H			;DE = NTILE*4
+	ADD	HL,HL			;HL = NTILE*8
+	ADD	HL,HL			;HL = NTILE*16
+	ADD	HL,HL			;HL = NTILE*32
+	ADD	HL,DE			;HL = NTILE*32 + NTILE*4
+	LD	DE,TILE
+	ADD	HL,DE			;HL = NTILE*36 + TILE
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 MAP:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
@@ -186,6 +230,11 @@ L15_1:	DS	8*8*2
 L15_2:	DS	8*8*2
 L15_3:	DS	8*8*2
 L15_ACC:DS	8*8
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+FLOOR:	DS	NR_FLOORS*SIZFLOOR
+TILE:	DS	NR_TILES*SIZTILE
 
 	PUBLIC	END
 END:	DS	0C000H-$,0
