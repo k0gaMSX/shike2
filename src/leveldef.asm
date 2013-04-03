@@ -1,4 +1,6 @@
 
+	INCLUDE	SHIKE2.INC
+
 	ASEG
 	ORG	08000H
 
@@ -191,7 +193,7 @@ END:	DS	0C000H-$,0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-PAGE	EQU	7
+PAGE	EQU	6+LEVELPAGE
 
 	INCLUDE	LOADER.ASM
 
