@@ -8,22 +8,32 @@
 JTABLE:	JP	GETFLOOR_
 	JP	GETTILE_
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = 1ST OPERAND
+;	A = 2ND OPERAND
+;OUTPUT:HL = DE*A
+
+MULTDEA:LD	HL,0
+	LD	B,8
+
+DE.LOOP:RRCA
+	JP	NC,DE.NOT
+	ADD	HL,DE
+DE.NOT:	SLA	E
+	RL	D
+	DJNZ	DE.LOOP
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	E = NUMBER OF FLOOR
 ;OUTPUT:HL = ADDRESS
 
 GETFLOOR_:
-	LD	L,E
-	LD	H,0
-	ADD	HL,HL			;HL = NFLOOR*2
-	ADD	HL,HL			;HL = NFLOOR*4
-	LD	E,L
-	LD	D,H			;DE = NFLOOR*4
-	ADD	HL,HL			;HL = NFLOOR*8
-	ADD	HL,DE			;HL = NFLOOR*8 + NFLOOR*4
+	LD	A,E
+	LD	DE,SIZFLOOR
+	CALL	MULTDEA
 	LD	DE,FLOOR
-	ADD	HL,DE			;HL = NFLOOR*12 + FLOOR
+	ADD	HL,DE
 	RET
 
 
@@ -32,18 +42,11 @@ GETFLOOR_:
 ;OUTPUT:HL = ADDRESS
 
 GETTILE_:
-	LD	L,E
-	LD	H,0
-	ADD	HL,HL			;HL = NTILE*2
-	ADD	HL,HL			;HL = NTILE*4
-	LD	E,L
-	LD	D,H			;DE = NTILE*4
-	ADD	HL,HL			;HL = NTILE*8
-	ADD	HL,HL			;HL = NTILE*16
-	ADD	HL,HL			;HL = NTILE*32
-	ADD	HL,DE			;HL = NTILE*32 + NTILE*4
+	LD	A,E
+	LD	DE,SIZTILE
+	CALL	MULTDEA
 	LD	DE,TILE
-	ADD	HL,DE			;HL = NTILE*36 + TILE
+	ADD	HL,DE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
