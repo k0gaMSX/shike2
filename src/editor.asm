@@ -1,13 +1,16 @@
 
 	INCLUDE	BIOS.INC
+	INCLUDE	SHIKE2.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	PUBLIC	EDINIT
-	EXTRN	MOUSE,MSCLR
+	EXTRN	MOUSE,MSCLR,CLRVPAGE
 
-EDINIT:	LD	A,1
+EDINIT:	LD	E,EDPAGE
+	CALL	CLRVPAGE
+	LD	A,1
 	CALL	MOUSE
 	JP	MSCLR
 
