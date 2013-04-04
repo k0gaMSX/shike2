@@ -1,6 +1,6 @@
 	INCLUDE	SHIKE2.INC
 	INCLUDE	BIOS.INC
-	INCLUDE	KBD.INC
+	INCLUDE	EVENT.INC
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

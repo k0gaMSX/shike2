@@ -40,7 +40,7 @@ bios.rel : bios.asm bios.inc
 	echo bios.asm
 	as $(ASFLAGS) bios.asm
 
-kbd.rel : kbd.asm shike2.inc bios.inc kbd.inc
+kbd.rel : kbd.asm shike2.inc bios.inc event.inc
 	echo kbd.asm
 	as $(ASFLAGS) kbd.asm
 

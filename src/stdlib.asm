@@ -5,6 +5,27 @@
 NR_NUMLINES	EQU	212/8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;OUTPUT:A = EVENT CODE
+;	HL = EVENT PARAMETER
+
+	CSEG
+	PUBLIC	SELECT,PSELECT
+	EXTRN	KBHIT,MSHIT
+
+SELECT:	CALL	KBHIT
+	RET	NZ
+	CALL	MSHIT
+	RET	NZ
+	EI
+	HALT
+	JR	SELECT
+
+PSELECT:CALL	SELECT
+	BIT	7,A
+	JR	NZ,PSELECT
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	PUBLIC	SEXPAND
