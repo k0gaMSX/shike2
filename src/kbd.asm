@@ -1,6 +1,6 @@
 	INCLUDE	SHIKE2.INC
 	INCLUDE	BIOS.INC
-
+	INCLUDE	KBD.INC
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -147,7 +147,7 @@ KBDCLR:	LD	HL,0
 KBDHOOK:LD	HL,NEWKEY
 	LD	DE,KBDOLD
 	LD	B,11
-	LD	C,1
+	LD	C,KB_OFFSET
 
 K.LOOP:	PUSH	BC
 	LD	B,(HL)
