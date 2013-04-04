@@ -3,10 +3,24 @@ REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel editor.rel edfloor.rel zbuf
 
 all : shike2.com leveldef.bin
 
-leveldef.bin : leveldef.asm loader.asm level.inc
+bload.obj : bload.asm
+	echo bload.asm
+	as $(ASFLAGS) bload.asm
+	ld bload.obj=bload.rel
+
+loader.obj : loader.asm
+	echo loader.asm
+	as $(ASFLAGS) loader.asm
+	ld /RC000 loader.obj=loader.rel
+
+leveldef.bin : leveldef.obj loader.obj bload.obj
+	echo leveldef.rel
+	concat bload.obj + leveldef.obj + loader.obj leveldef.bin
+
+leveldef.obj : leveldef.asm level.inc
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
-	ld /B8000 /R8000 /Gmain leveldef.bin=leveldef.rel
+	ld /R4000 leveldef.obj=leveldef.rel
 
 edfloor.rel : edfloor.asm bios.inc
 	echo edfloor.asm
@@ -52,5 +66,5 @@ clean :
 	del *.sym
 	del *.com
 	del *.bin
-
+	del *.obj
 
