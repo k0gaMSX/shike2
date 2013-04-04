@@ -13,11 +13,45 @@ EDFLOOR:CALL	EDINIT
 	LD	E,LEVELPAGE
 	CALL	CARTPAGE
 
-ED.LOOP:CALL	SHOWSCR
+ED.LOOP:CALL	GETFDATA
+	CALL	SHOWSCR
 	CALL	VDPSYNC
 	CALL	MPRESS
 	CP	2
 	JR	NZ,ED.LOOP
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+GETFDATA:
+	LD	A,(FLOOR)
+	LD	E,A
+	CALL	GETFLOOR		;GET THE POINTER TO THE FLOOR
+	LD	(FPTR),HL
+
+	PUSH	HL
+	CALL	GETNUMPAT
+	LD	(NUMPAT1),A
+	POP	HL
+	LD	DE,NR_LAYERS
+	ADD	HL,DE
+	CALL	GETNUMPAT
+	LD	(NUMPAT2),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = POINTER TO THE FLOOR
+
+	CSEG
+
+GETNUMPAT:
+	XOR	A
+	LD	BC,NR_LAYERS+1
+	CPIR
+	LD	A,NR_LAYERS
+	SUB	C
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -69,6 +103,7 @@ FMT:	DB	10,10,10,10
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	DSEG
+FPTR:	DW	0			;FLOOR POINTER
 FLOOR:	DB	0
 PAL:	DB	0
 TILESET:DB	0
