@@ -72,9 +72,11 @@ GETNUMPAT:
 
 
 	CSEG
-	EXTRN	LOCATE,PRINTF,GLINES
+	EXTRN	GAMEPAL,LOCATE,PRINTF,GLINES
 
-SHOWSCR:LD	DE,0
+SHOWSCR:LD	DE,(PAL)
+	CALL	GAMEPAL
+	LD	DE,0
 	CALL	LOCATE
 	LD	H,0
 	LD	A,(NUMPAT1)
@@ -145,10 +147,27 @@ F.RET:	LD	(FLOOR),A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
 
 CHANGEPAL:
-	LD	DE,TXTPAL
-	JP	PUTS
+	CP	MS_BUTTON1
+	LD	A,(PAL)
+	JR	NZ,P.DEC
+	CP	NR_PALETES-1
+	RET	Z
+	INC	A
+	JR	P.RET
+
+P.DEC:	OR	A
+	RET	Z
+	DEC	A
+P.RET:	LD	(PAL),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 CHANGESET:
 	LD	DE,TXTSET
@@ -156,7 +175,6 @@ CHANGESET:
 
 TXTPAT1:	DB	"PATTERN 1",10,0
 TXTPAT2:	DB	"PATTERN 2",10,0
-TXTPAL:		DB	"PALETE",10,0
 TXTSET:		DB	"SET",10,0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
