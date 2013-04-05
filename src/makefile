@@ -13,11 +13,17 @@ loader.obj : loader.asm
 	as $(ASFLAGS) loader.asm
 	ld /RC000 loader.obj=loader.rel
 
+palete.asm : ..\\gfx\\shike2.pl5
+	echo shike2.pl5
+	copy ..\\gfx\\shike2.pl5
+	db -lPALETES shike2.pl5 > palete.asm
+	del shike2.pl5
+
 leveldef.bin : leveldef.obj loader.obj bload.obj
 	echo leveldef.rel
 	concat bload.obj + leveldef.obj + loader.obj leveldef.bin
 
-leveldef.obj : leveldef.asm level.inc
+leveldef.obj : leveldef.asm level.inc palete.asm
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
@@ -67,4 +73,6 @@ clean :
 	del *.com
 	del *.bin
 	del *.obj
+	del palete.asm
+
 

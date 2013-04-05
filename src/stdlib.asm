@@ -690,7 +690,6 @@ P.END:	POP	DE
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	PRINTNUM
 
 PRINTNUM:
 	LD	DE,P.BUF
