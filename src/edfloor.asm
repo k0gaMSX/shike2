@@ -1,13 +1,13 @@
 
 	INCLUDE	SHIKE2.INC
 	INCLUDE	LEVEL.INC
-
+	INCLUDE	EVENT.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	PUBLIC	EDFLOOR
-	EXTRN	EDINIT,MPRESS,VDPSYNC,CARTPAGE
+	EXTRN	EDINIT,MPRESS,VDPSYNC,CARTPAGE,LISTEN
 
 EDFLOOR:CALL	EDINIT
 	LD	E,LEVELPAGE
@@ -16,10 +16,23 @@ EDFLOOR:CALL	EDINIT
 ED.LOOP:CALL	GETFDATA
 	CALL	SHOWSCR
 	CALL	VDPSYNC
-	CALL	MPRESS
-	CP	2
+	LD	DE,RECEIVERS
+	CALL	LISTEN
 	JR	NZ,ED.LOOP
 	RET
+
+RECEIVERS:
+	DB	80,30,30,8
+	DW	CHANGEFLOOR
+	DB	80,30,38,8
+	DW	CHANGEPAL
+	DB	80,30,46,8
+	DW	CHANGESET
+	DB	80,16,78,8
+	DW	PUTPATTERN1
+	DB	80,16,86,8
+	DW	PUTPATTERN2
+	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -43,6 +56,7 @@ GETFDATA:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = POINTER TO THE FLOOR
+;OUTPUT:A = NUMBER OF USED LAYERS IN THE PATTERN STACK
 
 	CSEG
 
@@ -87,10 +101,8 @@ SHOWSCR:LD	DE,0
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 FLOORG:	DB	4,  80, 30,  110, 30,  0,  8,  0,  8
 	DB	2,  80, 30,   80, 54, 30,  0, 30,  0
-
 	DB	3,  80, 78,   96, 78,  0,  8,  0,  8
 	DB	2,  80, 78,   80, 94, 16,  0, 16,  0
-
 	DB	0
 
 FMT:	DB	10,10,10,10
@@ -100,6 +112,39 @@ FMT:	DB	10,10,10,10
 	DB	10,10,10
 	DB	9,9,9," %d",10
 	DB	9,9,9," %d",0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
+	CSEG
+	EXTRN	PUTS
+
+PUTPATTERN1:
+	LD	DE,TXTPAT1
+	JP	PUTS
+
+PUTPATTERN2:
+	LD	DE,TXTPAT2
+	JP	PUTS
+
+CHANGEFLOOR:
+	LD	DE,TXTFLOOR
+	JP	PUTS
+
+CHANGEPAL:
+	LD	DE,TXTPAL
+	JP	PUTS
+
+CHANGESET:
+	LD	DE,TXTSET
+	JP	PUTS
+
+TXTPAT1:	DB	"PATTERN 1",10,0
+TXTPAT2:	DB	"PATTERN 2",10,0
+TXTFLOOR:	DB	"FLOOR",10,0
+TXTPAL:		DB	"PALETE",10,0
+TXTSET:		DB	"SET",10,0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	DSEG
