@@ -3,36 +3,36 @@ REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel editor.rel edfloor.rel zbuf
 
 all : shike2.com leveldef.bin
 
-bload.obj : bload.asm
-	echo bload.asm
-	as $(ASFLAGS) bload.asm
-	ld bload.obj=bload.rel
-
-loader.obj : loader.asm
-	echo loader.asm
-	as $(ASFLAGS) loader.asm
-	ld /RC000 loader.obj=loader.rel
-
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
 	copy ..\\gfx\\shike2.pl5
 	db -lPALETES shike2.pl5 > palete.asm
 	del shike2.pl5
 
-leveldef.bin : leveldef.obj loader.obj bload.obj
+bload.obj : bload.asm
+	echo bload.asm
+	as $(ASFLAGS) bload.asm
+	ld bload.obj=bload.rel
+
+loadpag1.obj : loadpag1.asm loader.asm
+	echo loadpag1.asm
+	as $(ASFLAGS) loadpag1.asm
+	ld /RC000 loadpag1.obj=loadpag1.rel
+
+leveldef.bin : leveldef.obj loadpag1.obj bload.obj
 	echo leveldef.rel
-	concat bload.obj + leveldef.obj + loader.obj leveldef.bin
+	concat bload.obj + leveldef.obj + loadpag1.obj leveldef.bin
 
 leveldef.obj : leveldef.asm level.inc palete.asm
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
 
-edfloor.rel : edfloor.asm bios.inc
+edfloor.rel : edfloor.asm shike2.inc level.inc event.inc
 	echo edfloor.asm
 	as $(ASFLAGS) edfloor.asm
 
-editor.rel : editor.asm bios.inc
+editor.rel : editor.asm shike2.inc level.inc event.inc
 	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
