@@ -128,9 +128,23 @@ PUTPATTERN2:
 	LD	DE,TXTPAT2
 	JP	PUTS
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+
 CHANGEFLOOR:
-	LD	DE,TXTFLOOR
-	JP	PUTS
+	CP	MS_BUTTON1
+	LD	A,(FLOOR)
+	JR	NZ,F.DEC
+	INC	A
+	JR	F.RET
+
+F.DEC:	DEC	A
+F.RET:	LD	(FLOOR),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 CHANGEPAL:
 	LD	DE,TXTPAL
@@ -142,7 +156,6 @@ CHANGESET:
 
 TXTPAT1:	DB	"PATTERN 1",10,0
 TXTPAT2:	DB	"PATTERN 2",10,0
-TXTFLOOR:	DB	"FLOOR",10,0
 TXTPAL:		DB	"PALETE",10,0
 TXTSET:		DB	"SET",10,0
 
