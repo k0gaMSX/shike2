@@ -120,7 +120,6 @@ WRTVDP:	PUSH	HL
 	OUT	(C),D
 	OUT	(C),A
 	LD	(HL),D          ;UPDATE THE RAM SHADOW VARIABLES
-	EI
 
 	POP	DE
 	POP	HL
@@ -186,7 +185,6 @@ SETWRT:	PUSH	BC
 	DI
 	OUT	(C),L
 	OUT	(C),H
-	EI
 
 	POP	BC
 	RET
@@ -206,7 +204,6 @@ SETRD:	PUSH	BC
 	DI
 	OUT	(C),L
 	OUT	(C),A
-	EI
 
 	POP	BC
 	RET
@@ -235,7 +232,6 @@ NSTWRT:	PUSH	BC
 	OUT	(C),L		;WRITE THE LOW 14 BITS NOW
 	OUT	(C),H
 	LD	(RG14SAV),A
-	EI
 
 	POP	BC
 	RET
@@ -264,7 +260,6 @@ NSETRD:	PUSH	BC
 	OUT	(C),L		;WRITE THE LOW 14 BITS NOW
 	OUT	(C),H
 	LD	(RG14SAV),A
-	EI
 
 	POP	BC
 	RET
@@ -287,7 +282,6 @@ FILVRM:	PUSH	HL
 	LD	A,(VDPW)
 	LD	C,A		;C = VDP WRITING PORT
 
-	DI
 .FILLOOP:			;IS IS SLOW?, YEAH, A LOT. IF YOU WANT
 	OUT	(C),B		;SPEED THEN DON'T USE IT AND GET AN UNROLL
 	DEC	HL		;VERSION
@@ -336,13 +330,13 @@ CLRSPR: LD	HL,SPRITEGEN
 	INC	A
 	DJNZ	.CLOOP
 	EI
+
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       HL = ORIGIN RAM ADDRESS
 ;             DE = DESTINE VRAM ADDRESS
 ;             BC = NUMBER OF BYTES
-;TODO: USE ALL THE BITS IN HL
 
 	CSEG
 	PUBLIC	LDIRVM
@@ -360,18 +354,16 @@ LDIRVM:	EX	DE,HL		;HL = VRAM ADDRESS
 	JR	Z,.VLOOP
 	INC	D
 
-	DI
 .VLOOP:	OTIR			;IS IT SLOW? READ THE COMMENT FILVRM
 	DEC	D
 	JR	NZ,.VLOOP
-	EI
 
+	EI
 	RET
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       HL = ORIGIN VRAM ADDRESS
 ;             DE = DESTINE RAM ADDRESS
 ;             BC = NUMBER OF BYTES
-;TODO: USE ALL THE BITS IN HL
 
 	CSEG
 	PUBLIC	LDIRMV
@@ -388,12 +380,11 @@ LDIRMV:	CALL	NSETRD
 	JR	Z,.MLOOP
 	INC	D
 
-	DI
 .MLOOP:	INIR			;IS IT SLOW? READ THE COMMENT FILVRM
 	DEC	D
 	JR	NZ,.MLOOP
-	EI
 
+	EI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -405,7 +396,6 @@ KILBUF:	DI
 	LD	HL,KEYBUF
 	LD	(PUTPNT),HL
 	LD	(GETPNT),HL
-	EI
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
