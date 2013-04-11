@@ -1,7 +1,7 @@
 ASFLAGS = -t
 REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
-all : shike2.com leveldef.bin
+all : shike2.com leveldef.bin tileset0.bin
 
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
@@ -14,7 +14,21 @@ bload.obj : bload.asm
 	as $(ASFLAGS) bload.asm
 	ld bload.obj=bload.rel
 
-loadpag1.obj : loadpag1.asm loader.asm
+loadpag7.obj : loadpag7.asm loader.asm shike2.inc bios.inc
+	echo loadpag7.asm
+	as $(ASFLAGS) loadpag7.asm
+	ld /RC000 loadpag7.obj=loadpag7.rel
+
+patset0.bin : patset0.obj loadpag7.obj bload.obj
+	echo patset0.obj
+	concat bload.obj + patset0.obj + loadpag7.obj patset0.bin
+
+patset0.obj : ..\\gfx\\patset0.gl5
+	echo patset0.gl5
+	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
+
+
+loadpag1.obj : loadpag1.asm loader.asm shike2.inc bios.inc
 	echo loadpag1.asm
 	as $(ASFLAGS) loadpag1.asm
 	ld /RC000 loadpag1.obj=loadpag1.rel
