@@ -2,6 +2,7 @@
 	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	EVENT.INC
+	INCLUDE	LEVEL.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -93,7 +94,6 @@ XY2PAT:	LD	A,E
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	SELPAT
 	EXTRN	SETPAGE,PSELECT,SETPAGE
 
 SELPAT:	LD	A,PATPAGE
@@ -124,6 +124,76 @@ S.END:	PUSH	AF
 	OR	A			;IF USER CANCELS OPERATION
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = LAYER
+;	BC = COORDENATE OFFSET
+;	HL = PATTERN STACK
+
+
+	CSEG
+
+DELLAYER:
+	DEC	E
+	LD	D,0
+	;CONTINUE IN ADDLAYER
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = LAYER
+;	D = PATTERN
+;	BC = COORDENATE OFFSET
+;	HL = PATTERN STACK
+
+	CSEG
+
+ADDLAYER:
+	LD	A,D
+	LD	D,0
+	ADD	HL,BC			;POINTERT TO PATTERN
+	ADD	HL,DE
+	LD	(HL),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+;	DE = COORDENATE OFFSET
+;	C = NUMBERS OF TILES
+;	HL = POINTER TO PATTERN STACK
+
+	CSEG
+	PUBLIC	PATEVENT
+
+PATEVENT:
+	EX	AF,AF'
+	LD	A,C
+	LD	(P.NUM),A
+	LD	(P.OFFSET),DE
+	LD	(P.PTR),HL
+	EX	AF,AF'
+
+	CP	MS_BUTTON1		;MOUSE 1 ADDS A PATTERN
+	LD	A,(P.NUM)
+	JR	NZ,P1.1
+
+	CP	NR_LAYERS
+	CALL	NZ,SELPAT
+	LD	DE,(P.NUM)
+	LD	D,A
+	LD	BC,(P.OFFSET)
+	LD	HL,(P.PTR)
+	CALL	NZ,ADDLAYER
+	RET
+
+P1.1:	OR	A			;MOUSE 2 DELETES A PATTERN
+	LD	E,A
+	LD	BC,(P.OFFSET)
+	LD	HL,(P.PTR)
+	CALL	NZ,DELLAYER
+	RET
+
+	DSEG
+P.NUM:		DB	0
+P.OFFSET:	DW	0
+P.PTR:		DW	0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

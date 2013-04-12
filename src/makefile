@@ -63,7 +63,7 @@ edfloor.rel : edfloor.asm bios.inc shike2.inc level.inc event.inc
 	echo edfloor.asm
 	as $(ASFLAGS) edfloor.asm
 
-editor.rel : editor.asm shike2.inc level.inc event.inc
+editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc
 	echo editor.asm
 	as $(ASFLAGS) editor.asm
 
