@@ -51,6 +51,20 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	EXTRN	HMMV
+
+CLEANSTACK:
+	LD	DE,80*256 + 78
+	LD	BC,16*256 + TILEYSIZ*8
+	XOR	A
+	LD	(FORCLR),A
+	JP	HMMV			;BLACK RECTANGLE
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
 	EXTRN	GETNUMPAT
 
 GETTDATA:
@@ -105,9 +119,10 @@ GETTDATA:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	PRINTF,LOCATE,GLINES
+	EXTRN	PRINTF,LOCATE,GLINES,DRAWSTACKS
 
-SHOWSCR:LD	DE,0
+SHOWSCR:CALL	CLEANSTACK
+	LD	DE,0
 	CALL	LOCATE
 
 	LD	H,0
@@ -146,7 +161,14 @@ SHOWSCR:LD	DE,0
 
 	LD	DE,TILEG
 	LD	C,15
-	JP	GLINES
+	CALL	GLINES
+
+	LD	HL,(TPTR)
+	LD	DE,TILE.MAP
+	ADD	HL,DE
+	LD	E,TILEYSIZ
+	LD	BC,80*256 + 78
+	JP	DRAWSTACKS
 
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
