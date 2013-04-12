@@ -114,11 +114,23 @@ FMT:	DB	10,10,10,10
 	DB	10,10
 	DB	9,9,"     HEIGHT",9,"%3d",0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
 
 	CSEG
 
 CHANGETILE:
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENT TILE NUMBER
+	LD	A,(TILE)
+	JR	NZ,F.DEC
+	INC	A
+	JR	F.RET
+
+F.DEC:	DEC	A			;BUTTON 2 DECREMENT TILE NUMBER
+F.RET:	LD	(TILE),A
+	RET
+
+
 CHANGEPAL:
 CHANGESET:
 CHANGEHEIGHT:
