@@ -67,6 +67,25 @@ G.LINE:	PUSH	AF
 	ADD	IY,DE
 	JR	G.NEXT
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = SET NUMBER
+
+	CSEG
+	PUBLIC	LOADSET
+	EXTRN	VLDIR,CARTPAGE
+
+LOADSET:LD	A,SET0PAGE
+	ADD	A,E
+	LD	E,A
+	CALL	CARTPAGE		;SET THE PAGE OF THE GRAPHICS
+	LD	HL,CARTSEG
+	LD	DE,00000H
+	LD	BC,04000H
+	LD	A,PATPAGE*2
+	JP	VLDIR			;COPY THEM TO VRAM (256*128)
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = RECEIVERS
 
