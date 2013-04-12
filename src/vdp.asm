@@ -212,6 +212,48 @@ CLRVPAGE:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = RAM ADDRESS
+;	DE = VRAM ADDRESS	(UNTIL 3FFF)
+;	BC = COUNT		(UNTIL 4000)
+;	A = VRAM PAGE
+
+	CSEG
+	PUBLIC	VLDIR
+	EXTRN	WRTVDP,SETWRT,VDPW
+
+VLDIR:	PUSH	HL
+	PUSH	BC
+	PUSH	DE
+
+	LD	B,A
+	LD	C,14
+	CALL	WRTVDP		;WRITE VRAM PAGE
+	POP	HL
+	CALL	SETWRT		;SET ADDRESS
+
+	POP	DE		;D = UPPER COUNT
+	LD	B,E		;B = LOWER COUNT
+	POP	HL		;HL = ADDRESS
+
+	LD	A,(VDPW)
+	LD	C,A		;C = VDP PORT
+	LD	A,B
+	OR	A
+	JR	Z,V.LOOP
+	INC	D
+
+V.LOOP:	OTIR
+	DEC	D
+	JR	NZ,V.LOOP
+
+	EI
+	RET
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:       C = PATTERN NUMBER
 ;             DE = PATTERN DATA
 ;             B = NUMBER SPRITES
