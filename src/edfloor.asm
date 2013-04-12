@@ -89,11 +89,61 @@ GETNUMPAT:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+	CSEG
+	EXTRN	HMMV
+
+CLEANSTACK:
+	LD	DE,80*256 + 78
+	LD	BC,16*256 + 16
+	XOR	A
+	LD	(FORCLR),A
+	JP	HMMV
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = PATTERN STACK
+;	BC = SCREEN COORDINATES
+
+	CSEG
+	EXTRN	VDPPAGE,LMMM
+
+PSTACK:	EX	DE,HL
+	LD	(P.COORD),BC
+	LD	A,PATPAGE
+	LD	(VDPPAGE),A
+	LD	A,LOGTIMP
+	LD	(LOGOP),A
+
+	LD	B,NR_LAYERS
+
+P.LOOP:	LD	A,(HL)
+	OR	A
+	RET	Z
+
+	PUSH	HL
+	PUSH	BC
+	LD	E,A
+	CALL	PAT2XY
+	LD	DE,(P.COORD)
+	LD	BC,1008H
+	CALL	LMMM
+	POP	BC
+	POP	HL
+	INC	HL
+	DJNZ	P.LOOP
+	RET
+
+	DSEG
+P.COORD:DW	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 	CSEG
 	EXTRN	SETPAL,LOCATE,PRINTF,GLINES
 
-SHOWSCR:LD	DE,(PAL)
+SHOWSCR:CALL	CLEANSTACK
+	LD	DE,(PAL)
 	CALL	GETPAL
 	CALL	SETPAL
 	LD	DE,0
@@ -116,9 +166,25 @@ SHOWSCR:LD	DE,(PAL)
 	PUSH	HL
 	LD	DE,FMT
 	CALL	PRINTF
+
 	LD	DE,FLOORG
 	LD	C,15
-	JP	GLINES
+	CALL	GLINES
+
+	LD	DE,(FLOOR)
+	CALL	GETFLOOR
+	PUSH	HL
+	EX	DE,HL
+	LD	BC,80*256 + 78
+	CALL	PSTACK
+
+	POP	HL
+	LD	DE,NR_LAYERS
+	ADD	HL,DE
+	EX	DE,HL
+	LD	BC,80*256 + 86
+	JP	PSTACK
+
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 FLOORG:	DB	4,  80, 30,  110, 30,  0,  8,  0,  8
@@ -135,6 +201,25 @@ FMT:	DB	10,10,10,10
 	DB	9,9,9," %d",10
 	DB	9,9,9," %d",0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = PATTERN NUMBER
+;OUTPUT:HL = COORDENATES OF THE PATTERN
+
+	CSEG
+
+PAT2XY:	LD	A,E
+	AND	0F0H
+	RRCA
+	LD	L,A
+
+	LD	A,E
+	AND	0FH
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	LD	H,A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = XY COORDENATES
