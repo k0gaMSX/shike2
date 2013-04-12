@@ -72,6 +72,8 @@ GETTDATA:
 	LD	E,A
 	CALL	GETTILE			;GET THE POINTER TO THE FLOOR
 	LD	(TPTR),HL		;SAVE FLOOR POINTER
+	LD	A,(HL)
+	LD	(HEIGHT),A
 
 	LD	DE,TILE.MAP
 	ADD	HL,DE
@@ -257,7 +259,7 @@ S.RET:	LD	(SET),A
 	JP	LOADSET			;THE GRAPHICS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;A = EVENT
+;INPUT:	A = EVENT
 
 	CSEG
 	EXTRN	PATEVENT
@@ -298,10 +300,26 @@ PUTPATTERN6:
 	LD	DE,TILE.MAP+NR_LAYERS*5
 	JP	PATEVENT
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
 
 CHANGEHEIGHT:
-	RET
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENT SET NUMBER
+	LD	A,(HEIGHT)
+	JR	NZ,H.DEC
+	CP	TILEYSIZ
+	RET	Z
+	INC	A
+	JR	H.RET
 
+H.DEC:	OR	A			;BUTTON 2 DECREMENT SET NUMBER
+	RET	Z
+	DEC	A
+H.RET:	LD	HL,(TPTR)
+	LD	(HL),A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
