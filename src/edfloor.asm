@@ -1,4 +1,5 @@
 
+	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	LEVEL.INC
 	INCLUDE	EVENT.INC
@@ -61,7 +62,6 @@ GETFDATA:
 	LD	A,(FLOOR)
 	LD	E,A
 	CALL	GETFLOOR		;GET THE POINTER TO THE FLOOR
-	LD	(FPTR),HL
 
 	PUSH	HL
 	CALL	GETNUMPAT
@@ -135,20 +135,147 @@ FMT:	DB	10,10,10,10
 	DB	9,9,9," %d",10
 	DB	9,9,9," %d",0
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = XY COORDENATES
+;OUTPUT:A = PATTERN NUMBER
+
+	CSEG
+
+XY2PAT:	LD	A,E
+	AND	078H
+	RLCA
+	PUSH	AF
+
+	LD	A,D
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	POP	HL
+	OR	H
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+	CSEG
+	EXTRN	SETPAGE,PSELECT,SETPAGE
+
+SELPAT:	LD	A,PATPAGE
+	LD	(DPPAGE),A
+
+	CALL	SETPAGE
+	CALL	PSELECT
+	CP	KB_ESC
+	JR	NZ,S.1
+	XOR	A
+	JR	S.END
+
+S.1:	CP	MS_BUTTON1
+	JR	NZ,SELPAT
+	BIT	7,H
+	JR	NZ,SELPAT
+	EX	DE,HL
+	CALL	XY2PAT
+
+S.END:	PUSH	AF
+	LD	A,EDPAGE
+	LD	(DPPAGE),A
+	CALL	SETPAGE
+	POP	AF
+	OR	A
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = LAYER
+;	BC = COORDENATE OFFSET
+
+	CSEG
+
+DELLAYER:
+	DEC	E
+	LD	D,0
+	;CONTINUE IN ADDLAYER
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = LAYER
+;	D = PATTERN
+;	BC = COORDENATE OFFSET
 
 
 	CSEG
-	EXTRN	PUTS
+	EXTRN	MULTDEA
+
+ADDLAYER:
+	PUSH	DE			;SAVE D = PATTERN NUMBER
+	EX	DE,HL
+	LD	H,0
+	ADD	HL,BC			;HL = OFFSET
+	PUSH	HL
+
+	LD	DE,(FLOOR)
+	CALL	GETFLOOR		;HL = FLOOR POINTER
+
+	POP	DE
+	ADD	HL,DE			;POINTERT TO PATTERN
+
+	POP	DE			;D = PATTERN NUMBER
+	LD	(HL),D
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+;	(P.OFFSET) = COORDENATE OFFSET
+;	(P.NUM) = NUMBERS OF TILES
+
+	CSEG
+
+PEVENT:	CP	MS_BUTTON1
+	LD	A,(P.NUM)
+	JR	NZ,P1.1
+
+	CP	NR_LAYERS
+	CALL	NZ,SELPAT
+	LD	DE,(P.NUM)
+	LD	D,A
+	LD	BC,(P.OFFSET)
+	CALL	NZ,ADDLAYER
+	RET
+
+P1.1:	OR	A
+	LD	E,A
+	LD	BC,(P.OFFSET)
+	CALL	NZ,DELLAYER
+	RET
+
+	DSEG
+P.NUM:		DB	0
+P.OFFSET:	DW	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;A = EVENT
+
+	CSEG
 
 PUTPATTERN1:
-	LD	DE,TXTPAT1
-	JP	PUTS
+	PUSH	AF
+	LD	A,(NUMPAT1)
+	LD	(P.NUM),A
+	LD	BC,0
+	LD	(P.OFFSET),BC
+	POP	AF
+	JR	PEVENT
 
 PUTPATTERN2:
-	LD	DE,TXTPAT2
-	JP	PUTS
+	PUSH	AF
+	LD	A,(NUMPAT2)
+	LD	(P.NUM),A
+	LD	BC,NR_LAYERS
+	LD	(P.OFFSET),BC
+	POP	AF
+	JR	PEVENT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
@@ -206,12 +333,8 @@ S.RET:	LD	(SET),A
 	LD	E,A
 	JP	LOADSET
 
-TXTPAT1:	DB	"PATTERN 1",10,0
-TXTPAT2:	DB	"PATTERN 2",10,0
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	DSEG
-FPTR:	DW	0			;FLOOR POINTER
 FLOOR:	DB	0
 PAL:	DB	0
 SET:	DB	0
