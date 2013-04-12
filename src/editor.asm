@@ -69,6 +69,23 @@ G.LINE:	PUSH	AF
 	JR	G.NEXT
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = POINTER TO THE PATTERN STACK
+;OUTPUT:A = NUMBER OF USED LAYERS IN THE PATTERN STACK
+
+	CSEG
+	PUBLIC	GETNUMPAT
+
+GETNUMPAT:
+	XOR	A
+	LD	BC,NR_LAYERS+1
+	CPIR
+	LD	A,NR_LAYERS
+	SUB	C
+	RET
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = XY COORDENATES
 ;OUTPUT:A = PATTERN NUMBER

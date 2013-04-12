@@ -38,10 +38,10 @@ RECEIVERS:
 	DW	PUTPATTERN2
 	DB	0
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	EXTRN	GETNUMPAT
 
 GETFDATA:
 	LD	A,(FLOOR)
@@ -57,20 +57,6 @@ GETFDATA:
 	ADD	HL,DE
 	CALL	GETNUMPAT
 	LD	(NUMPAT2),A		;CALCULATE NUMPAT2
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	HL = POINTER TO THE FLOOR
-;OUTPUT:A = NUMBER OF USED LAYERS IN THE PATTERN STACK
-
-	CSEG
-
-GETNUMPAT:
-	XOR	A
-	LD	BC,NR_LAYERS+1
-	CPIR
-	LD	A,NR_LAYERS
-	SUB	C
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
