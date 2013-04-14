@@ -55,7 +55,7 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
 
-edmap.rel : edmap.asm
+edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc
 	echo edmap.asm
 	as $(ASFLAGS) edmap.asm
 

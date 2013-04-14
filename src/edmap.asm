@@ -1,6 +1,8 @@
 
 	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
+	INCLUDE	EVENT.INC
+	INCLUDE	LEVEL.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -18,18 +20,27 @@ E.LOOP:	LD	E,LEVELPAGE
 	LD	DE,RECEIVERS
 	CALL	LISTEN
 	JR	NZ,E.LOOP
+	RET
 
 
 RECEIVERS:
+	DB	1,29,142,8
+	DW	CHANGEPAL
 	DB	0
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	GLINES,LOCATE,PRINTF
+	EXTRN	SETPAL,GLINES,LOCATE,PRINTF
 
-SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
+SHOWSCR:LD	DE,(PAL)
+	CALL	GETPAL
+	CALL	SETPAL			;LOAD THE SELECTED PALETE
+
+	CALL	FGRID			;DRAW FLOOR GRID
 	LD	DE,18
 	CALL	LOCATE
 
@@ -52,7 +63,7 @@ SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
 	LD	A,(SET)
 	LD	L,A
 	PUSH	HL
-	LD	A,(PALETE)
+	LD	A,(PAL)
 	LD	L,A
 	PUSH	HL
 	LD	DE,FMT
@@ -169,7 +180,27 @@ MFLOOR:	LD	A,E			;CALCULATE THE ISOMETRIC COORDENATES
 	LD	C,A
 	JP	LINE			;RIGHT LINE
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+
+CHANGEPAL:
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENT PALETE NUMBER
+	LD	A,(PAL)
+	JR	NZ,P.DEC
+	CP	NR_PALETES-1
+	RET	Z
+	INC	A
+	JR	P.RET
+
+P.DEC:	OR	A			;BUTTON 2 DECREMENT PALETE NUMBER
+	RET	Z
+	DEC	A
+P.RET:	LD	(PAL),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
 ROOM:	DB	0
@@ -178,7 +209,7 @@ RLEVEL1:DB	0
 RLEVEL2:DB	0
 LEVEL:	DB	0
 SET:	DB	0
-PALETE:	DB	0
+PAL:	DB	0
 
 
 
