@@ -320,8 +320,6 @@ LOADSET:LD	A,SET0PAGE
 	LD	A,PATPAGE*2
 	JP	VLDIR			;COPY THEM TO VRAM (256*128)
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = RECEIVERS
 
@@ -386,7 +384,7 @@ L.PTR:		DW	0
 ;INPUT: A = EVENT
 
 	CSEG
-	PUBLIC	EDPAL,PALEVENT
+	PUBLIC	PALEVENT
 	EXTRN	CARTPAGE,SETPAL
 
 PALEVENT:
@@ -410,13 +408,12 @@ GAMEPAL:LD	E,LEVELPAGE
 	CALL	GETPAL
 	JP	SETPAL			;LOAD THE SELECTED PALETE
 
-EDPAL:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: A = EVENT
 
 	CSEG
-	PUBLIC	EDSET,SETEVENT
+	PUBLIC	SETEVENT
 
 SETEVENT:
 	CP	MS_BUTTON1		;BUTTON 1 INCREMENT SET NUMBER
@@ -434,7 +431,12 @@ S.RET:	LD	(EDSET),A
 	LD	E,A			;THERE IS A SET CHANGE, SO UPDATE
 	JP	LOADSET			;THE GRAPHICS
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 	DSEG
+	PUBLIC	EDFLOOR,EDPAL,EDSET,EDFLOOR
+EDPAL:	DB	0
 EDSET:	DB	0
+EDFLOOR:DB	0
 
