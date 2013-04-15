@@ -109,6 +109,10 @@ MAPG:	DB	5,  0, 142,   30,142,  0,  8,  0,  8
 
 	CSEG
 
+ISOX	EQU	112
+ISOY	EQU	32
+
+
 FGRID:	LD	DE,0
 	LD	B,8
 
@@ -118,7 +122,14 @@ S.LOOPY:PUSH	BC			;LOOP OVER Y
 
 S.LOOPX:PUSH	BC			;LOOP OVER X
 	PUSH	DE
-	CALL	MFLOOR			;MARK THE FLOOR
+	CALL	ISOVIEW			;TRANSFORM TO EUCLIDEAN COORDENATES
+	LD	A,H			;ADD THE SCREEN OFFSET
+	ADD	A,ISOX
+	LD	D,A
+	LD	A,L
+	ADD	A,ISOY
+	LD	E,A
+	CALL	MARK			;MARK THE FLOOR
 	POP	DE
 	INC	D
 	POP	BC
@@ -131,33 +142,36 @@ S.LOOPX:PUSH	BC			;LOOP OVER X
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = FLOOR POSITION
+
+	CSEG
+
+ISOVIEW:LD	A,D
+	SUB	E
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	LD	H,A			;X = (X-Y)*16
+
+	LD	A,E
+	ADD	A,D
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	LD	L,A			;Y = (X+Y)*8
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = SCREEN COORDENATES OF THE MARK
 
 	CSEG
 	EXTRN	LINE
 
-MFLOOR:	LD	A,E			;CALCULATE THE ISOMETRIC COORDENATES
-	SUB	D
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,94
-	LD	L,A			;Y = (Y-X)*8
-
-	LD	A,D
-	ADD	A,E
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	LD	H,A			;X = (Y+X)*16
-
-	LD	A,15
+MARK:	LD	A,15
 	LD	(FORCLR),A
 	LD	A,LOGIMP
 	LD	(LOGOP),A
 
-	EX	DE,HL
 	PUSH	DE
 	PUSH	DE
 	PUSH	DE
