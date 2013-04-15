@@ -10,7 +10,8 @@
 	PUBLIC	EDMAP
 	EXTRN	CARTPAGE,EDINIT,VDPSYNC,LISTEN
 
-EDMAP:	CALL	EDINIT
+EDMAP:	CALL	ADDRECEIVERS
+ED.LOOP:CALL	EDINIT
 
 	LD	E,LEVELPAGE
 	CALL	CARTPAGE
@@ -18,7 +19,7 @@ EDMAP:	CALL	EDINIT
 	CALL	VDPSYNC
 	LD	DE,RECEIVERS
 	CALL	LISTEN
-	JR	NZ,EDMAP
+	JR	NZ,ED.LOOP
 	RET
 
 	EXTRN	ED.TILE,ED.FLOOR,PALEVENT,SETEVENT
@@ -32,10 +33,64 @@ RECEIVERS:
 	DW	ED.FLOOR
 	DB	220,16,150,48
 	DW	ED.TILE
+R.FLOOR:DS	64*6
 	DB	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+ADDRECEIVERS:
+	LD	HL,R.FLOOR
+	LD	(A.PTR),HL
+	LD	DE,0
+	LD	B,8
+
+A.LOOPY:PUSH	BC			;RUN OVER Y
+	PUSH	DE
+	LD	B,8
+
+A.LOOPX:PUSH	BC			;RUN OVER X
+	PUSH	DE
+	CALL	ISOVIEW			;TRANSFORM TO SCREEN COORDENATES
+	EX	DE,HL
+	LD	HL,(A.PTR)
+	LD	A,ISOX			;ADD THE SCREEN OFFSET
+	ADD	A,D
+	INC	A			;AVOID X = 0
+	LD	(HL),A
+	INC	HL
+	LD	(HL),15
+	INC	HL
+	LD	A,ISOY
+	ADD	A,E
+	LD	(HL),A
+	INC	HL
+	LD	(HL),16
+	INC	HL
+	LD	DE,POSEVENT
+	LD	(HL),E
+	INC	HL
+	LD	(HL),D
+	INC	HL
+	LD	(A.PTR),HL
+	POP	DE
+	INC	D
+	POP	BC
+	DJNZ	A.LOOPX			;NEXT X
+
+	POP	DE
+	INC	E
+	POP	BC
+	DJNZ	A.LOOPY			;NEXT Y
+	RET
+
+	DSEG
+
+A.PTR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 	CSEG
 	EXTRN	DRAWSTACKS,EDTILE,EDFLOOR,EDSET,EDPAL,GLINES,LOCATE,PRINTF
@@ -208,6 +263,12 @@ MARK:	LD	A,15
 	LD	C,A
 	JP	LINE			;RIGHT LINE
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+POSEVENT:
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
