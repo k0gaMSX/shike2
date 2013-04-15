@@ -113,9 +113,8 @@ SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
 	LD	A,(HEIGHT)
 	LD	L,A
 	PUSH	HL
-	LD	A,(MAP)
-	LD	L,A
-	PUSH	HL
+	LD	DE,(MAP)
+	PUSH	DE
 	LD	A,(EDSET)
 	LD	L,A
 	PUSH	HL
@@ -146,7 +145,7 @@ SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
 
 FMT:	DB	" PALETE",9,"  %3d",10
 	DB	" SET",9,"  %3d",10
-	DB	" MAP",9,"  %03d",10
+	DB	" MAP",9," %04d",10
 	DB	" HEIGHT",9,"   %02d",10
 	DB	" ROOM",9,"%02dX%02d",10
 	DB	" LEVEL",9,"%02dX%02d",0
@@ -273,7 +272,7 @@ POSEVENT:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
-MAP:	DB	0
+MAP:	DW	0
 HEIGHT:	DB	0
 ROOM:	DW	0
 LEVEL:	DW	0
