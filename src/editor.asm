@@ -22,6 +22,56 @@ EDINIT:	LD	E,EDPAGE
 	CALL	MOUSE
 	JP	MSCLR
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = SCREEN COORDENATES OF THE MARK
+
+	CSEG
+	PUBLIC	MARK
+	EXTRN	LINE
+
+MARK:	LD	A,15
+	LD	(FORCLR),A
+	LD	A,LOGIMP
+	LD	(LOGOP),A
+
+	PUSH	DE
+	PUSH	DE
+	PUSH	DE
+	LD	C,E
+	LD	A,D
+	ADD	A,16
+	LD	B,A
+	CALL	LINE			;UPPER LINE
+
+	POP	DE
+	LD	A,E
+	ADD	A,16
+	LD	E,A
+	LD	C,A
+	LD	A,D
+	ADD	A,16
+	LD	B,A
+	CALL	LINE			;LOWER LINE
+
+	POP	DE
+	LD	B,D
+	LD	A,E
+	ADD	A,16
+	LD	C,A
+	CALL	LINE			;LEFT LINE
+
+	POP	DE
+	LD	A,D
+	ADD	A,16
+	LD	D,A
+	LD	B,A
+	LD	A,E
+	ADD	A,16
+	LD	C,A
+	JP	LINE			;RIGHT LINE
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = DEFINITION OF GROUP OF LINES
 ;	C = COLOR

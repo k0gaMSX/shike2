@@ -197,7 +197,7 @@ MAPG:	DB	5,  0, 142,   30,142,  0,  8,  0,  8
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-
+	EXTRN	MARK
 
 FGRID:	LD	DE,0
 	LD	B,8
@@ -286,52 +286,6 @@ WRL2SCR:LD	A,D
 	LD	L,A			;Ys = Y' + ISOY
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = SCREEN COORDENATES OF THE MARK
-
-	CSEG
-	EXTRN	LINE
-
-MARK:	LD	A,15
-	LD	(FORCLR),A
-	LD	A,LOGIMP
-	LD	(LOGOP),A
-
-	PUSH	DE
-	PUSH	DE
-	PUSH	DE
-	LD	C,E
-	LD	A,D
-	ADD	A,16
-	LD	B,A
-	CALL	LINE			;UPPER LINE
-
-	POP	DE
-	LD	A,E
-	ADD	A,16
-	LD	E,A
-	LD	C,A
-	LD	A,D
-	ADD	A,16
-	LD	B,A
-	CALL	LINE			;LOWER LINE
-
-	POP	DE
-	LD	B,D
-	LD	A,E
-	ADD	A,16
-	LD	C,A
-	CALL	LINE			;LEFT LINE
-
-	POP	DE
-	LD	A,D
-	ADD	A,16
-	LD	D,A
-	LD	B,A
-	LD	A,E
-	ADD	A,16
-	LD	C,A
-	JP	LINE			;RIGHT LINE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
