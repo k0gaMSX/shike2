@@ -9,6 +9,7 @@ JTABLE:	JP	GETFLOOR_
 	JP	GETTILE_
 	JP	GETPAL_
 	JP	GETLEVEL_
+	JP	GETROOM_
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;INPUT:	E PALETE NUMBER
@@ -94,6 +95,45 @@ GETLEVEL_:
 	OR	1			;SET Z=1
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = LEVEL LOCATION
+;	BC = ROOM LOCATION
+;	L = HEIGTH
+;OUTPUT:HL = ROOM ADDRESS
+;	DE = MAP VALUE
+;	Z = 0 WHEN NO VALID ROOM
+
+GETROOM_:
+	PUSH	BC
+	PUSH	HL
+	CALL	GETLEVEL_
+	POP	HL
+	POP	BC
+	RET	Z			;NO VALID LEVEL
+
+	PUSH	BC			;SAVE ROOM LOCATION
+	LD	A,L			;A = HEIGHT
+	LD	DE,LVL.HEIGHT1
+	ADD	HL,DE			;HL = LEVEL HEIGHT1
+	PUSH	HL
+	LD	DE,SIZRMATRIX
+	CALL	MULTDEA			;HL = HEIGHT OFFSET
+	POP	DE			;DE = LEVEL HEIGHT1
+	ADD	HL,DE			;HL = HEIGHT POINTER
+	POP	BC			;BC = ROOM LOCATION
+
+	LD	A,C
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A			;A = Y ROOM OFFSET
+	ADD	A,B			;A = ROOM OFFSET
+	LD	E,A
+	LD	D,0
+	ADD	HL,DE			;HL = MAP ADDRESS
+	OR	1			;SET Z FLAG
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 MAP:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
