@@ -22,6 +22,67 @@ EDINIT:	LD	E,EDPAGE
 	CALL	MOUSE
 	JP	MSCLR
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = ROOM LOCATION
+
+	CSEG
+	PUBLIC	COLORGRID16
+	EXTRN	LMMV
+
+COLORGRID16:
+	LD	A,D
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	ADD	A,16
+	INC	A
+	LD	D,A
+	LD	A,E
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A
+	ADD	A,16
+	INC	A
+	LD	E,A
+
+	LD	BC,0F0FH
+	LD	A,15
+	LD	(FORCLR),A
+	JP	LMMV
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	GRID16
+	EXTRN	LINE
+
+GRID16:	LD	B,LVLYSIZ
+	LD	DE,1010H
+
+S.LOOPY:PUSH	BC
+	PUSH	DE
+	LD	B,LVLXSIZ
+
+S.LOOPX:PUSH	BC
+	PUSH	DE
+	CALL	MARK
+	POP	DE
+	LD	A,D
+	ADD	A,16
+	LD	D,A
+	POP	BC
+	DJNZ	S.LOOPX
+
+	POP	DE
+	LD	A,E
+	ADD	A,16
+	LD	E,A
+	POP	BC
+	DJNZ	S.LOOPY
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDENATES OF THE MARK
 

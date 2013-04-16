@@ -25,17 +25,19 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	EXTRN	GRID16
 
-SHOWSCR:CALL	RGRID
+SHOWSCR:CALL	GRID16
+	CALL	DRAWRMATRIX
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 	CSEG
-	EXTRN	MARK
+	EXTRN	EDLEVEL,COLORGRID16
 
-RGRID:	LD	B,LVLYSIZ
+DRAWRMATRIX:
+	LD	B,LVLYSIZ
 	LD	DE,0
 
 S.LOOPY:PUSH	BC
@@ -44,8 +46,20 @@ S.LOOPY:PUSH	BC
 
 S.LOOPX:PUSH	BC
 	PUSH	DE
-	CALL	SHOWROOM
+	PUSH	DE
+	LD	C,E
+	LD	B,D
+	LD	DE,(EDLEVEL)
+	LD	L,0
+	CALL	GETROOM
 	POP	DE
+	JR	Z,S.ENDX
+	LD	A,(HL)
+	INC	HL
+	OR	(HL)
+	CALL	Z,COLORGRID16
+
+S.ENDX:	POP	DE
 	INC	D
 	POP	BC
 	DJNZ	S.LOOPX
@@ -55,54 +69,6 @@ S.LOOPX:PUSH	BC
 	POP	BC
 	DJNZ	S.LOOPY
 	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	CSEG
-	EXTRN	EDLEVEL,LMMV
-
-SHOWROOM:
-	PUSH	DE
-	LD	A,D
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,10H
-	LD	D,A
-	LD	A,E
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,10H
-	LD	E,A
-	LD	(S.LEVEL),DE
-	CALL	MARK
-	POP	DE
-
-	LD	C,E
-	LD	B,D
-	LD	DE,(EDLEVEL)
-	LD	L,0
-	CALL	GETROOM
-	RET	Z
-
-	LD	A,(HL)
-	INC	HL
-	OR	(HL)
-	RET	Z
-
-	LD	DE,(S.LEVEL)
-	INC	D
-	INC	E
-	LD	BC,0F0FH
-	LD	A,15
-	LD	(FORCLR),A
-	JP	LMMV
-
-	DSEG
-S.LEVEL:DW	0
 
 
 
