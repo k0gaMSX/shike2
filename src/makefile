@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
 all : shike2.com leveldef.bin patset0.bin patset1.bin
 
@@ -54,6 +54,11 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
+
+edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc
+	echo edlevel.asm
+	as $(ASFLAGS) edlevel.asm
+
 
 edroom.rel : edroom.asm shike2.inc level.inc bios.inc
 	echo edroom.asm
