@@ -7,10 +7,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	EDMAP
+	PUBLIC	ED.MAP
 	EXTRN	CARTPAGE,EDINIT,VDPSYNC,LISTEN
 
-EDMAP:	CALL	ADDRECEIVERS
+ED.MAP:	CALL	ADDRECEIVERS
 
 
 ED.LOOP:CALL	EDINIT

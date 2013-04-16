@@ -60,7 +60,7 @@ edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc event.inc
 	as $(ASFLAGS) edlevel.asm
 
 
-edroom.rel : edroom.asm shike2.inc level.inc bios.inc
+edroom.rel : edroom.asm shike2.inc level.inc bios.inc event.inc
 	echo edroom.asm
 	as $(ASFLAGS) edroom.asm
 
