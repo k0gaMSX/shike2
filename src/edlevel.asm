@@ -7,20 +7,28 @@
 
 	CSEG
 	PUBLIC	ED.LEVEL
-	EXTRN	CARTPAGE,EDINIT,LISTEN,VDPSYNC
+	EXTRN	ADDGLISTEN,CARTPAGE,EDINIT,LISTEN,VDPSYNC
 
 ED.LEVEL:
 	CALL	EDINIT
-	LD	E,LEVELPAGE
+	LD	DE,RECEIVERS
+	LD	BC,POSEVENT
+	CALL	ADDGLISTEN
+
+ED.LOOP:LD	E,LEVELPAGE
 	CALL	CARTPAGE
 	CALL	SHOWSCR
 	CALL	VDPSYNC
+	LD	DE,RECEIVERS
 	CALL	LISTEN
 	JR	NZ,ED.LEVEL
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+RECEIVERS:
+	DS	64*6
+	DB	0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	EXTRN	GRID16
@@ -61,5 +69,11 @@ S.ENDX:	POP	DE
 	DJNZ	S.LOOPY
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+POSEVENT:
+	RET
 
 

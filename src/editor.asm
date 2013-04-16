@@ -22,6 +22,57 @@ EDINIT:	LD	E,EDPAGE
 	CALL	MOUSE
 	JP	MSCLR
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = DESTINE BUFFER
+;	BC = CALLBACK FUNCTION
+
+	CSEG
+	PUBLIC	ADDGLISTEN
+
+ADDGLISTEN:
+	LD	(A.FUN),BC
+	EX	DE,HL
+	LD	DE,1010H
+	LD	B,LVLYSIZ
+
+A.LOOPY:PUSH	BC
+	PUSH	DE
+	LD	B,LVLXSIZ
+
+A.LOOPX:PUSH	DE
+	LD	(HL),D
+	INC	HL
+	LD	(HL),16
+	INC	HL
+	LD	(HL),E
+	INC	HL
+	LD	(HL),16
+	INC	HL
+	LD	DE,(A.FUN)
+	LD	(HL),E
+	INC	HL
+	LD	(HL),D
+	INC	HL
+	POP	DE
+	LD	A,D
+	ADD	A,16
+	LD	D,A
+	DJNZ	A.LOOPX
+
+	POP	DE
+	LD	A,E
+	ADD	A,16
+	LD	E,A
+	POP	BC
+	DJNZ	A.LOOPY
+	RET
+
+	DSEG
+A.FUN:	DW	0
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = ROOM LOCATION
 
@@ -48,7 +99,7 @@ COLORGRID16:
 	LD	E,A
 
 	LD	BC,0F0FH
-	LD	A,15
+	LD	A,14
 	LD	(FORCLR),A
 	JP	LMMV
 
