@@ -33,6 +33,8 @@ RECEIVERS:
 	DW	SETEVENT
 	DB	1,29,158,8
 	DW	ROOMEVENT
+	DB	1,29,166,8
+	DW	HEIGHTEVENT
 	DB	220,16,126,16
 	DW	ED.FLOOR
 	DB	220,16,150,48
@@ -379,7 +381,6 @@ P.OFFSET:	DB	0
 ;INPUT:	A = EVENT
 
 	CSEG
-	PUBLIC	ROOMEVENT
 
 ROOMEVENT:
 	EX	AF,AF'
@@ -407,6 +408,26 @@ R.RET:	LD	(MAP),DE		;UPDATE MAP NUMBER
 	LD	(HL),E			;UPDATE THE ROOM MATRIX
 	INC	HL
 	LD	(HL),D
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+
+HEIGHTEVENT:
+	CP	MS_BUTTON1
+	LD	A,(HEIGHT)
+	JR	NZ,H.1
+	CP	NR_HEIGHTS-1
+	RET	Z
+	INC	A
+	JR	H.RET
+
+H.1:	OR	A
+	RET	Z
+	DEC	A
+H.RET:	LD	(HEIGHT),A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
