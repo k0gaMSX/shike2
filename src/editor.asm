@@ -23,6 +23,31 @@ EDINIT:	LD	E,EDPAGE
 	JP	MSCLR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = SCREEN POSITION
+
+	CSEG
+	PUBLIC	GRIDPOS
+
+GRIDPOS:LD	A,E
+	SUB	10H
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	LD	E,A
+
+	LD	A,D
+	SUB	10H
+	AND	0F0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	LD	D,A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = DESTINE BUFFER
 ;	BC = CALLBACK FUNCTION
 

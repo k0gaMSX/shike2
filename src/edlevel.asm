@@ -2,6 +2,7 @@
 	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	LEVEL.INC
+	INCLUDE	EVENT.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -28,6 +29,8 @@ ED.LOOP:LD	E,LEVELPAGE
 RECEIVERS:
 	DS	64*6
 	DB	0
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
@@ -70,10 +73,24 @@ S.ENDX:	POP	DE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+;	DE = SCREEN POSITION
 
 	CSEG
+	EXTRN	GRIDPOS,EDLEVEL,ED.ROOM
 
 POSEVENT:
+	PUSH	AF
+	CALL	GRIDPOS
+	POP	AF
+	CP	MS_BUTTON1
+	JR	NZ,P.1
+	LD	(EDLEVEL),DE
+	CALL	GETLEVEL
+	RET	Z
+	JP	ED.ROOM
+
+P.1:	LD	(EDLEVEL),DE
 	RET
 
 
