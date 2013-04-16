@@ -8,6 +8,7 @@
 JTABLE:	JP	GETFLOOR_
 	JP	GETTILE_
 	JP	GETPAL_
+	JP	GETLEVEL_
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;INPUT:	E PALETE NUMBER
@@ -67,6 +68,32 @@ GETTILE_:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = LEVEL LOCATION
+;OUTPUT:HL = ADDRESS
+;	Z = 0 WHEN NO VALID LEVEL
+
+GETLEVEL_:
+	LD	A,E
+	ADD	A,A
+	ADD	A,A
+	ADD	A,A			;A = YOOFSET
+	ADD	A,D			;A = OFFSET
+	LD	L,A
+	LD	H,0			;HL = OFFSET
+	LD	DE,MAP
+	ADD	HL,DE			;MAP[X][Y]
+	LD	A,(HL)			;A = LEVEL NUMBER
+	OR	A
+	LD	HL,0			;LEVEL 0 IS THE EMPTY LEVEL
+	RET	Z
+	DEC	A
+	LD	DE,SIZLEVEL
+	CALL	MULTDEA			;HL = LEVEL OFFSET
+	LD	DE,LEVEL1
+	ADD	HL,DE			;HL = LEVEL ADDRESS
+	OR	1			;SET Z=1
+	RET
+
 
 MAP:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
@@ -85,6 +112,8 @@ ACCS:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
+
+LEVEL1:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;LEVEL 1
