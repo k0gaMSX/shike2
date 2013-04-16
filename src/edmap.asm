@@ -96,10 +96,16 @@ SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
 	CALL	LOCATE
 
 	LD	H,0
+	LD	A,(EDTILE)
+	LD	L,A
+	PUSH	HL
 	LD	DE,(LEVEL)
 	LD	L,E
 	PUSH	HL
 	LD	L,D
+	PUSH	HL
+	LD	A,(EDFLOOR)
+	LD	L,A
 	PUSH	HL
 	LD	DE,(ROOM)
 	LD	L,E
@@ -149,8 +155,9 @@ FMT:	DB	" PALETE",9,"  %3d",10
 	DB	" SET",9,"  %3d",10
 	DB	" MAP",9," %04d",10
 	DB	" HEIGHT",9,"   %02d",10
-	DB	" ROOM",9,"%02dX%02d",10
-	DB	" LEVEL",9,"%02dX%02d",0
+	DB	" ROOM",9,"%02dX%02d",9,"FLOOR",9,"%03d",10
+	DB	" LEVEL",9,"%02dX%02d",9,"TILE",9,"%03d",0
+
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 MAPG:	DB	5,  0, 142,   30,142,  0,  8,  0,  8
