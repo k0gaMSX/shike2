@@ -55,7 +55,7 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
 
-edroom.rel : edroom.asm shike2.inc level.inc
+edroom.rel : edroom.asm shike2.inc level.inc bios.inc
 	echo edroom.asm
 	as $(ASFLAGS) edroom.asm
 
