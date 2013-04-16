@@ -12,9 +12,11 @@
 
 EDMAP:	CALL	ADDRECEIVERS
 
+
 ED.LOOP:CALL	EDINIT
 	LD	E,LEVELPAGE
 	CALL	CARTPAGE
+	CALL	GETMDATA
 	CALL	SHOWSCR
 	CALL	VDPSYNC
 	LD	DE,RECEIVERS
@@ -29,6 +31,8 @@ RECEIVERS:
 	DW	PALEVENT
 	DB	1,29,150,8
 	DW	SETEVENT
+	DB	1,29,158,8
+	DW	ROOMEVENT
 	DB	220,16,126,16
 	DW	ED.FLOOR
 	DB	220,16,150,48
@@ -84,6 +88,26 @@ A.LOOPX:PUSH	BC			;RUN OVER X
 	DSEG
 
 A.PTR:	DW	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	MULTDEA,PTRHL
+
+GETMDATA:				;UPDATE THE MAP VARIABLES
+	LD	HL,0
+	LD	(RPTR),HL
+	LD	(MAP),HL
+
+	LD	DE,(LEVEL)
+	LD	BC,(ROOM)
+	LD	HL,(HEIGHT)
+	CALL	GETROOM
+	RET	Z
+	LD	(RPTR),HL
+	CALL	PTRHL
+	LD	(MAP),HL
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -351,6 +375,40 @@ P.TILE:	LD	DE,(MAP)
 	DSEG
 P.OFFSET:	DB	0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+	PUBLIC	ROOMEVENT
+
+ROOMEVENT:
+	EX	AF,AF'
+	LD	DE,(MAP)		;MAP 0 MEANS EMPTY MAP
+	LD	A,D
+	OR	E
+	RET	Z
+	EX	AF,AF'
+
+	CP	MS_BUTTON1		;LEFT BUTTON INCREMENT ROOM NUMBER
+	LD	DE,(MAP)
+	JR	NZ,R.1
+	LD	HL,NR_MAPS
+	CALL	DCOMPR
+	RET	Z
+	INC	DE
+	JR	R.RET
+
+R.1:	LD	A,E			;RIGTH BUTTON DECREMENT ROOM NUMBER
+	OR	D
+	RET	Z
+	DEC	DE
+R.RET:	LD	(MAP),DE		;UPDATE MAP NUMBER
+	LD	HL,(RPTR)
+	LD	(HL),E			;UPDATE THE ROOM MATRIX
+	INC	HL
+	LD	(HL),D
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
@@ -358,6 +416,6 @@ MAP:	DW	0
 HEIGHT:	DB	0
 ROOM:	DW	0
 LEVEL:	DW	0
-
+RPTR:	DW	0
 
 
