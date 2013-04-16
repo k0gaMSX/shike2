@@ -52,19 +52,15 @@ A.LOOPY:PUSH	BC			;RUN OVER Y
 
 A.LOOPX:PUSH	BC			;RUN OVER X
 	PUSH	DE
-	CALL	ISOVIEW			;TRANSFORM TO SCREEN COORDENATES
+	CALL	WRL2SCR			;TRANSFORM TO SCREEN COORDENATES
 	EX	DE,HL
 	LD	HL,(A.PTR)
-	LD	A,ISOX			;ADD THE SCREEN OFFSET
-	ADD	A,D
-	INC	A			;AVOID X = 0
-	LD	(HL),A
+	INC	D			;AVOID X = 0
+	LD	(HL),D
 	INC	HL
 	LD	(HL),15
 	INC	HL
-	LD	A,ISOY
-	ADD	A,E
-	LD	(HL),A
+	LD	(HL),E
 	INC	HL
 	LD	(HL),16
 	INC	HL
@@ -163,9 +159,6 @@ MAPG:	DB	5,  0, 142,   30,142,  0,  8,  0,  8
 
 	CSEG
 
-ISOX	EQU	112
-ISOY	EQU	32
-
 
 FGRID:	LD	DE,0
 	LD	B,8
@@ -176,13 +169,8 @@ S.LOOPY:PUSH	BC			;LOOP OVER Y
 
 S.LOOPX:PUSH	BC			;LOOP OVER X
 	PUSH	DE
-	CALL	ISOVIEW			;TRANSFORM TO EUCLIDEAN COORDENATES
-	LD	A,H			;ADD THE SCREEN OFFSET
-	ADD	A,ISOX
-	LD	D,A
-	LD	A,L
-	ADD	A,ISOY
-	LD	E,A
+	CALL	WRL2SCR			;TRANSFORM FROM WORLD TO SCREEN
+	EX	DE,HL
 	CALL	MARK			;MARK THE FLOOR
 	POP	DE
 	INC	D
@@ -196,23 +184,67 @@ S.LOOPX:PUSH	BC			;LOOP OVER X
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = SCREEN COORDINATES
+;OUTPUT:HL = WORLD COORDENATES
 
 	CSEG
 
-ISOVIEW:LD	A,D
+ISOX	EQU	112
+ISOY	EQU	32
+
+SCR2WRL:SRL	E
+	SRL	E
+	SRL	E			;E = Ys/8
+	LD	A,E
+	SUB	ISOY/8
+	LD	E,A			;E = Y' = (Ys - ISOY)/8
+	SLA	E
+	SLA	E			;E = 4Y'
+	SRL	D
+	SRL	D
+	SRL	D			;D = Xs/8
+	LD	A,D
+	AND	0FEH			;CLEAN LOWER BIT, BECAUSE WE WANT
+	SUB	ISOX/8			;LEFT UP CORNERS
+	LD	D,A			;D = X' = (Xs - ISOX)/8
+	SLA	D			;D = 2X'
+
+	LD	A,E
+	ADD	A,D			;A = 4Y' + 2X'
+	SRA	A
+	SRA	A
+	SRA	A
+	LD	H,A			;H = Xw = (4Y' + 2X')/8
+
+	LD	A,E
+	SUB	D			;A = 4Y' - 2X'
+	SRA	A
+	SRA	A
+	SRA	A
+	LD	L,A			;L = Yw = (4Y' - 2X')/8
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = WORLD COORDENATES
+;OUTPUT:HL = SCREEN COORDENATES
+	CSEG
+
+WRL2SCR:LD	A,D
 	SUB	E
 	ADD	A,A
 	ADD	A,A
 	ADD	A,A
-	ADD	A,A
-	LD	H,A			;X = (X-Y)*16
+	ADD	A,A			;X' = (Xw-Yw)*16
+	ADD	A,ISOX
+	LD	H,A			;Xs = X' + ISOX
 
 	LD	A,E
 	ADD	A,D
 	ADD	A,A
 	ADD	A,A
-	ADD	A,A
-	LD	L,A			;Y = (X+Y)*8
+	ADD	A,A			;Y' = (Xw+Yw)*8
+	ADD	A,ISOY
+	LD	L,A			;Ys = Y' + ISOY
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -263,10 +295,14 @@ MARK:	LD	A,15
 	JP	LINE			;RIGHT LINE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+;	DE = PARAMETER (IN MOUSE EVENTS = SCREEN COORDENATES)
 
 	CSEG
 
+
 POSEVENT:
+	CALL	SCR2WRL			;TRANSFORM TO WORLD COORDENATES
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
