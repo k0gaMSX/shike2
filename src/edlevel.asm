@@ -34,7 +34,7 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	PUTS,LOCATE,PRINTF,GRID16
+	EXTRN	EDLEVEL,PUTS,LOCATE,PRINTF,GRID16
 
 SHOWSCR:CALL	GRID16
 	CALL	DRAWLMATRIX

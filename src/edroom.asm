@@ -17,6 +17,7 @@ ED.ROOM:CALL	EDINIT
 
 ED.LOOP:LD	E,LEVELPAGE
 	CALL	CARTPAGE
+	CALL	GETRDATA
 	CALL	SHOWSCR
 	CALL	VDPSYNC
 	LD	DE,RECEIVERS
@@ -32,11 +33,75 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	GRID16
+	EXTRN	EDSET,EDPAL,EDLEVEL
+
+GETRDATA:
+	LD	DE,(EDLEVEL)
+	CALL	GETLEVEL
+	RET	Z
+	PUSH	HL
+	POP	IY
+	LD	A,(IY+LVL.PAL)
+	LD	(EDPAL),A
+	LD	A,(IY+LVL.GFX)
+	LD	(EDSET),A
+	LD	(LPTR),IY
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	PTRHL,PRINTF,LOCATE,EDLEVEL,GRID16
 
 SHOWSCR:CALL	GRID16
 	CALL	DRAWRMATRIX
+
+	LD	DE,0
+	CALL	LOCATE
+	LD	HL,(LPTR)
+	PUSH	HL
+	LD	DE,TITLE
+	CALL	PRINTF
+
+	LD	DE,0054H
+	CALL	LOCATE
+
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	XOR	A
+	CALL	GETROOM
+	CALL	PTRHL
+	PUSH	HL
+
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	LD	A,1
+	CALL	GETROOM
+	CALL	PTRHL
+	PUSH	HL
+
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	LD	A,2
+	CALL	GETROOM
+	CALL	PTRHL
+	PUSH	HL
+
+	LD	H,0
+	LD	DE,(EDROOM)
+	LD	L,E
+	PUSH	HL
+	LD	L,D
+	PUSH	HL
+	LD	DE,ROOMI
+	CALL	PRINTF
 	RET
+
+TITLE:	DB	9,"ROOM EDITOR: LEVEL %s",0
+ROOMI:	DB	9,"ROOM",9,"     %03dX%03d",10
+	DB	9,"HEIGHT 0",9,"%04d",10
+	DB	9,"HEIGHT 1",9,"%04d",10
+	DB	9,"HEIGHT 2",9,"%04d",0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -95,5 +160,11 @@ POSEVENT:
 
 P.1:	LD	(EDROOM),DE
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	DSEG
+LPTR:	DW	0
+
 
 
