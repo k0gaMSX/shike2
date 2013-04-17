@@ -161,7 +161,6 @@ LEVEL1:
 ALCAZAR:DB	"AL-QASR            ",0	;LEVEL 1
 L1_PAL:	DB	0
 L1_GFX:	DB	0
-
 L1_1:	DS	8*8*2
 L1_2:	DS	8*8*2
 L1_3:	DS	8*8*2
@@ -196,6 +195,10 @@ L3_ACC:	DS	8*8
 RAYAHUD:DB	"RABAD AL-YAHUD     ",0	;LEVEL 4
 L4_PAL:	DB	0
 L4_GFX:	DB	0
+L4_1:	DS	8*8*2
+L4_2:	DS	8*8*2
+L4_3:	DS	8*8*2
+L4_ACC:	DS	8*8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;LEVEL 5
