@@ -64,7 +64,7 @@ edroom.rel : edroom.asm shike2.inc level.inc bios.inc event.inc
 	echo edroom.asm
 	as $(ASFLAGS) edroom.asm
 
-map.rel : map.asm shike2.inc level.inc
+map.rel : map.asm shike2.inc level.inc bios.inc
 	echo map.asm
 	as $(ASFLAGS) map.asm
 
