@@ -34,11 +34,37 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	GRID16
+	EXTRN	PUTS,LOCATE,PRINTF,GRID16
 
 SHOWSCR:CALL	GRID16
 	CALL	DRAWLMATRIX
+
+	LD	DE,0000H
+	CALL	LOCATE
+	LD	DE,LVLSTR
+	CALL	PUTS
+
+	LD	DE,0054H
+	CALL	LOCATE
+	LD	DE,(EDLEVEL)
+	CALL	GETLEVEL
+	RET	Z
+	PUSH	HL
+	POP	IY
+	LD	H,0
+	LD	L,(IX+LVL.GFX)
+	PUSH	HL
+	LD	L,(IX+LVL.PAL)
+	PUSH	HL
+	PUSH	IY
+	LD	DE,FMT
+	CALL	PRINTF
 	RET
+
+LVLSTR:	9,"LEVEL EDITOR",10,0
+FMT:	9,"NAME:",9,"%s",10
+	9,"PALETE",9,"%d",10
+	9,"SET",9,"%d",0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
