@@ -1,7 +1,7 @@
 ASFLAGS = -t
 REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
-all : shike2.com leveldef.bin patset0.bin patset1.bin charset0.bin
+all : shike2.com leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin
 
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
@@ -17,28 +17,37 @@ bload.obj : bload.asm
 ########################################################
 #load pages objects
 
-loadpag9.obj : loadpag9.asm loader.asm shike2.inc bios.inc
-	echo loadpag9.asm
-	as $(ASFLAGS) loadpag9.asm
-	ld /RC000 loadpag9.obj=loadpag9.rel
+loadpg10.obj : loadpg10.asm loader.asm shike2.inc bios.inc
+	echo loadpg10.asm
+	as $(ASFLAGS) loadpg10.asm
+	ld /RC000 loadpg10.obj=loadpg10.rel
 
-loadpag8.obj : loadpag8.asm loader.asm shike2.inc bios.inc
-	echo loadpag8.asm
-	as $(ASFLAGS) loadpag8.asm
-	ld /RC000 loadpag8.obj=loadpag8.rel
+loadpg9.obj : loadpg9.asm loader.asm shike2.inc bios.inc
+	echo loadpg9.asm
+	as $(ASFLAGS) loadpg9.asm
+	ld /RC000 loadpg9.obj=loadpg9.rel
 
-loadpag7.obj : loadpag7.asm loader.asm shike2.inc bios.inc
-	echo loadpag7.asm
-	as $(ASFLAGS) loadpag7.asm
-	ld /RC000 loadpag7.obj=loadpag7.rel
+loadpg8.obj : loadpg8.asm loader.asm shike2.inc bios.inc
+	echo loadpg8.asm
+	as $(ASFLAGS) loadpg8.asm
+	ld /RC000 loadpg8.obj=loadpg8.rel
 
-loadpag1.obj : loadpag1.asm loader.asm shike2.inc bios.inc
-	echo loadpag1.asm
-	as $(ASFLAGS) loadpag1.asm
-	ld /RC000 loadpag1.obj=loadpag1.rel
+loadpg7.obj : loadpg7.asm loader.asm shike2.inc bios.inc
+	echo loadpg7.asm
+	as $(ASFLAGS) loadpg7.asm
+	ld /RC000 loadpg7.obj=loadpg7.rel
+
+loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
+	echo loadpg1.asm
+	as $(ASFLAGS) loadpg1.asm
+	ld /RC000 loadpg1.obj=loadpg1.rel
 
 ########################################################
 #data objects
+
+charset1.obj : ..\\gfx\\charset1.gl5
+	echo charset1.obj
+	delgl5 ..\\gfx\\charset1.gl5 charset1.obj
 
 charset0.obj : ..\\gfx\\charset0.gl5
 	echo charset0.obj
@@ -60,21 +69,25 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 ########################################################
 #binary files
 
-charset0.bin : charset0.obj loadpag9.obj bload.obj
+charset1.bin : charset1.obj loadpg10.obj bload.obj
+	echo charset1.obj
+	concat bload.obj + charset1.obj + loadpg10.obj charset1.bin
+
+charset0.bin : charset0.obj loadpg9.obj bload.obj
 	echo charset0.obj
-	concat bload.obj + charset0.obj + loadpag9.obj charset0.bin
+	concat bload.obj + charset0.obj + loadpg9.obj charset0.bin
 
-patset1.bin : patset1.obj loadpag8.obj bload.obj
+patset1.bin : patset1.obj loadpg8.obj bload.obj
 	echo patset1.obj
-	concat bload.obj + patset1.obj + loadpag8.obj patset1.bin
+	concat bload.obj + patset1.obj + loadpg8.obj patset1.bin
 
-patset0.bin : patset0.obj loadpag7.obj bload.obj
+patset0.bin : patset0.obj loadpg7.obj bload.obj
 	echo patset0.obj
-	concat bload.obj + patset0.obj + loadpag7.obj patset0.bin
+	concat bload.obj + patset0.obj + loadpg7.obj patset0.bin
 
-leveldef.bin : leveldef.obj loadpag1.obj bload.obj
+leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 	echo leveldef.rel
-	concat bload.obj + leveldef.obj + loadpag1.obj leveldef.bin
+	concat bload.obj + leveldef.obj + loadpg1.obj leveldef.bin
 
 
 ##########################################################
