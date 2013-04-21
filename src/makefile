@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
 all : shike2.com leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin
 
@@ -92,6 +92,10 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 
 ##########################################################
 #sources
+
+level.rel : level.asm shike2.inc bios.inc level.inc
+	echo level.asm
+	as $(ASFLAGS) level.asm
 
 edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc event.inc
 	echo edlevel.asm
