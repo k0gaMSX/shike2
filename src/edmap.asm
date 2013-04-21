@@ -25,7 +25,7 @@ ED.LOOP:LD	E,EDPAGE
 	JR	NZ,ED.LOOP
 	RET
 
-	EXTRN	ED.TILE,ED.FLOOR,PALEVENT,SETEVENT
+	EXTRN	PALEVENT,SETEVENT
 
 RECEIVERS:
 	DB	1,29,142,8
@@ -33,9 +33,9 @@ RECEIVERS:
 	DB	1,29,150,8
 	DW	HEIGHTEVENT
 	DB	220,16,126,16
-	DW	ED.FLOOR
+	DW	FLOOREVENT
 	DB	220,16,150,48
-	DW	ED.TILE
+	DW	TILEEVENT
 R.FLOOR:DS	64*6
 	DB	0
 
@@ -317,7 +317,7 @@ POSEVENT:
 	LD	A,(EDFLOOR)
 	LD	(HL),A
 	RET
-	PUBLIC	P.TILE
+
 P.TILE:	CALL	GETTMAP			;BUTTON 2 SET TILE
 	LD	A,(P.OFFSET)
 	CALL	ADDAHL
@@ -373,6 +373,24 @@ H.1:	OR	A
 	DEC	A
 H.RET:	LD	(HEIGHT),A
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	ED.FLOOR,EDINIT
+
+FLOOREVENT:
+	CALL	ED.FLOOR
+	JP	EDINIT
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	ED.TILE,EDINIT
+
+TILEEVENT:
+	CALL	ED.TILE
+	JP	EDINIT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
