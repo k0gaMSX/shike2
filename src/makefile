@@ -93,11 +93,11 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
-mob.rel : mob.asm bios.inc
+mob.rel : mob.asm bios.inc shike2.inc data.inc
 	echo mob.asm
 	as $(ASFLAGS) mob.asm
 
-game.rel : game.asm
+game.rel : game.asm bios.asm data.inc
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
