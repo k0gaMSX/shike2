@@ -119,7 +119,7 @@ ROOMG:	DB	3, 156,158,  186,158,  0,  8,  0,  8
 	DB	0
 
 TITLE:	DB	9,"ROOM EDITOR: LEVEL %s",0
-ROOMI:	DB	9,"ROOM",9,"     %03dX%03d",9,9,"PALETE",9,"%d",10
+ROOMI:	DB	9,"ROOM",9,"       %02dX%02d",9,9,"PALETE",9,"%d",10
 	DB	9,"HEIGHT 0",9,"%04d",9,9,"SET",9,"%d",10
 	DB	9,"HEIGHT 1",9,"%04d",10
 	DB	9,"HEIGHT 2",9,"%04d",0
