@@ -12,6 +12,8 @@
 
 ED.MAP:	CALL	EDINIT
 	CALL	ADDRECEIVERS
+	LD	HL,0
+	LD	(COORD),HL
 
 ED.LOOP:LD	E,EDPAGE
 	CALL	CLRVPAGE
@@ -136,6 +138,11 @@ SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
 	PUSH	HL
 	LD	L,D
 	PUSH	HL
+	LD	DE,(COORD)
+	LD	L,E
+	PUSH	HL
+	LD	L,D
+	PUSH	HL
 	LD	A,(HEIGHT)
 	LD	L,A
 	PUSH	HL
@@ -175,7 +182,7 @@ S.1:	LD	A,(EDTILE)		;TILE 0 IS EMPTY TILE
 
 
 FMT:	DB	" MAP",9," %04d",10
-	DB	" HEIGHT",9,"   %02d",10
+	DB	" HEIGHT",9,"   %02d",9,"POS %d,%d",10
 	DB	" ROOM",9,"%02dX%02d",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" FLOOR",9,"  %03d",10
@@ -300,6 +307,7 @@ POSEVENT:
 
 	PUSH	AF
 	CALL	SCR2WRL			;TRANSFORM TO WORLD COORDENATES
+	LD	(P.COORD),HL
 	LD	A,L
 	ADD	A,A
 	ADD	A,A
@@ -319,7 +327,7 @@ POSEVENT:
 	RET
 
 P.TILE:	CP	MS_BUTTON2
-	RET	NZ
+	JR	NZ,P.INFO
 	CALL	GETTMAP			;BUTTON 2 SET TILE
 	LD	A,(P.OFFSET)
 	CALL	ADDAHL
@@ -327,8 +335,15 @@ P.TILE:	CP	MS_BUTTON2
 	LD	(HL),A
 	RET
 
+P.INFO:	CP	KB_F1
+	RET	NZ
+	LD	HL,(P.COORD)
+	LD	(COORD),HL
+	RET
+
 	DSEG
 P.OFFSET:	DB	0
+P.COORD:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
@@ -402,6 +417,7 @@ TILEEVENT:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
+COORD:	DW	0
 MAPNO:	DW	0
 HEIGHT:	DB	0
 RPTR:	DW	0
