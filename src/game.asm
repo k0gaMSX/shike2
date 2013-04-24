@@ -80,8 +80,8 @@ ENGINE:	LD	IX,MOV1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
-MOV1:	DS	MOV.SIZ
-MOV2:	DS	MOV.SIZ
+MOV1:	DS	SIZMOV
+MOV2:	DS	SIZMOV
 X1:	DW	0
 X2:	DW	0
 
