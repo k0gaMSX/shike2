@@ -180,7 +180,9 @@ POSEVENT:
 	CALL	ED.MAP
 	JP	EDINIT
 
-P.1:	LD	(EDROOM),DE
+P.1:	CP	MS_BUTTON2
+	RET	NZ
+	LD	(EDROOM),DE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
