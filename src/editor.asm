@@ -273,25 +273,6 @@ G.LINE:	PUSH	AF
 	ADD	IY,DE
 	JR	G.NEXT
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	E = PATTERN NUMBER
-;OUTPUT:HL = COORDENATES OF THE PATTERN
-
-	CSEG
-
-PAT2XY:	LD	A,E
-	AND	0F0H
-	RRCA
-	LD	L,A
-
-	LD	A,E
-	AND	0FH
-	RLCA
-	RLCA
-	RLCA
-	RLCA
-	LD	H,A
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = POINTER TO FIRST STACK
@@ -300,6 +281,7 @@ PAT2XY:	LD	A,E
 
 	CSEG
 	PUBLIC	DRAWSTACKS
+	EXTRN	PSTACK
 
 DRAWSTACKS:
 	PUSH	DE
@@ -320,44 +302,6 @@ DRAWSTACKS:
 	DEC	E
 	JR	NZ,DRAWSTACKS
 	RET
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = PATTERN STACK
-;	BC = SCREEN COORDINATES
-
-	CSEG
-	PUBLIC	PSTACK
-	EXTRN	VDPPAGE,LMMM
-
-PSTACK:	EX	DE,HL
-	LD	(P.COORD),BC
-	LD	A,PATPAGE
-	LD	(VDPPAGE),A
-	LD	A,LOGTIMP
-	LD	(LOGOP),A
-
-	LD	B,NR_LAYERS
-
-P.LOOP:	LD	A,(HL)			;0 MARKS THE END OF A TILE STACK
-	OR	A
-	RET	Z
-
-	PUSH	HL
-	PUSH	BC
-	LD	E,A
-	CALL	PAT2XY			;TRANSFORM THE PATTER NUMBER TO XY
-	LD	DE,(P.COORD)
-	LD	BC,1008H
-	CALL	LMMM			;AND COPY THE PATTERN TO THE DESTINE
-	POP	BC
-	POP	HL
-	INC	HL
-	DJNZ	P.LOOP
-	RET
-
-	DSEG
-P.COORD:DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	HL = POINTER TO THE PATTERN STACK
