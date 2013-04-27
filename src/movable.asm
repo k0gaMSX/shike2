@@ -113,6 +113,55 @@ TURN:	LD	(IX+MOV.DIR),E
 	LD	D,(IX+MOV.YR+1)
 	JP	DRAW
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE MOVABLE
+
+	CSEG
+
+LINKANIM:
+	LD	DE,(ANIM+MOV.ANEXT)	;DE = ANIM.NEXT
+	LD	IYL,E
+	LD	IYU,D			;IY = HEAD.NEXT
+	LD	C,IXL
+	LD	B,IXU			;BC = PTR
+	LD	HL,ANIM			;HL = &HEAD
+
+	LD	(IX+MOV.APREV),L
+	LD	(IX+MOV.APREV+1),H	;PTR->APREV = &ANIM
+	LD	(IX+MOV.ANEXT),E
+	LD	(IX+MOV.ANEXT+1),D	;PTR->ANEXT = ANIM.ANEXT
+
+	LD	(ANIM+MOV.ANEXT),BC	;ANIM.ANEXT = PTR
+	LD	(IY+MOV.APREV),C
+	LD	(IY+MOV.APREV+1),B	;ANIM.ANEXT->APREV = PTR
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE MOVABLE
+
+	CSEG
+
+UNLINKANIM:
+	LD	C,(IX+MOV.APREV)
+	LD	B,(IX+MOV.APREV+1)	;BC = PTR->APREV
+	LD	E,(IX+MOV.ANEXT)
+	LD	D,(IX+MOV.ANEXT+1)	;DE = PTR->ANEXT
+
+	LD	IYL,C
+	LD	IYU,B
+	LD	(IY+MOV.ANEXT),E
+	LD	(IY+MOV.ANEXT+1),D	;PTR->APREV->ANEXT = PTR->ANEXT
+
+	LD	IYL,E
+	LD	IYU,D
+	LD	(IY+MOV.APREV),C
+	LD	(IY+MOV.APREV+1),B	;PTR->ANEXT->APREV = PTR->APREV
+	XOR	A
+	LD	(IX+MOV.ANEXT),A
+	LD	(IX+MOV.ANEXT+1),A
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;IX = POINTER TO THE MOVABLE
