@@ -37,7 +37,7 @@ GAME:	CALL	MOBINIT
 	CALL	PLACE
 
 G.LOOP:	CALL	NEWFRAME
-	CALL	KPRESS
+	CALL	KBHIT
 	CP	KB_ESC
 	JR	NZ,G.LOOP
 	RET
@@ -45,14 +45,16 @@ G.LOOP:	CALL	NEWFRAME
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	PUBLIC	ENGINE
-	EXTRN	TURN
+	EXTRN	ANIMATE,STEP
 
 ENGINE:	LD	IX,MOV1
-	LD	A,(IX+MOV.DIR)
-	INC	A
-	AND	3
-	LD	E,A
-	CALL	TURN
+	LD	A,(IX+MOV.ANEXT)
+	OR	(IX+MOV.ANEXT+1)
+	JR	NZ,E.ANIM
+	LD	A,DRIGHT
+	CALL	STEP
+
+E.ANIM:	CALL	ANIMATE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
