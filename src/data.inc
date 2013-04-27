@@ -42,6 +42,16 @@ SIZPOINT	EQU	POINT.Z+1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;DIFFERENT DIRECTIONS
+
+DRIGHT		EQU	0
+DDOWN		EQU	1
+DUP		EQU	2
+DLEFT		EQU	3
+DNODIR		EQU	4
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;A MOV IS A GAME ENTITY WHICH CAN BE MOVED
 
 MOV.MOB		EQU	0			;MOB INFORMATION (GRAP. INFO)

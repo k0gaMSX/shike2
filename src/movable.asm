@@ -113,6 +113,58 @@ TURN:	LD	(IX+MOV.DIR),E
 	LD	D,(IX+MOV.YR+1)
 	JP	DRAW
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = ORIGIN X,Y
+;	BC = ORIGIN ROOM
+;	HL = ORIGIN LEVEL
+;	A = DIRECTION
+;OUTPUT:DE = DESTINATION X,Y
+;	BC = ORIGIN ROOM
+;	HL = ORIGIN LEVEL
+
+	CSEG
+
+NEXTPOINT:				;TODO: UPDATE LEVEL
+	CP	DRIGHT
+	JR	NZ,N.LEFT
+	INC	D
+	LD	A,MAPXSIZ
+	CP	D			;END OF MAP?
+	RET	NZ
+	LD	D,0			;GOTO NEXT MAP
+	INC	B
+	RET
+
+N.LEFT:	CP	DLEFT
+	JR	NZ,N.UP
+	DEC	D
+	LD	A,-1
+	CP	D			;BEGIN OF MAP?
+	RET	NZ
+	LD	D,MAPXSIZ-1
+	DEC	B			;GOTO PREVIOUS MAP
+	RET
+
+N.UP:	CP	DUP
+	JR	NZ,N.DOWN
+	DEC	E
+	LD	A,-1
+	CP	E			;BEGIN OF MAP?
+	RET	NZ
+	LD	E,MAPYSIZ-1
+	DEC	C			;GOTO LOWER MAP
+	RET
+
+N.DOWN:	CP	DDOWN
+	RET	NZ
+	INC	E
+	LD	A,MAPYSIZ
+	CP	E			;END OF MAP?
+	RET	NZ
+	LD	E,0
+	INC	C			;GOTO UPPER MAP
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOVABLE
 
