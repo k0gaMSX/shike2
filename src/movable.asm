@@ -140,6 +140,42 @@ TURN:	LD	(IX+MOV.DIR),E
 	LD	D,(IX+MOV.YR+1)
 	JP	DRAW
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = DIRECTION
+;	C = COUNT
+;OUTPUT:DE = Y INCREMENT
+;	BC = X INCREMENT
+
+	CSEG
+
+ISOINC:	LD	A,E			;THIS FUNCTION RETURNS THE ISOMETRIC
+	ADD	A,A			;INCREMENT DUE TO A NUMBER OF MINIMAL
+	ADD	A,A			;STEPS (2X1) IN A DIRECTION
+	ADD	A,A
+	ADD	A,A
+	LD	E,A
+	LD	A,C
+	ADD	A,A
+	ADD	A,A
+	ADD	A,E
+	LD	E,A
+	LD	D,0
+	LD	HL,I.DATA
+	ADD	HL,DE
+	LD	C,(HL)
+	INC	HL
+	LD	B,(HL)
+	INC	HL
+	LD	E,(HL)
+	INC	HL
+	LD	D,(HL)
+	RET
+
+I.DATA:	DW	 4, 2,	 8, 4,	12, 6,	16, 8	;RIGTH
+	DW	-4, 2,	-8, 4, -12, 6, -16, 8	;DOWN
+	DW	 4,-2,	 8,-4,	12,-6,	16,-8	;UP
+	DW	-4,-2,	-8,-4, -12,-6, -16,-8	;LEFT
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = ORIGIN X,Y
 ;	BC = ORIGIN ROOM
