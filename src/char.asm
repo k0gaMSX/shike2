@@ -1,6 +1,8 @@
 
 	INCLUDE	DATA.INC
 
+CHARHEIGHT	EQU	4
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
@@ -12,19 +14,31 @@ INITCHAR:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE CHAR
-;	DE = CONTROLLER FUNCTION
+;	E = PATTERN
+;	BC = CONTROLLER FUNCTION
 
 	CSEG
-	PUBLIC	CHAR
+	PUBLIC	CHARACTER
 	EXTRN	MOVABLE
 
-CHAR:	PUSH	DE
+CHARACTER:
+	PUSH	BC
+	LD	C,CHARHEIGHT
+	LD	HL,WALKER
 	CALL	MOVABLE
-	POP	DE
-	LD	(IX+CHAR.CONTROL),E
-	LD	(IX+CHAR.CONTROL+1),D
+	POP	HL
+	LD	(IX+CHAR.CONTROL),L
+	LD	(IX+CHAR.CONTROL+1),H
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	WALKER
+	EXTRN	STEP
+
+WALKER:	LD	A,DRIGHT
+	JP	STEP
 
 
 
