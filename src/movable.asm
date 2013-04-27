@@ -99,6 +99,21 @@ PLACE:	LD	(IX+MOV.DIR),C
 	CALL	SETRINFO
 	JP	RENDER
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE MOVABLE
+;	E = DIRECTION
+
+	CSEG
+	PUBLIC	TURN
+
+TURN:	LD	(IX+MOV.DIR),E
+	LD	L,(IX+MOV.XR)
+	LD	H,(IX+MOV.XR+1)
+	LD	E,(IX+MOV.YR)
+	LD	D,(IX+MOV.YR+1)
+	JP	DRAW
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;IX = POINTER TO THE MOVABLE
 
