@@ -32,11 +32,12 @@ GAME:	CALL	MOBINIT
 	CALL	FOCUSCAM
 
 	LD	IX,CHR1
+	LD	E,0
+	LD	BC,WALKER
 	CALL	CHARACTER
 	LD	DE,P1
 	LD	C,0
 	CALL	PLACE
-	CALL	WALKER
 
 G.LOOP:	CALL	NEWFRAME
 	CALL	KBHIT
@@ -47,9 +48,10 @@ G.LOOP:	CALL	NEWFRAME
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	PUBLIC	ENGINE
-	EXTRN	ANIMATE
+	EXTRN	THINK,ANIMATE
 
-ENGINE:	CALL	ANIMATE
+ENGINE:	CALL	THINK
+	CALL	ANIMATE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

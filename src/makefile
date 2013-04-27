@@ -93,7 +93,7 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
-char.rel : char.asm data.inc
+char.rel : char.asm bios.inc data.inc
 	echo char.asm
 	as $(ASFLAGS) char.asm
 
