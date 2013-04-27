@@ -78,6 +78,27 @@ MOVABLE:PUSH	BC
 	LD	(IY+MOV.PREV+1),B	;HEAD.NEXT->PREV = PTR
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: IX = POINTER TO MOVABLE
+;	DE = POINTER TO INITIAL POINT
+;	C = INITIAL DIRECTION
+
+	CSEG
+	PUBLIC	PLACE
+
+PLACE:	LD	(IX+MOV.DIR),C
+
+	LD	C,IXL
+	LD	B,IXU
+	LD	HL,MOV.POINT
+	ADD	HL,BC
+	EX	DE,HL
+	LD	BC,SIZPOINT
+	LDIR				;COPY MOVABLE POINT
+
+	CALL	SETRINFO
+	JP	RENDER
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;IX = POINTER TO THE MOVABLE
 
