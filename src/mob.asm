@@ -118,6 +118,33 @@ MOB:	XOR	A
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	PUBLIC	DELMOBS
+
+DELMOBS:PUSH	IX
+	LD	DE,(HEAD+MOB.NEXT)
+	JR	M.ELOOP
+
+M.LOOP:	LD	IXL,E
+	LD	IXU,D
+	LD	E,(IX+MOB.NEXT)
+	LD	D,(IX+MOB.NEXT+1)
+	PUSH	DE
+	CALL	MOB
+	POP	DE
+
+M.ELOOP:LD	HL,HEAD
+	CALL	DCOMPR
+	JR	NZ,M.LOOP
+
+	LD	HL,HEAD
+	LD	(HEAD+MOB.NEXT),HL
+	LD	(HEAD+MOB.PREV),HL
+	POP	IX
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
 	EXTRN	HMMM,VDPPAGE
 
 ERASE:	LD	A,MOBPAGE
