@@ -8,9 +8,9 @@ CHARHEIGHT	EQU	4
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	INITCHAR
+	PUBLIC	CHARINIT
 
-INITCHAR:
+CHARINIT:
 	LD	HL,READY
 	LD	(READY+CHAR.NEXT),HL
 	LD	(READY+CHAR.PREV),HL
