@@ -1,7 +1,7 @@
 ASFLAGS = -t
 REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
 
-all : shike2.com leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin
+all : shike2.com leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin map0.bin map1.bin map2.bin map3.bin height0.bin height1.bin
 
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
@@ -37,6 +37,36 @@ loadpg8.obj : loadpg8.asm loader.asm shike2.inc bios.inc
 	as $(ASFLAGS) loadpg8.asm
 	ld /RC000 loadpg8.obj=loadpg8.rel
 
+loadpg7.obj : loadpg7.asm loader.asm shike2.inc bios.inc
+	echo loadpg7.asm
+	as $(ASFLAGS) loadpg7.asm
+	ld /RC000 loadpg7.obj=loadpg7.rel
+
+loadpg6.obj : loadpg6.asm loader.asm shike2.inc bios.inc
+	echo loadpg6.asm
+	as $(ASFLAGS) loadpg6.asm
+	ld /RC000 loadpg6.obj=loadpg6.rel
+
+loadpg5.obj : loadpg5.asm loader.asm shike2.inc bios.inc
+	echo loadpg5.asm
+	as $(ASFLAGS) loadpg5.asm
+	ld /RC000 loadpg5.obj=loadpg5.rel
+
+loadpg4.obj : loadpg4.asm loader.asm shike2.inc bios.inc
+	echo loadpg4.asm
+	as $(ASFLAGS) loadpg4.asm
+	ld /RC000 loadpg4.obj=loadpg4.rel
+
+loadpg3.obj : loadpg3.asm loader.asm shike2.inc bios.inc
+	echo loadpg3.asm
+	as $(ASFLAGS) loadpg3.asm
+	ld /RC000 loadpg3.obj=loadpg3.rel
+
+loadpg2.obj : loadpg2.asm loader.asm shike2.inc bios.inc
+	echo loadpg2.asm
+	as $(ASFLAGS) loadpg2.asm
+	ld /RC000 loadpg2.obj=loadpg2.rel
+
 loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
 	echo loadpg1.asm
 	as $(ASFLAGS) loadpg1.asm
@@ -68,6 +98,31 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 
 ########################################################
 #binary files
+
+
+map0.bin : map0.dat loadpg2.obj bload.obj
+	echo map0.dat
+	concat bload.obj + map0.dat + loadpg2.obj map0.bin
+
+map1.bin : map1.dat loadpg3.obj bload.obj
+	echo map1.dat
+	concat bload.obj + map1.dat + loadpg3.obj map1.bin
+
+map2.bin : map2.dat loadpg4.obj bload.obj
+	echo map2.dat
+	concat bload.obj + map2.dat + loadpg4.obj map2.bin
+
+map3.bin : map3.dat loadpg5.obj bload.obj
+	echo map3.dat
+	concat bload.obj + map3.dat + loadpg5.obj map3.bin
+
+height0.bin : height0.dat loadpg6.obj bload.obj
+	echo height0.dat
+	concat bload.obj + height0.dat + loadpg6.obj height0.bin
+
+height1.bin : height1.dat loadpg7.obj bload.obj
+	echo height1.dat
+	concat bload.obj + height1.dat + loadpg7.obj height1.bin
 
 charset1.bin : charset1.obj loadpg11.obj bload.obj
 	echo charset1.obj
