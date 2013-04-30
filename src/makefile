@@ -17,6 +17,11 @@ bload.obj : bload.asm
 ########################################################
 #load pages objects
 
+loadpg11.obj : loadpg11.asm loader.asm shike2.inc bios.inc
+	echo loadpg11.asm
+	as $(ASFLAGS) loadpg11.asm
+	ld /RC000 loadpg11.obj=loadpg11.rel
+
 loadpg10.obj : loadpg10.asm loader.asm shike2.inc bios.inc
 	echo loadpg10.asm
 	as $(ASFLAGS) loadpg10.asm
@@ -31,11 +36,6 @@ loadpg8.obj : loadpg8.asm loader.asm shike2.inc bios.inc
 	echo loadpg8.asm
 	as $(ASFLAGS) loadpg8.asm
 	ld /RC000 loadpg8.obj=loadpg8.rel
-
-loadpg7.obj : loadpg7.asm loader.asm shike2.inc bios.inc
-	echo loadpg7.asm
-	as $(ASFLAGS) loadpg7.asm
-	ld /RC000 loadpg7.obj=loadpg7.rel
 
 loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
 	echo loadpg1.asm
@@ -69,21 +69,21 @@ leveldef.obj : leveldef.asm level.inc palete.asm
 ########################################################
 #binary files
 
-charset1.bin : charset1.obj loadpg10.obj bload.obj
+charset1.bin : charset1.obj loadpg11.obj bload.obj
 	echo charset1.obj
-	concat bload.obj + charset1.obj + loadpg10.obj charset1.bin
+	concat bload.obj + charset1.obj + loadpg11.obj charset1.bin
 
-charset0.bin : charset0.obj loadpg9.obj bload.obj
+charset0.bin : charset0.obj loadpg10.obj bload.obj
 	echo charset0.obj
-	concat bload.obj + charset0.obj + loadpg9.obj charset0.bin
+	concat bload.obj + charset0.obj + loadpg10.obj charset0.bin
 
-patset1.bin : patset1.obj loadpg8.obj bload.obj
+patset1.bin : patset1.obj loadpg9.obj bload.obj
 	echo patset1.obj
-	concat bload.obj + patset1.obj + loadpg8.obj patset1.bin
+	concat bload.obj + patset1.obj + loadpg9.obj patset1.bin
 
-patset0.bin : patset0.obj loadpg7.obj bload.obj
+patset0.bin : patset0.obj loadpg8.obj bload.obj
 	echo patset0.obj
-	concat bload.obj + patset0.obj + loadpg7.obj patset0.bin
+	concat bload.obj + patset0.obj + loadpg8.obj patset0.bin
 
 leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 	echo leveldef.rel
