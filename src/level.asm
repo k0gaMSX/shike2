@@ -242,7 +242,7 @@ G.NINFO:EXX				;CARTPAGE ONLY MODIFY A
 	LD	E,B
 	ADD	HL,DE			;HL = HMAP[Y][X]
 	LD	A,(HL)			;A = HEIGHT VALUE
-	LD	HL,0
+	LD	HL,G.DUMMY
 	CP	-1			;SET Z = 0
 	RET
 
@@ -251,7 +251,7 @@ G.BAD:	XOR	A			;SET Z = 1
 
 	DSEG
 G.COOR:	DW	0
-
+G.DUMMY:DB	0			;RETURN THIS ADDRESS WHEN IS A ROM VAL
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = ROOM COORDENATES

@@ -184,8 +184,8 @@ U.STEP:	LD	A,(USERDIR)		;IF KEYDIR IS NODIR THEN RETURN
 	CP	DNODIR
 	RET	Z
 	CALL	STEP
-	JP	UNLINK
-
+	JP	NZ,UNLINK
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
