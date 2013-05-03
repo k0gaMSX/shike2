@@ -202,7 +202,7 @@ mouse.rel : mouse.asm bios.inc sprite.inc shike2.inc
 	echo mouse.asm
 	as $(ASFLAGS) mouse.asm
 
-zbuffer.rel : zbuffer.asm
+zbuffer.rel : zbuffer.asm shike2.inc bios.inc
 	echo zbuffer.asm
 	as $(ASFLAGS) zbuffer.asm
 
