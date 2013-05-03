@@ -19,7 +19,7 @@ NR_PATTIL	EQU	4		;NUMBER OF PATTERNS BY TILE
 ;	struct pattern stack[NR_PATTIL];
 ;};
 ;
-;struct tile_stack buffer[NR_SCRCOL][NR_SCRROW];
+;struct pattern_stack buffer[NR_SCRCOL][NR_SCRROW];
 ;
 
 
@@ -40,8 +40,8 @@ ZVALINIT:
 	JP	BZERO
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = INPUT TILE
-;OUTPUT:HL = POINTER TO THE TILE STACK ASSOCIATED TO THE INPUT TILE
+;INPUT:	DE = INPUT PATTERN
+;OUTPUT:HL = POINTER TO THE TILE STACK ASSOCIATED TO THE INPUT PATTERN
 
 
 	CSEG

@@ -637,8 +637,8 @@ RENDER:	LD	E,(IX+MOV.RINFO)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOVABLE
-;	HL = X POSIITON
-;	DE = Y POSIITON
+;	HL = X POSITION
+;	DE = Y POSITION
 
 	CSEG
 	EXTRN	PUTMOB

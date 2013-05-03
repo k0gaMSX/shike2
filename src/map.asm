@@ -295,7 +295,7 @@ F.LOOPI:PUSH	AF			;LOOP OVER ALL THE ROWS OF THE STACK
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN POSITION
-;	A = FLOOR NUMBER
+;	A = TILE NUMBER
 
 	CSEG
 
