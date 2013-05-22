@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel edfloor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel edtile.rel editor.rel zbuffer.rel mouse.rel
 
 all : shike2.com
 
@@ -189,10 +189,6 @@ edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc
 edtile.rel : edtile.asm bios.inc shike2.inc level.inc event.inc
 	echo edtile.asm
 	as $(ASFLAGS) edtile.asm
-
-edfloor.rel : edfloor.asm bios.inc shike2.inc level.inc event.inc
-	echo edfloor.asm
-	as $(ASFLAGS) edfloor.asm
 
 editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc
 	echo editor.asm

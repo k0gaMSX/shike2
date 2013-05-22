@@ -415,10 +415,9 @@ H.RET:	LD	(HEIGHT),A
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	ED.FLOOR,EDINIT
+	EXTRN	EDINIT
 
 FLOOREVENT:
-	CALL	ED.FLOOR
 	JP	EDINIT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
