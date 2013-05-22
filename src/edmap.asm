@@ -26,13 +26,13 @@ ED.LOOP:LD	E,EDPAGE
 	JR	NZ,ED.LOOP
 	RET
 
-	EXTRN	PALEVENT,SETEVENT
-
 RECEIVERS:
 	DB	1,29,166,8
 	DW	ROOMEVENT
 	DB	1,29,174,8
 	DW	HEIGHTEVENT
+	DB	1,254,32,127
+	DW	MAPEVENT
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -106,13 +106,63 @@ FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",10
 	DB	" POS=%03dX%03d,ROOM=%02dX%02d,LEVEL=%02dX%02d",0
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
-MAPG:	DB     	9,  0,  95,  127, 32, 16,  8, 16,  8
-	DB	9,  0,  96,  127,159, 16, -8, 16, -8
-	DB	3,  0, 166,   30,166,  0,  8,  0,  8
-	DB	2,  0, 166,    0,182, 30,  0, 30,  0
+MAPG:	DB     	9,  0,   95, 127, 32, 16,  8, 16,  8
+	DB	9,  0,   96, 127,159, 16, -8, 16, -8
+	DB	3,  0,  166,  30,166,  0,  8,  0,  8
+	DB	2,  0,  166,   0,182, 30,  0, 30,  0
 	DB	3,  54, 166,  84,166,  0,  8,  0,  8
 	DB	2,  54, 166,  54,182, 30,  0, 30,  0
 	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = SCREEN COORDINATES
+;
+
+
+ISOX	EQU	128
+ISOY	EQU	32
+
+	CSEG
+
+SCR2WRL:LD	C,E
+	LD	B,D
+
+	LD	L,B
+	LD	H,0			;HL = X
+	LD	DE,ISOX
+	OR	A
+	SBC	HL,DE			;HL = X' = X - ISOX
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL			;HL = 16X'
+	PUSH	HL
+	PUSH	HL
+
+	LD	L,C
+	LD	H,0			;HL = Y
+	LD	DE,ISOY
+	OR	A
+	SBC	HL,DE			;HL = Y' = Y - ISOY
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL			;HL = 32Y'
+	POP	DE			;DE = 16X'
+	PUSH	HL
+
+	OR	A
+	SBC	HL,DE			;HL = 32Y' - 16X'
+	LD	A,H
+
+	POP	HL			;HL = Y'
+	POP	DE			;DE = X'
+	ADD	HL,DE			;HL = 32Y' + 16X'
+	SRL	H			;H = (32Y' + 16X')/(32*16)
+	LD	L,A
+	SRL	L			;L = (32Y' - 16X')/(32*16)
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
@@ -163,6 +213,18 @@ H.1:	CP	MS_BUTTON2
 	RET	Z
 	DEC	A
 H.RET:	LD	(HEIGHT),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+;	HL = SCREEN COORDINATES
+
+	CSEG
+
+MAPEVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+	CALL	SCR2WRL
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
