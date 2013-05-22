@@ -117,8 +117,7 @@ GETMDATA:				;UPDATE THE MAP VARIABLES
 	EXTRN	DRAWSTACKS,EDTILE,EDFLOOR,GLINES,LOCATE,PRINTF
 	EXTRN	EDLEVEL,EDROOM,MAPMAP
 
-SHOWSCR:CALL	FGRID			;DRAW FLOOR GRID
-	LD	DE,18
+SHOWSCR:LD	DE,18
 	CALL	LOCATE
 
 	LD	H,0
@@ -189,41 +188,15 @@ FMT:	DB	" MAP",9," %04d",10
 	DB	" TILE",9,"  %03d",0
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
-MAPG:	DB	3,  0, 142,   30,142,  0,  8,  0,  8
+MAPG:	DB     	9,  0,  95,  127, 32, 16,  8, 16,  8
+	DB	9,  0,  96,  127,159, 16, -8, 16, -8
+	DB	3,  0, 142,   30,142,  0,  8,  0,  8
 	DB	2,  0, 142,    0,158, 30,  0, 30,  0
 	DB	2,220, 126,  236,126,  0, 16,  0, 16
 	DB	2,220, 126,  220,142, 16,  0, 16,  0
 	DB	2,220, 150,  236,150,  0, 48,  0, 48
 	DB	2,220, 150,  220,198, 16,  0, 16,  0
 	DB	0
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	CSEG
-	EXTRN	MARK
-
-FGRID:	LD	DE,0
-	LD	B,MAPYSIZ
-
-S.LOOPY:PUSH	BC			;LOOP OVER Y
-	PUSH	DE
-	LD	B,MAPXSIZ
-
-S.LOOPX:PUSH	BC			;LOOP OVER X
-	PUSH	DE
-	CALL	WRL2SCR			;TRANSFORM FROM WORLD TO SCREEN
-	EX	DE,HL
-	CALL	MARK			;MARK THE FLOOR
-	POP	DE
-	INC	D
-	POP	BC
-	DJNZ	S.LOOPX			;END OF X LOOP
-
-	POP	DE
-	INC	E
-	POP	BC
-	DJNZ	S.LOOPY			;END OF Y LOOP
-	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDINATES
