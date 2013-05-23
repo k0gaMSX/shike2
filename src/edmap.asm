@@ -259,13 +259,16 @@ FLOOREVENT:
 	XOR	A
 	LD	(ACTION),A
 	RET
-F.1:	RET
+F.1:	CP	MS_BUTTON1
+	CALL	Z,ED.FLOOR
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
 ;	DE = SCREEN LOCATION
 
 	CSEG
+	EXTRN	ED.FLOOR
 
 TILEEVENT:
 	CP	KB_SPACE
