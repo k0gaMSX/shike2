@@ -5,8 +5,7 @@
 	ASEG
 	ORG	CARTSEG
 
-JTABLE:	JP	GETFLOOR_
-	JP	GETTILE_
+JTABLE:	JP	GETTILE_
 	JP	GETPAL_
 	JP	GETLEVEL_
 	JP	GETROOM_
@@ -40,20 +39,6 @@ DE.NOT:	SLA	E
 	RL	D
 	DJNZ	DE.LOOP
 	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	E = NUMBER OF FLOOR
-;OUTPUT:HL = ADDRESS
-
-GETFLOOR_:
-	LD	A,E
-	DEC	A			;FLOOR 0 IS EMPTY FLOOR, SO DECREMENT 1
-	LD	DE,SIZFLOOR
-	CALL	MULTDEA
-	LD	DE,FLOOR
-	ADD	HL,DE
-	RET
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	E = NUMBER OF TILE
@@ -326,7 +311,6 @@ L15_ACC:DS	8*8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-FLOOR:	DS	NR_FLOORS*SIZFLOOR
 TILE:	DS	NR_TILES*SIZTILE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
