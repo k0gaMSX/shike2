@@ -2,6 +2,7 @@
 	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	EVENT.INC
+	INCLUDE	LEVEL.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -28,9 +29,8 @@ RECEIVERS:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-NR_FLOORS	EQU	6
-
 	CSEG
+	EXTRN	DRAWFLOOR
 
 SHOWSCR:LD	C,0
 	LD	DE,0
@@ -49,78 +49,6 @@ S.LOOP:	PUSH	DE			;DRAW ALL THE FLOORS
 	CP	NR_FLOORS
 	JR	NZ,S.LOOP
 	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = SCREEN COORDENATES
-;	C = FLOOR NUMBER
-
-
-	CSEG
-	EXTRN	PNUM2XY,LMMM,VDPPAGE
-
-DRAWFLOOR:
-	LD	A,C
-	RLCA
-	RLCA
-	LD	C,A
-	LD	B,0
-	LD	HL,FLOORDEF
-	ADD	HL,BC
-	LD	(D.PTR),HL
-	LD	(D.COORD),DE
-	LD	A,LOGTIMP
-	LD	(LOGOP),A
-	LD	A,PATPAGE
-	LD	(VDPPAGE),A
-
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	BC,1008H
-	CALL	LMMM			;DRAW LEFT-UP PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,D
-	ADD	A,16
-	LD	D,A
-	LD	BC,1008H
-	CALL	LMMM			;DRAW RIGHT-UP PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,E
-	ADD	A,8
-	LD	E,A
-	LD	BC,1008H
-	CALL	LMMM			;DRAW LEFT-DOWN PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,D
-	ADD	A,16
-	LD	D,A
-	LD	A,E
-	ADD	A,8
-	LD	E,A
-	LD	BC,1008H
-	JP	LMMM			;DRAW RIGHT-DOWN PATTERN
-
-	DSEG
-D.PTR:	DW	0
-D.COORD:DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
@@ -144,13 +72,5 @@ FLOOREVENT:
 	RET
 
 
-	CSEG
-
-FLOORDEF:	DB	16,17,32,33
-		DB	48,49,64,65
-		DB	80,81,96,97
-		DB	112,113,128,129
-		DB	144,145,160,161
-		DB	176,177,192,193
 
 

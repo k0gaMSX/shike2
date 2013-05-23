@@ -182,7 +182,7 @@ map.rel : map.asm shike2.inc level.inc bios.inc
 	echo map.asm
 	as $(ASFLAGS) map.asm
 
-edfloor.rel : edfloor.asm bios.inc shike2.inc event.inc
+edfloor.rel : edfloor.asm bios.inc shike2.inc event.inc level.inc
 	echo edfloor.asm
 	as $(ASFLAGS) edfloor.asm
 
