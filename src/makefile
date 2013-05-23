@@ -182,7 +182,7 @@ map.rel : map.asm shike2.inc level.inc bios.inc
 	echo map.asm
 	as $(ASFLAGS) map.asm
 
-edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc
+edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc sprite.inc
 	echo edmap.asm
 	as $(ASFLAGS) edmap.asm
 
