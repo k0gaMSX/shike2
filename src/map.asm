@@ -341,17 +341,67 @@ DRAWFLOOR:
 	LD	BC,1008H
 	JP	LMMM			;DRAW RIGHT-DOWN PATTERN
 
-FLOORDEF:
-	DB	16,17,32,33
-	DB	48,49,64,65
-	DB	80,81,96,97
-	DB	112,113,128,129
-	DB	144,145,160,161
-	DB	176,177,192,193
-
 	DSEG
 D.PTR:	DW	0
 D.COORD:DW	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = PATTERN COORDENATES
+;	C = FLOOR NUMBER
+;	(M.HGTH) = ZVAL VALUE
+
+	CSEG
+	PUBLIC	ZFLOOR
+
+ZFLOOR:	LD	A,(M.HGHT)
+	ADD	A,A
+	ADD	A,A
+	LD	(S.ZVAL),A		;ZVAL IS CONSTANT IN FLOORS
+
+	LD	A,C
+	RLCA
+	RLCA
+	LD	C,A
+	LD	B,0
+	LD	HL,FLOORDEF
+	ADD	HL,BC			;HL = ADDRESS OF FLOOR
+
+	LD	(Z.COOR),DE
+	LD	BC,(S.ZVAL)
+	LD	B,(HL)
+	INC	HL
+	LD	(Z.PTR),HL
+	CALL	ADDZPAT
+
+	LD	HL,(Z.PTR)
+	LD	DE,(Z.COOR)
+	INC	D
+	LD	BC,(S.ZVAL)
+	LD	B,(HL)
+	INC	HL
+	LD	(Z.PTR),HL
+	CALL	ADDZPAT
+
+	LD	HL,(Z.PTR)
+	LD	DE,(Z.COOR)
+	INC	E
+	LD	BC,(S.ZVAL)
+	LD	B,(HL)
+	INC	HL
+	LD	(Z.PTR),HL
+	CALL	ADDZPAT
+
+	LD	HL,(Z.PTR)
+	LD	DE,(Z.COOR)
+	INC	D
+	INC	E
+	LD	BC,(S.ZVAL)
+	LD	B,(HL)
+	JP	ADDZPAT
+
+	DSEG
+Z.COOR:	DW	0
+Z.PTR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN POSITION
@@ -364,11 +414,7 @@ FLOORFUN:
 	DEC	A
 	LD	(F.NUM),A
 
-	LD	A,(M.HGHT)
-	ADD	A,A
-	ADD	A,A
-	LD	(S.ZVAL),A		;ZVAL IS CONSTANT IN FLOORS
-
+	LD	(F.COOR),DE
 	LD	C,E
 	LD	B,D
 	CALL	ISVALID
@@ -376,10 +422,15 @@ FLOORFUN:
 	CALL	PAT2XY
 	EX	DE,HL
 	LD	BC,(F.NUM)
-	JP	DRAWFLOOR
+	CALL	DRAWFLOOR
+
+	LD	DE,(F.COOR)
+	LD	BC,(F.NUM)
+	JP	ZFLOOR
 
 	DSEG
 F.NUM:	DB	0
+F.COOR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN POSITION
@@ -597,5 +648,19 @@ GETHMAP:DEC	DE			;0 IS THE EMPTY MAP
 	LD	E,A
 	CALL	CARTPAGE
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+FLOORDEF:
+	DB	16,17,32,33
+	DB	48,49,64,65
+	DB	80,81,96,97
+	DB	112,113,128,129
+	DB	144,145,160,161
+	DB	176,177,192,193
+
+
 
 
