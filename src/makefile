@@ -1,7 +1,9 @@
 ASFLAGS = -t
 REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
 
-all : shike2.com
+all : shike data
+
+shike : shike2.com
 
 data : leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin map0.bin map1.bin map2.bin map3.bin height0.bin height1.bin
 
@@ -79,18 +81,22 @@ loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
 
 charset1.obj : ..\\gfx\\charset1.gl5
 	echo charset1.obj
+	del charset1.obj > NUL
 	delgl5 ..\\gfx\\charset1.gl5 charset1.obj
 
 charset0.obj : ..\\gfx\\charset0.gl5
 	echo charset0.obj
+	del charset0.obj > NUL
 	delgl5 ..\\gfx\\charset0.gl5 charset0.obj
 
 patset1.obj : ..\\gfx\\patset1.gl5
 	echo patset1.gl5
+	del patset1.obj > NUL
 	delgl5 ..\\gfx\\patset1.gl5 patset1.obj
 
 patset0.obj : ..\\gfx\\patset0.gl5
 	echo patset0.gl5
+	del patset0.obj > NUL
 	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
 
 leveldef.obj : leveldef.asm level.inc palete.asm
@@ -230,11 +236,11 @@ shike2.com : $(REL)
 	ld /R0100 /P0100 /D8000 /X /Gmain & <ld.cmd
 
 clean :
-	del *.rel
-	del *.sym
-	del *.com
-	del *.bin
-	del *.obj
+	del *.rel > NUL
+	del *.sym > NUL
+	del *.com > NUL
+	del *.bin > NUL
+	del *.obj > NUL
 	del palete.asm
 
 
