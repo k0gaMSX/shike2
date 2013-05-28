@@ -20,6 +20,8 @@ ED.TILE:CALL	EDINIT
 	RET
 
 RECEIVERS:
+	DB	1,253,0,254
+	DW	TILEEVENT
 	DB	0
 
 
@@ -136,6 +138,48 @@ T.LOOPY:PUSH	BC			;LOOP OVER Y
 
 	DSEG
 DT.PTR:	DW	0
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+;	DE = SCREEN LOCATION
+
+	CSEG
+	EXTRN	EDTILE
+
+TILEEVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+	LD	A,E
+	SRL	A
+	SRL	A
+	SRL	A
+	LD	E,0
+
+T.LOOP:	SUB	6
+	JR	C,T.BIG
+	INC	E
+	JR	T.LOOP
+
+T.BIG:	LD	A,E
+	RLCA
+	RLCA
+	RLCA
+	LD	E,A
+	LD	A,D
+	AND	0E0H
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	RRCA
+	ADD	A,E
+	CP	NR_TILES
+	RET	NC
+	INC	A
+	LD	(EDTILE),A
+	RET
+
 
 
 
