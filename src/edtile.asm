@@ -91,11 +91,13 @@ S.1:	LD	D,A
 
 STR:	DB	" PAGE %d",10," QUIT",0
 
+LINEY	EQU	NR_TILES_ROW*TILEYSIZ*8+8
+
 ;	       REP  X0  Y0    X1  Y1  IX0 IY0 IX1 IY1
 MAPG:	DB	3,  0,  182,  30,182,  0,  8,  0,  8
 	DB	2,  0,  182,   0,198, 30,  0, 30,  0
-	DB	4,  0,  8,   255,  8,  0, 56,  0, 56
-	DB	9,  0,  8,     0,176, 32,  0, 32,  0
+	DB	4,  0,  8,   255,  8,  0, TILEYSIZ*8,  0, TILEYSIZ*8
+	DB	9,  0,  8,     0,LINEY, TILEXSIZ*16,  0, TILEXSIZ*16,  0
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
