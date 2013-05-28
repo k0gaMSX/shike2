@@ -4,6 +4,8 @@
 	INCLUDE	EVENT.INC
 	INCLUDE	LEVEL.INC
 
+NR_FLOORS	EQU	6
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG

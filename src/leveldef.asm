@@ -5,8 +5,7 @@
 	ASEG
 	ORG	CARTSEG
 
-JTABLE:	JP	GETTILE_
-	JP	GETPAL_
+JTABLE:	JP	GETPAL_
 	JP	GETLEVEL_
 	JP	GETROOM_
 
@@ -38,19 +37,6 @@ DE.LOOP:RRCA
 DE.NOT:	SLA	E
 	RL	D
 	DJNZ	DE.LOOP
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	E = NUMBER OF TILE
-;OUTPUT:HL = ADDRESS
-
-GETTILE_:
-	LD	A,E
-	DEC	A			;TILE 0 IS EMPTY TILE, SO DECREMENT 1
-	LD	DE,SIZTILE
-	CALL	MULTDEA
-	LD	DE,TILE
-	ADD	HL,DE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -308,10 +294,6 @@ L15_1:	DS	8*8*2
 L15_2:	DS	8*8*2
 L15_3:	DS	8*8*2
 L15_ACC:DS	8*8
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-TILE:	DS	NR_TILES*SIZTILE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -188,7 +188,7 @@ map.rel : map.asm shike2.inc level.inc bios.inc
 	echo map.asm
 	as $(ASFLAGS) map.asm
 
-edtile.rel : edtile.asm bios.inc shike2.inc event.inc
+edtile.rel : edtile.asm bios.inc shike2.inc event.inc level.inc
 	echo edtile.asm
 	as $(ASFLAGS) edtile.asm
 

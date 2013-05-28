@@ -2,6 +2,9 @@
 	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	EVENT.INC
+	INCLUDE	LEVEL.INC
+
+NR_TILES	EQU	19
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -60,8 +63,6 @@ S.1:	LD	D,A
 	CSEG
 	EXTRN	VDPPAGE,PNUM2XY,LMMM,MULTDEA
 
-TILE.SIZ	EQU	12
-NR_TILES	EQU	19
 
 TILEDEF:DB	50,34,18,0,0,0,    51,35,19,0,0,0
 	DB	1,66,34,18,0,0,    0,51,35,19,0,0
