@@ -4,7 +4,7 @@
 	INCLUDE	EVENT.INC
 	INCLUDE	LEVEL.INC
 
-NR_TILES	EQU	19
+NR_TILES	EQU	26
 NR_TILES_ROW	EQU	3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
