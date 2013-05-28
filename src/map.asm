@@ -275,78 +275,6 @@ S.COORD:DW	0
 S.ZVAL:	DB	0
 S.PTR:	DW	0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = SCREEN COORDENATES
-;	C = FLOOR NUMBER
-
-
-	CSEG
-	PUBLIC	DRAWFLOOR
-	EXTRN	LMMM,VDPPAGE
-
-DRAWFLOOR:
-	LD	A,C
-	RLCA
-	RLCA
-	LD	C,A
-	LD	B,0
-	LD	HL,FLOORDEF
-	ADD	HL,BC
-	LD	(D.PTR),HL
-	LD	(D.COORD),DE
-	LD	A,LOGTIMP
-	LD	(LOGOP),A
-	LD	A,PATPAGE
-	LD	(VDPPAGE),A
-
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	BC,1008H
-	CALL	LMMM			;DRAW LEFT-UP PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,D
-	ADD	A,16
-	LD	D,A
-	LD	BC,1008H
-	CALL	LMMM			;DRAW RIGHT-UP PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	INC	HL
-	LD	(D.PTR),HL
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,E
-	ADD	A,8
-	LD	E,A
-	LD	BC,1008H
-	CALL	LMMM			;DRAW LEFT-DOWN PATTERN
-
-	LD	HL,(D.PTR)
-	LD	E,(HL)
-	CALL	PNUM2XY
-	LD	DE,(D.COORD)
-	LD	A,D
-	ADD	A,16
-	LD	D,A
-	LD	A,E
-	ADD	A,8
-	LD	E,A
-	LD	BC,1008H
-	JP	LMMM			;DRAW RIGHT-DOWN PATTERN
-
-	DSEG
-D.PTR:	DW	0
-D.COORD:DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = PATTERN
@@ -661,6 +589,7 @@ GETHMAP:DEC	DE			;0 IS THE EMPTY MAP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	PUBLIC	FLOORDEF
 
 FLOORDEF:
 	DB	16,17,32,33
