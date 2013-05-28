@@ -317,8 +317,44 @@ F.ZVAL:	DB	0
 ;	A = TILE NUMBER
 
 	CSEG
+	EXTRN	MULTDEA
 
-TILEFUN:RET
+TILEFUN:PUSH	DE
+	DEC	A
+	LD	DE,TILE.SIZ		;TAKE ADDRESS OF THE TILE
+	CALL	MULTDEA
+	LD	DE,TILEDEF
+	ADD	HL,DE
+	LD	(T.PTR),HL
+	POP	DE
+
+	LD	B,TILEXSIZ
+T.LOOPX:PUSH	BC			;LOOP OVER X
+	PUSH	DE
+
+	LD	B,TILEYSIZ
+T.LOOPY:PUSH	BC			;LOOP OVER Y
+	PUSH	DE
+
+	LD	HL,(T.PTR)
+	LD	C,0
+	LD	B,(HL)
+	INC	HL
+	LD	(T.PTR),HL
+	CALL	MAPPAT
+	POP	DE
+	DEC	E
+	POP	BC
+	DJNZ	T.LOOPY
+
+	POP	DE
+	INC	D
+	POP	BC
+	DJNZ	T.LOOPX
+
+	RET
+
+T.PTR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	(M.MNUM) = FLOOR MAP NUMBER
@@ -329,9 +365,7 @@ TILEFUN:RET
 	EXTRN	CARTPAGE
 
 MAPTILE:LD	BC,(M.OFFS)		;CALCULATE INITIAL POSITION
-	LD	A,C
-	SUB	TILEYSIZ-2
-	LD	C,A
+	INC	C
 	LD	(M.POS),BC
 	LD	HL,TILEFUN
 	LD	(M.FUN),HL
@@ -503,7 +537,7 @@ GETHMAP:DEC	DE			;0 IS THE EMPTY MAP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	FLOORDEF
+	PUBLIC	FLOORDEF,TILEDEF
 
 FLOORDEF:
 	DB	16,17,32,33
@@ -514,5 +548,29 @@ FLOORDEF:
 	DB	176,177,192,193
 
 
+TILEDEF:DB	50,34,18,0,0,0,    51,35,19,0,0,0
+	DB	1,66,34,18,0,0,    0,51,35,19,0,0
+	DB	1,3,66,34,18,0,    0,0,51,35,19,0
+	DB	1,3,3,66,34,18,    0,0,0,51,35,19
+
+	DB	52,36,20,0,0,0,    53,37,21,0,0,0
+	DB	0,52,36,20,0,0,    2,67,37,21,0,0
+	DB	0,0,52,36,20,0,    2,4,67,37,21,0
+	DB	0,0,0,52,36,20,    2,4,4,67,37,21
+
+	DB	1,3,3,3,5,21,      0,0,0,0,0,0
+	DB	1,3,3,3,5,22,      0,0,0,0,0,0
+	DB	1,3,3,3,5,18,      0,0,0,0,0,0
+	DB	7,8,8,8,9,18,      0,0,0,0,0,0
+
+	DB	0,0,0,0,0,0,       2,4,4,4,6,18
+	DB	0,0,0,0,0,0,       2,4,4,4,6,22
+	DB	0,0,0,0,0,0,       2,4,4,4,6,21
+	DB	0,0,0,0,0,0,       7,8,8,8,9,21
+
+	DB	1,3,3,3,5,21,      2,4,4,4,6,18
+
+	DB	7,8,8,8,9,22,      0,0,0,0,0,0
+	DB	0,0,0,0,0,0,       7,8,8,8,9,22
 
 
