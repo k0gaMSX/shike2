@@ -266,12 +266,13 @@ H.RET:	LD	(HEIGHT),A
 
 FLOOREVENT:
 	CP	MS_BUTTON2
-	JR	NZ,F.1
-	XOR	A
+	JR	Z,F.1
+	CP	MS_BUTTON1
+	RET	NZ
+
+	CALL	ED.FLOOR
+F.1:	XOR	A
 	LD	(ACTION),A
-	RET
-F.1:	CP	MS_BUTTON1
-	CALL	Z,ED.FLOOR
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -283,12 +284,13 @@ F.1:	CP	MS_BUTTON1
 
 TILEEVENT:
 	CP	MS_BUTTON2
-	JR	NZ,T.1
-	LD	A,1
+	JR	Z,T.1
+	CP	MS_BUTTON1
+	RET	NZ
+
+	CALL	ED.TILE
+T.1:	LD	A,1
 	LD	(ACTION),A
-	RET
-T.1:	CP	MS_BUTTON1
-	CALL	Z,ED.TILE
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
