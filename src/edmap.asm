@@ -49,6 +49,8 @@ RECEIVERS:
 	DW	ROOMEVENT
 	DB	54,30,166,8
 	DW	FLOOREVENT
+	DB	130,30,166,8
+	DW	GENHEIGHT
 	DB	1,29,174,8
 	DW	HEIGHTEVENT
 	DB	54,30,174,8
@@ -139,7 +141,7 @@ SHOWSCR:LD	DE,21
 	JP	PUTSPRITE		;SHOW THE SELECTED ACTION
 
 
-FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",10
+FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9," UPDATE",10
 	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",10
 	DB	" POS=%03dX%03d,ROOM=%02dX%02d,LEVEL=%02dX%02d",0
 
@@ -150,6 +152,8 @@ MAPG:	DB     	9,  0,   95, 127, 32, 16,  8, 16,  8
 	DB	2,  0,  166,   0,182, 30,  0, 30,  0
 	DB	3,  54, 166,  84,166,  0,  8,  0,  8
 	DB	2,  54, 166,  54,182, 30,  0, 30,  0
+	DB	2, 130, 166, 160,166,  0,  8,  0,  8
+	DB	2, 130, 166, 130,174, 30,  0, 30,  0
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -289,7 +293,7 @@ T.1:	CP	MS_BUTTON1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: A = EVENT
-;	HL = SCREEN COORDINATES
+;	DE = SCREEN COORDINATES
 
 	CSEG
 	EXTRN	EDFLOOR,GETFMAP,ADDAHL,GETTMAP
@@ -362,6 +366,61 @@ M.INFO:	LD	HL,(M.COOR)
 M.EV:		DB	0
 M.COOR:		DW	0
 M.OFFSET:	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+	EXTRN	GETHMAP,MULTEA,GETTMAP,TILEDEF
+	PUBLIC	GENHEIGHT
+
+GENHEIGHT:
+	CP	MS_BUTTON1
+	RET	NZ
+
+	LD	DE,(MAPNO)
+	CALL	GETTMAP			;HL = TILE MAP
+	LD	DE,G.BUF
+	LD	BC,ROOMXSIZ*ROOMYSIZ
+	LDIR				;COPY TILE MAP
+	LD	DE,(MAPNO)
+	CALL	GETHMAP
+	EX	DE,HL			;DE = HEIGHT POINTER
+
+	LD	HL,G.BUF		;HL = TILE MAP
+	LD	B,ROOMXSIZ*ROOMYSIZ
+
+G.LOOP:	PUSH	BC
+	PUSH	HL
+	PUSH	DE
+	LD	A,(HL)			;TAKE TILE NUMBER
+	OR	A
+	JR	Z,G.NEXT
+	DEC	A
+	LD	E,TILE.SIZ
+	CALL	MULTEA
+	LD	DE,TILEDEF
+	ADD	HL,DE
+	LD	DE,TILE.HEIGHT
+	ADD	HL,DE			;HL = TILE->HEIGHT
+	LD	A,(HL)			;A = BASE HEIGHT
+G.NEXT:	LD	BC,(HEIGHT)
+	ADD	A,C
+	ADD	A,C
+	ADD	A,C			;A = HEIGHT
+	POP	DE
+	LD	(DE),A
+	INC	DE
+	POP	HL
+	INC	HL
+	POP	BC
+	DJNZ	G.LOOP
+	RET
+
+
+	DSEG
+G.BUF:	DS	ROOMXSIZ*ROOMYSIZ
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
