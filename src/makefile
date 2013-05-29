@@ -13,6 +13,10 @@ palete.asm : ..\\gfx\\shike2.pl5
 	db -lPALETES shike2.pl5 > palete.asm
 	del shike2.pl5
 
+font.asm : font.obj
+	echo font.obj
+	db -lFONT font.obj > font.asm
+
 bload.obj : bload.asm
 	echo bload.asm
 	as $(ASFLAGS) bload.asm
@@ -79,6 +83,11 @@ loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
 ########################################################
 #data objects
 
+font.obj : ..\\gfx\\font.gl5
+	echo font.gl5
+	del font.obj > NUL
+	delgl5 ..\\gfx\\font.gl5 font.obj
+
 charset1.obj : ..\\gfx\\charset1.gl5
 	echo charset1.obj
 	del charset1.obj > NUL
@@ -99,7 +108,7 @@ patset0.obj : ..\\gfx\\patset0.gl5
 	del patset0.obj > NUL
 	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
 
-leveldef.obj : leveldef.asm level.inc palete.asm
+leveldef.obj : leveldef.asm level.inc palete.asm font.asm
 	echo leveldef.asm
 	as $(ASFLAGS) leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
