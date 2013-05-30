@@ -712,6 +712,24 @@ D.STOP:	ADD	A,A			;WE HAVE 16 PATTERNS IN EACH ROW
 	JP	PUTMOB			;DRAW THE MOVABLE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	RESETCAM
+
+RESETCAM:
+	PUSH	IX			;FORCE RESET OF THE CAMERA
+	LD	A,-1
+	LD	L,A
+	LD	H,A
+	LD	(LEVEL),A
+	LD	(ROOM),HL
+	LD	IX,(CAMERAOP)
+	CALL	PLACECAM
+	POP	IX
+	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOVABLE
 
 	CSEG
