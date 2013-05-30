@@ -250,6 +250,8 @@ clean :
 	del *.com > NUL
 	del *.bin > NUL
 	del *.obj > NUL
-	del palete.asm
+	del palete.asm > NUL
+	del font.asm > NUL
+	del *.bat > NUL
 
 
