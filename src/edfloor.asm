@@ -4,7 +4,7 @@
 	INCLUDE	EVENT.INC
 	INCLUDE	LEVEL.INC
 
-NR_FLOORS	EQU	6
+NR_FLOORS	EQU	7
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -32,8 +32,13 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
+	EXTRN	GLINES
 
-SHOWSCR:LD	C,0
+SHOWSCR:LD	DE,MAPG
+	LD	C,15
+	CALL	GLINES			;DRAW BUTTONS
+
+	LD	C,0
 	LD	DE,0
 
 S.LOOP:	PUSH	DE			;DRAW ALL THE FLOORS
@@ -50,6 +55,12 @@ S.LOOP:	PUSH	DE			;DRAW ALL THE FLOORS
 	CP	NR_FLOORS
 	JR	NZ,S.LOOP
 	RET
+
+
+;	       REP  X0  Y0    X1  Y1  IX0 IY0 IX1 IY1
+MAPG:	DB	1,  0,  16,  255, 16,  0, 16,  0, 16
+	DB	9,  0,  0,     0, 16, 32,  0, 32, 0
+	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDENATES

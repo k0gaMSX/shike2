@@ -547,6 +547,7 @@ GETHMAP:DEC	DE			;0 IS THE EMPTY MAP
 	PUBLIC	FLOORDEF,TILEDEF
 
 FLOORDEF:
+	DB	0,0,0,0
 	DB	16,17,32,33
 	DB	48,49,64,65
 	DB	80,81,96,97
@@ -556,7 +557,6 @@ FLOORDEF:
 
 
 TILEDEF:
-
         ;STAIRS
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	DB	50,34,18,0,0,0,0,            51,35,19,0,0,0,0,               1
