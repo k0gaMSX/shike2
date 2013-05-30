@@ -43,10 +43,7 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	PUBLIC	SHOWSCR
-	EXTRN	GLINES,LOCATE,PUTS,MULTEA
-
-	EXTRN	PRINTF
+	EXTRN	GLINES,LOCATE,PRINTF,MULTEA
 
 SHOWSCR:LD	DE,23
 	CALL	LOCATE
@@ -63,6 +60,9 @@ SHOWSCR:LD	DE,23
 	LD	A,(PAGE)
 	LD	E,NR_TILES_ROW*8
 	CALL	MULTEA
+	LD	A,L
+	ADD	A,NR_TILES_ROW*8
+	LD	(S.MAX),A
 	LD	C,L
 	LD	DE,TILEYSIZ*8
 
@@ -84,7 +84,8 @@ S.1:	LD	D,A
 	LD	C,A
 	CP	NR_TILES
 	RET	Z
-	CP	NR_TILES_ROW*8
+	LD	HL,S.MAX
+	CP	(HL)
 	JR	NZ,S.LOOP
 
 	RET
@@ -99,6 +100,9 @@ MAPG:	DB	3,  0,  182,  30,182,  0,  8,  0,  8
 	DB	4,  0,  8,   255,  8,  0, TILEYSIZ*8,  0, TILEYSIZ*8
 	DB	9,  0,  8,     0,LINEY, TILEXSIZ*16,  0, TILEXSIZ*16,  0
 	DB	0
+
+	DSEG
+S.MAX:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDENATES
