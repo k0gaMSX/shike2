@@ -119,47 +119,47 @@ leveldef.obj : leveldef.asm level.inc palete.asm font.asm
 
 map0.bin : map0.dat loadpg2.obj bload.obj
 	echo map0.dat
-	concat bload.obj + map0.dat + loadpg2.obj map0.bin
+	concat /B bload.obj + map0.dat + loadpg2.obj map0.bin
 
 map1.bin : map1.dat loadpg3.obj bload.obj
 	echo map1.dat
-	concat bload.obj + map1.dat + loadpg3.obj map1.bin
+	concat /B bload.obj + map1.dat + loadpg3.obj map1.bin
 
 map2.bin : map2.dat loadpg4.obj bload.obj
 	echo map2.dat
-	concat bload.obj + map2.dat + loadpg4.obj map2.bin
+	concat /B bload.obj + map2.dat + loadpg4.obj map2.bin
 
 map3.bin : map3.dat loadpg5.obj bload.obj
 	echo map3.dat
-	concat bload.obj + map3.dat + loadpg5.obj map3.bin
+	concat /B bload.obj + map3.dat + loadpg5.obj map3.bin
 
 height0.bin : height0.dat loadpg6.obj bload.obj
 	echo height0.dat
-	concat bload.obj + height0.dat + loadpg6.obj height0.bin
+	concat /B bload.obj + height0.dat + loadpg6.obj height0.bin
 
 height1.bin : height1.dat loadpg7.obj bload.obj
 	echo height1.dat
-	concat bload.obj + height1.dat + loadpg7.obj height1.bin
+	concat /B bload.obj + height1.dat + loadpg7.obj height1.bin
 
 charset1.bin : charset1.obj loadpg11.obj bload.obj
 	echo charset1.obj
-	concat bload.obj + charset1.obj + loadpg11.obj charset1.bin
+	concat /B bload.obj + charset1.obj + loadpg11.obj charset1.bin
 
 charset0.bin : charset0.obj loadpg10.obj bload.obj
 	echo charset0.obj
-	concat bload.obj + charset0.obj + loadpg10.obj charset0.bin
+	concat /B bload.obj + charset0.obj + loadpg10.obj charset0.bin
 
 patset1.bin : patset1.obj loadpg9.obj bload.obj
 	echo patset1.obj
-	concat bload.obj + patset1.obj + loadpg9.obj patset1.bin
+	concat /B bload.obj + patset1.obj + loadpg9.obj patset1.bin
 
 patset0.bin : patset0.obj loadpg8.obj bload.obj
 	echo patset0.obj
-	concat bload.obj + patset0.obj + loadpg8.obj patset0.bin
+	concat /B bload.obj + patset0.obj + loadpg8.obj patset0.bin
 
 leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 	echo leveldef.rel
-	concat bload.obj + leveldef.obj + loadpg1.obj leveldef.bin
+	concat /B bload.obj + leveldef.obj + loadpg1.obj leveldef.bin
 
 
 ##########################################################
