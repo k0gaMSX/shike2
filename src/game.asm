@@ -17,11 +17,6 @@ GAME:	CALL	MOBINIT
 	CALL	LEVELINIT
 	CALL	CHARINIT
 
-	EXTRN	TELL
-	LD	DE,G.STR
-	LD	BC,4040H
-	CALL	TELL
-
 	CALL	EDITOR
 
 	EXTRN	EDLEVEL,EDROOM,FOCUSCAM,PLACE,USER,SETCAMOP
@@ -46,8 +41,6 @@ G.LOOP:	CALL	NEWFRAME
 	JR	Z,G.LOOP
 
 	RET
-
-G.STR:	DB	"HELLO WORLD!..............",0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -172,7 +172,7 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
-talk.rel : talk.asm sprite.inc fontspr.asm
+talk.rel : talk.asm sprite.inc fontspr.asm data.inc
 	echo talk.asm
 	as $(ASFLAGS) talk.asm
 
