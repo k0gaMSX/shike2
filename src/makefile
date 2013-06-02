@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel talk.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
 
 all : shike data
 
@@ -15,6 +15,10 @@ palete.asm : ..\\gfx\\shike2.pl5
 	copy ..\\gfx\\shike2.pl5
 	db -lPALETES shike2.pl5 > palete.asm
 	del shike2.pl5
+
+fontspr.asm : font.obj
+	echo font.obj
+	fon2spr -lFONTSPR font.obj > fontspr.asm
 
 font.asm : font.obj
 	echo font.obj
@@ -168,6 +172,10 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
+talk.rel : talk.asm sprite.inc fontspr.asm
+	echo talk.asm
+	as $(ASFLAGS) talk.asm
+
 char.rel : char.asm bios.inc data.inc event.inc
 	echo char.asm
 	as $(ASFLAGS) char.asm
@@ -256,6 +264,7 @@ clean :
 	del shike2.lzh > NUL
 	del palete.asm > NUL
 	del font.asm > NUL
+	del fontspr.asm > NUL
 	del *.bat > NUL
 
 
