@@ -7,6 +7,9 @@ shike : shike2.com
 
 data : leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin map0.bin map1.bin map2.bin map3.bin height0.bin height1.bin
 
+dist : clean
+	a:\\utils\\comp\\lhpack a shike2.lzh *.*
+
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
 	copy ..\\gfx\\shike2.pl5
@@ -250,6 +253,7 @@ clean :
 	del *.com > NUL
 	del *.bin > NUL
 	del *.obj > NUL
+	del shike2.lzh > NUL
 	del palete.asm > NUL
 	del font.asm > NUL
 	del *.bat > NUL
