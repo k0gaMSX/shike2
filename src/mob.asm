@@ -57,6 +57,11 @@ UNLINK:	LD	C,(IX+MOB.NEXT)		;BC = IX->NEXT
 	LD	IYU,D
 	LD	(IY+MOB.NEXT),C		;IX->PREV->NEXT = IX->NEXT
 	LD	(IY+MOB.NEXT+1),B
+	XOR	A
+	LD	(IX+MOB.NEXT),A
+	LD	(IX+MOB.NEXT+1),A
+	LD	(IX+MOB.PREV),A
+	LD	(IX+MOB.PREV+1),A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
