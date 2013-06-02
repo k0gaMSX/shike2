@@ -188,7 +188,7 @@ mob.rel : mob.asm bios.inc shike2.inc data.inc
 	echo mob.asm
 	as $(ASFLAGS) mob.asm
 
-game.rel : game.asm bios.asm data.inc
+game.rel : game.asm bios.inc data.inc
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
