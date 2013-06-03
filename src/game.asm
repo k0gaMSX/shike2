@@ -57,9 +57,10 @@ ENGINE:	CALL	THINK
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	DSEG
-	PUBLIC	FINISH
+	PUBLIC	FINISH,EDRUN
 
 FINISH:	DB	0
+EDRUN:	DB	0
 CHR1:	DS	SIZCHAR
 P1:	DW	0,0
 	DB	0,0,0
