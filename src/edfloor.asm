@@ -7,6 +7,8 @@
 NR_FLOORS	EQU	7
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;OUTPUT:Z = 1 WHEN NO FLOOR IS SELECTED
+;	A = FLOOR NUMBER WHEN Z = 0
 
 	CSEG
 	PUBLIC	ED.FLOOR
@@ -140,7 +142,6 @@ D.COORD:DW	0
 ;	DE = SCREEN LOCATION
 
 	CSEG
-	EXTRN	EDFLOOR
 
 FLOOREVENT:
 	CP	MS_BUTTON1
@@ -155,9 +156,11 @@ FLOOREVENT:
 	CP	NR_FLOORS
 	RET	NC
 	INC	A
-	LD	(EDFLOOR),A
+	LD	(FLOOR),A
 	RET
 
 
+	DSEG
+FLOOR:	DB	0
 
 
