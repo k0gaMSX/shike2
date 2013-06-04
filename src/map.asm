@@ -607,6 +607,91 @@ N.DOWN:	CP	DDOWN
 	RET
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	HL = WORLD COORDENATES
+;	A  = Z WORLD COORDENATE
+;	DE = X SCREEN COORDENATES OF P1 (S(P1x)) (16 BIT FOR NEGATIVE NUMBERS)
+;	BC = Y SCREEN COORDENATES OF P1 (S(P1y)) (16 BIT FOR NEGATIVE NUMBERS)
+;OUTPUT:HL = X SCREEN COORDENATES (16 BIT FOR NEGATIVE NUMBERS)
+;	DE = Y SCREEN COORDENATES (16 BIT FOR NEGATIVE NUMBERS)
+;
+;	   W                 S
+;
+;			     1
+;			 --------
+;	1----2		 |  / \ |
+;	|    |		 | /   \|
+;	|    |	->	3| \   /| 2
+;	|    |		 |  \ / |
+;	3----4		 --------
+;			     4
+;
+; W(P1) = (0,0)
+; D(P1->P2) = Xs + 16, Ys + 8 (RIGTH)
+; D(P1->P3) = Xs - 16, Ys + 8 (DOWN)
+; Xs = S(P1x) + (Xw-Yw)*16
+; Ys = S(P1y) + (Xw+Yw)*8
+
+	CSEG
+	PUBLIC	WRLD2SCR
+
+WRLD2SCR:
+	LD	(W.ZVAL),A
+	LD	(W.CWRLD),HL
+	LD	(W.P1X),DE
+	LD	(W.P1Y),BC
+
+	LD	D,0
+	LD	E,L
+	LD	L,H
+	LD	H,D
+	OR	A
+	SBC	HL,DE			;HL = Xw-Yw
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL			;HL = (Xw-Yw)*16
+	LD	DE,(W.P1X)
+	ADD	HL,DE			;HL = (Xw-Yw)*16 + S(P1x) = Xs
+	PUSH	HL			;PUSH Xs
+
+	LD	HL,(W.CWRLD)
+	LD	D,0
+	LD	E,L
+	LD	L,H
+	LD	H,D
+	ADD	HL,DE			;HL = Xw+Yw
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL			;HL = (Xw+Yw)*8
+	LD	DE,(W.P1Y)
+	ADD	HL,DE			;HL = (Xw+Yw)*8 + S(P1y) = Ys
+	EX	DE,HL			;DE = Ys
+
+	LD	A,(W.ZVAL)
+	LD	L,A
+	LD	H,0
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL			;HL = Zw*8
+	EX	DE,HL			;HL = Ys, DE = Zw*8
+	OR	A
+	SBC	HL,DE			;HL = Ys - Zw*8 (Y CORRECTION DUE TO Z)
+	LD	DE,12
+	ADD	HL,DE			;(CENTRAL PART OF THE FLOOR)
+	EX	DE,HL			;DE = Ys - Zw*8
+	POP	HL			;HL = Xs
+	LD	BC,8
+	ADD	HL,BC
+	RET
+
+	DSEG
+W.ZVAL:		DB	0
+W.CWRLD:	DW	0
+W.P1X:		DW	0
+W.P1Y:		DW	0
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: IX = POINTER TO CHARACTER
 
