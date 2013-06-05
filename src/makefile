@@ -1,5 +1,5 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel talk.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel door.rel talk.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
 
 all : shike data
 
@@ -171,6 +171,10 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 
 ##########################################################
 #sources
+
+door.rel : door.asm data.inc level.inc shike2.inc
+	echo door.asm
+	as $(ASFLAGS) door.asm
 
 talk.rel : talk.asm sprite.inc fontspr.asm data.inc
 	echo talk.asm
