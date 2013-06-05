@@ -55,6 +55,8 @@ RECEIVERS:
 	DW	HEIGHTEVENT
 	DB	54,30,174,8
 	DW	TILEEVENT
+	DB	130,30,174,8
+	DW	CHAREVENT
 	DB	1,254,32,127
 	DW	MAPEVENT
 	DB	0
@@ -142,7 +144,7 @@ SHOWSCR:LD	DE,21
 
 
 FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9," UPDATE",10
-	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",10
+	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",9," CHARS",10
 	DB	" POS=%03dX%03d,ROOM=%02dX%02d,LEVEL=%02dX%02d",0
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
@@ -152,8 +154,8 @@ MAPG:	DB     	9,  0,   95, 127, 32, 16,  8, 16,  8
 	DB	2,  0,  166,   0,182, 30,  0, 30,  0
 	DB	3,  54, 166,  84,166,  0,  8,  0,  8
 	DB	2,  54, 166,  54,182, 30,  0, 30,  0
-	DB	2, 130, 166, 160,166,  0,  8,  0,  8
-	DB	2, 130, 166, 130,174, 30,  0, 30,  0
+	DB	3, 130, 166, 160,166,  0,  8,  0,  8
+	DB	2, 130, 166, 130,182, 30,  0, 30,  0
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -452,6 +454,17 @@ G.NFLR:	POP	DE
 G.PTR:	DW	0
 G.FBUF:	DS	ROOMXSIZ*ROOMYSIZ
 G.TBUF:	DS	ROOMXSIZ*ROOMYSIZ
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	ED.CHAR,EDLEVEL,EDROOM
+
+CHAREVENT:
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	LD	HL,(COORD)
+	JP	ED.CHAR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

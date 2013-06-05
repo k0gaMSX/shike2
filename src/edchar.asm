@@ -1,0 +1,5 @@
+
+	PUBLIC	ED.CHAR
+
+ED.CHAR:RET
+

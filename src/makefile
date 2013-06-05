@@ -1,5 +1,10 @@
 ASFLAGS = -t
-REL =	shike2.rel vdp.rel kbd.rel bios.rel stdlib.rel char.rel door.rel talk.rel edtile.rel edfloor.rel movable.rel mob.rel game.rel level.rel edlevel.rel edroom.rel map.rel edmap.rel editor.rel zbuffer.rel mouse.rel
+REL =	shike2.rel char.rel door.rel talk.rel movable.rel mob.rel game.rel level.rel map.rel zbuffer.rel
+SYSREL = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
+EDREL = editor.rel edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
+LIB =   editor.irl system.irl
+CMD =  shike2,zbuffer,char,movable,mob,game,level,door,talk,map,editor/s,system/s
+
 
 all : shike data
 
@@ -172,6 +177,10 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
+edchar.rel : edchar.asm
+	echo edchar.asm
+	as $(ASFLAGS) edchar.asm
+
 door.rel : door.asm data.inc level.inc shike2.inc
 	echo door.asm
 	as $(ASFLAGS) door.asm
@@ -256,8 +265,14 @@ kbd.rel : kbd.asm shike2.inc bios.inc event.inc
 	echo kbd.asm
 	as $(ASFLAGS) kbd.asm
 
-shike2.com : $(REL)
-	ld /R0100 /P0100 /D8000 /X /Gmain & <ld.cmd
+editor.irl : $(EDREL)
+	ol a editor $(EDREL)
+
+system.irl : $(SYSREL)
+	ol a system $(SYSREL)
+
+shike2.com : $(REL) $(LIB)
+	ld /R0100 /P0100 /D8000 /X /Gmain $(CMD)
 
 clean :
 	del *.rel > NUL
@@ -270,5 +285,6 @@ clean :
 	del font.asm > NUL
 	del fontspr.asm > NUL
 	del *.bat > NUL
+	del *.irl > NUL
 
 
