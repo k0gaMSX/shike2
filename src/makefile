@@ -177,7 +177,7 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
-edchar.rel : edchar.asm
+edchar.rel : edchar.asm shike2.inc bios.inc level.inc data.inc
 	echo edchar.asm
 	as $(ASFLAGS) edchar.asm
 
