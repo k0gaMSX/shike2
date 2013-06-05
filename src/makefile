@@ -1,10 +1,10 @@
 ASFLAGS = -t
-REL =	shike2.rel char.rel door.rel talk.rel movable.rel mob.rel game.rel level.rel map.rel zbuffer.rel
-SYSREL = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
-EDREL = editor.rel edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
-LIB =   editor.irl system.irl
-CMD =  shike2,zbuffer,char,movable,mob,game,level,door,talk,map,editor/s,system/s
 
+REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
+REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel
+REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
+REL4 = edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
+REL =  $(REL1) $(REL2) $(REL3) $(REL4)
 
 all : shike data
 
@@ -189,7 +189,7 @@ talk.rel : talk.asm sprite.inc fontspr.asm data.inc
 	echo talk.asm
 	as $(ASFLAGS) talk.asm
 
-char.rel : char.asm bios.inc data.inc event.inc
+char.rel : char.asm bios.inc data.inc event.inc level.inc shike2.inc
 	echo char.asm
 	as $(ASFLAGS) char.asm
 
@@ -201,7 +201,7 @@ mob.rel : mob.asm bios.inc shike2.inc data.inc
 	echo mob.asm
 	as $(ASFLAGS) mob.asm
 
-game.rel : game.asm bios.inc data.inc
+game.rel : game.asm
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
@@ -265,14 +265,8 @@ kbd.rel : kbd.asm shike2.inc bios.inc event.inc
 	echo kbd.asm
 	as $(ASFLAGS) kbd.asm
 
-editor.irl : $(EDREL)
-	ol a editor $(EDREL)
-
-system.irl : $(SYSREL)
-	ol a system $(SYSREL)
-
-shike2.com : $(REL) $(LIB)
-	ld /R0100 /P0100 /D8000 /X /Gmain $(CMD)
+shike2.com : $(REL)
+	ld /R0100 /P0100 /D8000 /X /Gmain & < ld.cmd
 
 clean :
 	del *.rel > NUL
@@ -285,6 +279,5 @@ clean :
 	del font.asm > NUL
 	del fontspr.asm > NUL
 	del *.bat > NUL
-	del *.irl > NUL
 
 
