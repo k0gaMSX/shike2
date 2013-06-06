@@ -107,7 +107,7 @@ SHOWSCR:LD	DE,1
 CINFO:	DB	" CHAR",9,"%02d",10
 	DB	" PATERN",9,"%02d",10
 	DB	" DIR",9,"%s",10
-	DB	" CTRL",9,"%s",10
+	DB	" CTRL",9,"%6s",10
 	DB	" PLACE",10," SAVE",10," SETCAM",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" ROOM",9,"%02dX%02d",10
