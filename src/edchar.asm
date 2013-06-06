@@ -35,6 +35,8 @@ ED.LOOP:LD	E,EDPAGE
 
 
 RECEIVERS:
+	DB	1,29,8,8
+	DW	CHAREVENT
 	DB	1,29,16,8
 	DW	PATEVENT
 	DB	1,29,28,8
@@ -247,6 +249,34 @@ P.1:	CP	MS_BUTTON2		;BUTTON 2 DECREMENTS PAT NUMBER
 P.END:	LD	IY,(CHARPTR)
 	LD	(IY+CHAR.PAT),A
 	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+
+CHAREVENT:
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENTS CHAR NUMBER
+	JR	NZ,CH.1
+	LD	A,(NCHAR)
+	CP	NR_CHARS-1
+	RET	Z
+	INC	A
+	JR	CH.END
+
+CH.1:	CP	MS_BUTTON2		;BUTTON 2 DECREMENTS CHAR NUMBER
+	RET	NZ
+	LD	A,(NCHAR)
+	OR	A
+	RET	Z
+	DEC	A
+
+CH.END:	LD	(NCHAR),A
+	RET
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
