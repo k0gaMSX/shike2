@@ -33,8 +33,10 @@ ED.LOOP:LD	E,LEVELPAGE
 
 
 RECEIVERS:
-	DB	1,29,37,8
+	DB	1,29,36,8
 	DW	PLACEEVENT
+	DB	1,29,54,8
+	DW	CAMEVENT
 	DB	0
 
 
@@ -101,7 +103,7 @@ CINFO:	DB	" CHAR",9,"%02d",10
 	DB	" PATERN",9,"%02d",10
 	DB	" DIR",9,"%s",10
 	DB	" CTRL",9,"%s",10
-	DB	" PLACE",10," SAVE",10
+	DB	" PLACE",10," SAVE",10," SETCAM",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" ROOM",9,"%02dX%02d",10
 	DB	" X",9,"%02d",10
@@ -111,8 +113,8 @@ CINFO:	DB	" CHAR",9,"%02d",10
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 CHARG:	DB	2,  60,  5,   76,  5,  0, 32,  0, 32
 	DB	2,  60,  5,   60, 37, 16,  0, 16,  0
-	DB	7,   0,  6,   30,  6,  0,  8,  0,  8
-	DB	2,   0,  6,    0, 54, 30,  0, 30,  0
+	DB	8,   0,  6,   30,  6,  0,  8,  0,  8
+	DB	2,   0,  6,    0, 62, 30,  0, 30,  0
 	DB	0
 
 DIRS:	DW	RIGTH,LEFT,UP,DOWN,NODIR
@@ -142,6 +144,23 @@ PLACEEVENT:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+	EXTRN	SETCAMOP
+
+CAMEVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+
+	PUSH	IX
+	LD	IX,(CHARPTR)
+	CALL	SETCAMOP
+	POP	IX
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 	DSEG
 
 POINT1:	DS	SIZPOINT
