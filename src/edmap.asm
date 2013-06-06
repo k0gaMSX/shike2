@@ -464,6 +464,9 @@ CHAREVENT:
 	LD	DE,(EDLEVEL)
 	LD	BC,(EDROOM)
 	LD	HL,(COORD)
+	LD	A,(HEIGHT)
+	ADD	A,A
+	ADD	A,A
 	JP	ED.CHAR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
