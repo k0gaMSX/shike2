@@ -101,7 +101,8 @@ SHOWSCR:LD	DE,1
 
 	LD	C,15
 	LD	DE,CHARG
-	JP	GLINES
+	CALL	GLINES
+	JP	DRAWCHAR
 
 
 CINFO:	DB	" CHAR",9,"%02d",10
@@ -129,6 +130,27 @@ UP:	DB	"UP",0
 DOWN:	DB	"DOWN",0
 NODIR:	DB	"NO DIR",0
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	VDPPAGE,LMMM
+
+DRAWCHAR:
+	LD	A,LOGTIMP
+	LD	(LOGOP),A
+	LD	A,MOBPAGE
+	LD	(VDPPAGE),A
+
+	LD	IY,(CHARPTR)
+	LD	A,(IY+CHAR.PAT)
+	ADD	A,A
+	ADD	A,A
+	LD	L,A
+	LD	H,0
+	LD	DE,3C05H
+	LD	BC,1020H
+	JP	LMMM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
