@@ -169,6 +169,25 @@ UNLINK:	LD	C,(IX+CHAR.PREV)
 	RET
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = PATTERN NUMBER
+
+	CSEG
+	PUBLIC	CHARPAT
+
+CHARPAT:LD	A,E			;WE HAVE 4 DIRECTIONS, SO
+	CP	4			;EACH PATTERN MEANS MULTIPLY BY 4
+	LD	B,0			;WE HAVE 4 PATTERNS IN 0-112
+	JR	C,C.1			;AND 4 PATTERNS IN 128-240
+	SUB	4
+	LD	B,64
+
+C.1:	ADD	A,A
+	ADD	A,A
+	ADD	A,B
+	RET
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE CHAR
 ;	E = PATTERN
@@ -180,9 +199,7 @@ UNLINK:	LD	C,(IX+CHAR.PREV)
 CHARACTER:
 	LD	(IX+CHAR.PAT),E
 	PUSH	BC
-	LD	A,E			;WE HAVE 4 DIRECTIONS, SO
-	ADD	A,A			;EACH PATTERN MEANS MULTIPLY BY 4
-	ADD	A,A
+	CALL	CHARPAT
 	OR	80H			;MARK AS ANIMATE OBJECT
 	LD	E,A
 	LD	C,CHARHEIGHT
