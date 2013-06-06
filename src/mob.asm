@@ -8,7 +8,6 @@ MOBXSIZ		EQU	16
 MOBYSIZ		EQU	32
 MOBYSAV		EQU	224
 DISABLED	EQU	255
-MOBSBANK	EQU	16*3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -328,6 +327,26 @@ NEWFRAME:
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = MOB PATTERN NUMBER
+;OUTPUT:HL = XY COORDENATES
+
+	CSEG
+	PUBLIC	MOB2XY
+
+MOB2XY:	LD	A,E
+	AND	0FH
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	LD	H,A
+	LD	A,B
+	AND	0F0H
+	RLCA
+	LD	L,A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOB
 ;	HL = X DESTINE
 ;	DE = Y DESTINE
@@ -354,23 +373,13 @@ PUTMOB:	LD	(CLIP.X),HL		;SET INPUT PARAMETERS FOR CLIP
 	LD	(CLIP.XSIZ),A
 	LD	A,MOBYSIZ
 	LD	(CLIP.YSIZ),A
-	LD	A,B
-	LD	C,0
-	CP	MOBSBANK
-	JR	C,P.1
-	LD	C,128			;IT IS THE 2ND BANK, BEGINS IN HALF PAGE
 
-P.1:	AND	0F0H
-	RLCA
-	ADD	A,C
-	LD	(CLIP.YO),A
-	LD	A,B
-	AND	0FH
-	RLCA
-	RLCA
-	RLCA
-	RLCA
+	LD	E,B
+	CALL	MOB2XY
+	LD	A,H
 	LD	(CLIP.XO),A
+	LD	A,L
+	LD	(CLIP.YO),A
 
 	CALL	CLIP
 	JR	NZ,M.VIS
