@@ -6,8 +6,6 @@
 	ORG	CARTSEG
 
 JTABLE:	JP	GETPAL_
-	JP	GETLEVEL_
-	JP	GETROOM_
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;INPUT:	E PALETE NUMBER
@@ -23,91 +21,11 @@ GETPAL_:EX	DE,HL
 	ADD	HL,DE
 	RET
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = 1ST OPERAND
-;	A = 2ND OPERAND
-;OUTPUT:HL = DE*A
-
-MULTDEA:LD	HL,0
-	LD	B,8
-
-DE.LOOP:RRCA
-	JP	NC,DE.NOT
-	ADD	HL,DE
-DE.NOT:	SLA	E
-	RL	D
-	DJNZ	DE.LOOP
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = LEVEL LOCATION
-;OUTPUT:HL = ADDRESS
-;	Z = 0 WHEN NO VALID LEVEL
-
-GETLEVEL_:
-	LD	A,E
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A			;A = YOOFSET
-	ADD	A,D			;A = OFFSET
-	LD	L,A
-	LD	H,0			;HL = OFFSET
-	LD	DE,MAP
-	ADD	HL,DE			;MAP[X][Y]
-	LD	A,(HL)			;A = LEVEL NUMBER
-	OR	A
-	LD	HL,0			;LEVEL 0 IS THE EMPTY LEVEL
-	RET	Z
-	DEC	A
-	LD	DE,SIZLEVEL
-	CALL	MULTDEA			;HL = LEVEL OFFSET
-	LD	DE,LEVEL1
-	ADD	HL,DE			;HL = LEVEL ADDRESS
-	OR	1			;SET Z=1
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	DE = LEVEL LOCATION
-;	BC = ROOM LOCATION
-;	A = HEIGTH
-;OUTPUT:HL = ROOM ADDRESS
-;	Z = 0 WHEN NO VALID ROOM
-
-GETROOM_:
-	PUSH	BC
-	PUSH	AF
-	CALL	GETLEVEL_
-	POP	DE
-	POP	BC
-	RET	Z			;NO VALID LEVEL
-
-	LD	A,D			;A = HEIGHT
-	PUSH	BC			;SAVE ROOM LOCATION
-	LD	DE,LVL.HEIGHT1		;HL = LEVEL POINTER
-	ADD	HL,DE			;HL = LEVEL HEIGHT1
-	PUSH	HL
-	LD	DE,SIZRMATRIX
-	CALL	MULTDEA			;HL = HEIGHT OFFSET
-	POP	DE			;DE = LEVEL HEIGHT1
-	ADD	HL,DE			;HL = HEIGHT POINTER
-	POP	BC			;BC = ROOM LOCATION
-
-	LD	A,C
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A
-	ADD	A,A			;A = Y ROOM OFFSET
-	ADD	A,B
-	ADD	A,B			;A = ROOM OFFSET
-	LD	E,A
-	LD	D,0
-	ADD	HL,DE			;HL = MAP ADDRESS
-	OR	1			;SET Z FLAG
-	RET
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-MAP:	DB	0, 0, 0, 0, 0, 0, 0, 0
+	PUBLIC	MAPDEF,LEVELDEF
+
+MAPDEF:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 7, 8, 9, 0, 0
 	DB	0,10,14, 4, 5, 6,15,11
@@ -125,7 +43,7 @@ ACCS:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 
-LEVEL1:
+LEVELDEF:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;LEVEL 1

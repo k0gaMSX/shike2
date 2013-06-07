@@ -64,7 +64,7 @@ RECEIVERS:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	EDLEVEL,EDROOM,MULTDEA,PTRHL
+	EXTRN	EDLEVEL,EDROOM,MULTDEA,PTRHL,GETROOM
 
 GETMDATA:				;UPDATE THE MAP VARIABLES
 	LD	HL,0

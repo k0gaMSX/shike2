@@ -37,7 +37,7 @@ R.PTR:	DS	64*6
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	EDSET,EDPAL,EDLEVEL
+	EXTRN	EDSET,EDPAL,EDLEVEL,GETLEVEL
 
 GETRDATA:
 	LD	DE,(EDLEVEL)
@@ -55,7 +55,7 @@ GETRDATA:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	GLINES,EDPAL,EDSET,PTRHL,PRINTF,LOCATE,EDLEVEL,GRID16
+	EXTRN	GLINES,EDPAL,EDSET,PTRHL,PRINTF,LOCATE,EDLEVEL,GRID16,GETROOM
 
 SHOWSCR:CALL	GRID16
 	CALL	DRAWRMATRIX
@@ -127,7 +127,7 @@ ROOMI:	DB	9,"ROOM",9,"       %02dX%02d",9,9,"PALETE",9,"%d",10
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
-	EXTRN	EDLEVEL,COLORGRID16
+	EXTRN	EDLEVEL,COLORGRID16,GETROOM
 
 DRAWRMATRIX:
 	LD	B,ROOMYSIZ
