@@ -357,7 +357,6 @@ CINFO.DIR	EQU	CINFO.CONTROL+1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	PUBLIC	END
 END:	DS	CARTSEG+4000H-$,0
 
 

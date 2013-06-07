@@ -122,8 +122,12 @@ patset0.obj : ..\\gfx\\patset0.gl5
 
 leveldef.obj : leveldef.asm level.inc palete.asm font.asm
 	echo leveldef.asm
-	as $(ASFLAGS) leveldef.asm
+	as leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
+
+leveldef.inc : leveldef.rel
+	echo leveldef.rel
+	export leveldef.sym > leveldef.inc
 
 ########################################################
 #binary files
@@ -205,7 +209,7 @@ game.rel : game.asm
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
-level.rel : level.asm shike2.inc bios.inc level.inc
+level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc
 	echo level.asm
 	as $(ASFLAGS) level.asm
 
@@ -278,6 +282,7 @@ clean :
 	del palete.asm > NUL
 	del font.asm > NUL
 	del fontspr.asm > NUL
+	del leveldef.inc > NUL
 	del *.bat > NUL
 
 
