@@ -185,7 +185,7 @@ edchar.rel : edchar.asm shike2.inc bios.inc level.inc data.inc
 	echo edchar.asm
 	as $(ASFLAGS) edchar.asm
 
-door.rel : door.asm data.inc level.inc shike2.inc
+door.rel : door.asm data.inc level.inc
 	echo door.asm
 	as $(ASFLAGS) door.asm
 
@@ -193,7 +193,7 @@ talk.rel : talk.asm sprite.inc fontspr.asm data.inc
 	echo talk.asm
 	as $(ASFLAGS) talk.asm
 
-char.rel : char.asm bios.inc data.inc event.inc level.inc shike2.inc
+char.rel : char.asm bios.inc data.inc event.inc level.inc
 	echo char.asm
 	as $(ASFLAGS) char.asm
 
