@@ -214,7 +214,7 @@ L15_ACC:DS	8*8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	PUBLIC	CHARSDAT,DOORSDAT
+	PUBLIC	CHARSDAT,DOORSDAT,CAMDAT
 
 DOORSDAT:
 	DS	NR_DOORS*SIZDINFO
@@ -222,6 +222,7 @@ CHARSDAT:
 	DW	0,0			;WE NEED AT LEAST ONE USER CHARACTER
 	DB	0,0,0,0,1,0
 	DS	SIZCINFO*(NR_CHARS-1)
+CAMDAT:	DB	-1
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -48,6 +48,8 @@ RECEIVERS:
 	DW	SAVEEVENT
 	DB	1,29,54,8
 	DW	CAMEVENT
+	DB	1,29,64,8
+	DW	SAVECAM
 	DB	0
 
 
@@ -121,7 +123,7 @@ CINFO:	DB	" CHAR",9,"%02d",10
 	DB	" PATERN",9,"%02d",10
 	DB	" DIR",9,"%s",10
 	DB	" CTRL",9,"%6s",10
-	DB	" PLACE",10," SAVE",10," SETCAM",10
+	DB	" PLACE",10," SAVE",10," SETCAM",10," SAVCAM",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" ROOM",9,"%02dX%02d",10
 	DB	" X",9,"%02d",10
@@ -131,8 +133,8 @@ CINFO:	DB	" CHAR",9,"%02d",10
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 CHARG:	DB	2,  60,  5,   76,  5,  0, 32,  0, 32
 	DB	2,  60,  5,   60, 37, 16,  0, 16,  0
-	DB	8,   0,  6,   30,  6,  0,  8,  0,  8
-	DB	2,   0,  6,    0, 62, 30,  0, 30,  0
+	DB	9,   0,  6,   30,  6,  0,  8,  0,  8
+	DB	2,   0,  6,    0, 70, 30,  0, 30,  0
 	DB	0
 
 DIRTBL:	DW	RIGTH,DOWN,UP,LEFT,NODIR
@@ -181,6 +183,22 @@ PLACEEVENT:
 	CALL	PLACE
 	POP	IX
 	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+	EXTRN	CAMDAT
+
+SAVECAM:CP	MS_BUTTON1
+	RET	NZ
+
+	LD	A,(NCHAR)
+	LD	(CAMDAT),A
+	LD	A,MS_BUTTON1
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	A = EVENT
