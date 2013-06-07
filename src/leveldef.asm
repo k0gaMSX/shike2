@@ -9,7 +9,6 @@ JTABLE:	JP	GETPAL_
 	JP	GETLEVEL_
 	JP	GETROOM_
 	JP	GETFONT_
-	JP	GETDOOR_
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;INPUT:	E PALETE NUMBER
@@ -111,12 +110,6 @@ GETROOM_:
 	LD	D,0
 	ADD	HL,DE			;HL = MAP ADDRESS
 	OR	1			;SET Z FLAG
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-GETDOOR_:
-	LD	HL,DOORS
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -326,9 +319,10 @@ L15_ACC:DS	8*8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	PUBLIC	CHARSDAT
+	PUBLIC	CHARSDAT,DOORSDAT
 
-DOORS:	DS	NR_DOORS*SIZDINFO
+DOORSDAT:
+	DS	NR_DOORS*SIZDINFO
 CHARSDAT:
 	DW	0,0			;WE NEED AT LEAST ONE USER CHARACTER
 	DB	0,0,0,0,1,0
