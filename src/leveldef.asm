@@ -10,7 +10,6 @@ JTABLE:	JP	GETPAL_
 	JP	GETROOM_
 	JP	GETFONT_
 	JP	GETDOOR_
-	JP	GETCHARS_
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
 ;INPUT:	E PALETE NUMBER
@@ -118,12 +117,6 @@ GETROOM_:
 
 GETDOOR_:
 	LD	HL,DOORS
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-GETCHARS_:
-	LD	HL,CHARS
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -333,22 +326,13 @@ L15_ACC:DS	8*8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+	PUBLIC	CHARSDAT
+
 DOORS:	DS	NR_DOORS*SIZDINFO
-CHARS:	DW	0,0			;WE NEED AT LEAST ONE USER CHARACTER
+CHARSDAT:
+	DW	0,0			;WE NEED AT LEAST ONE USER CHARACTER
 	DB	0,0,0,0,1,0
 	DS	SIZCINFO*(NR_CHARS-1)
-
-
-CINFO.LEVEL	EQU	0
-CINFO.ROOM	EQU	CINFO.LEVEL+2
-CINFO.Y		EQU	CINFO.ROOM+2
-CINFO.X		EQU	CINFO.Y+1
-CINFO.Z		EQU	CINFO.X+1
-CINFO.PAT	EQU	CINFO.Z+1
-CINFO.CONTROL	EQU	CINFO.PAT+1
-CINFO.DIR	EQU	CINFO.CONTROL+1
-
-	DS	NR_CHARS*SIZCINFO
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
