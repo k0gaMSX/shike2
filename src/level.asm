@@ -12,7 +12,7 @@ P1Y		EQU	CENTRAL.P1Y*8
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	INCLUDE	LEVELDEF.INC
-	PUBLIC	CHARSDAT,DOORSDAT
+	PUBLIC	CHARSDAT,DOORSDAT,FONTGR5
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

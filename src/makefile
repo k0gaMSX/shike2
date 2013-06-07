@@ -27,7 +27,7 @@ fontspr.asm : font.obj
 
 font.asm : font.obj
 	echo font.obj
-	db -lFONT font.obj > font.asm
+	db -lFONTGR5 font.obj > font.asm
 
 bload.obj : bload.asm
 	echo bload.asm
