@@ -12,7 +12,7 @@ P1Y		EQU	CENTRAL.P1Y*8
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	INCLUDE	LEVELDEF.INC
-	PUBLIC	CHARSDAT,DOORSDAT,FONTGR5,LEVELDEF,MAPDEF
+	PUBLIC	CHARSDAT,DOORSDAT,FONTGR5,LEVELDEF,MAPDEF,PALETES
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -107,6 +107,25 @@ G.NOK:	LD	HL,0			;I'M SORRY, YOU ARE NOT SHOWED
 	CP	A			;SET Z=1
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
+;INPUT:	E = PALETE NUMBER
+;OUTPUT:HL = PALETE DATA
+
+	CSEG
+	PUBLIC	GETPAL
+
+GETPAL:	EX	DE,HL
+	LD	H,0
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	ADD	HL,HL
+	LD	DE,PALETES
+	ADD	HL,DE
+	LD	E,LEVELPAGE
+	CALL	CARTPAGE
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = LEVEL NUMBER

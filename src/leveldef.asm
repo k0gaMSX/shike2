@@ -5,22 +5,6 @@
 	ASEG
 	ORG	CARTSEG
 
-JTABLE:	JP	GETPAL_
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
-;INPUT:	E PALETE NUMBER
-
-GETPAL_:EX	DE,HL
-	LD	H,0
-	ADD	HL,HL
-	ADD	HL,HL
-	ADD	HL,HL
-	ADD	HL,HL
-	ADD	HL,HL
-	LD	DE,PALETES
-	ADD	HL,DE
-	RET
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	PUBLIC	MAPDEF,LEVELDEF
