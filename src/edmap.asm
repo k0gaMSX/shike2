@@ -50,6 +50,8 @@ RECEIVERS:
 	DW	FLOOREVENT
 	DB	130,30,166,8
 	DW	GENHEIGHT
+	DB	160,30,166,8
+	DW	DOOREVENT
 	DB	1,29,174,8
 	DW	HEIGHTEVENT
 	DB	54,30,174,8
@@ -142,8 +144,8 @@ SHOWSCR:LD	DE,21
 	JP	PUTSPRITE		;SHOW THE SELECTED ACTION
 
 
-FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9," UPDATE",10
-	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",9," CHARS",10
+FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9," UPDATE",9," DOORS",10
+	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",9," CHARS",9, " OBJECT",10
 	DB	" POS=%03dX%03d,ROOM=%02dX%02d,LEVEL=%02dX%02d",0
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
@@ -153,8 +155,8 @@ MAPG:	DB     	9,  0,   95, 127, 32, 16,  8, 16,  8
 	DB	2,  0,  166,   0,182, 30,  0, 30,  0
 	DB	3,  54, 166,  84,166,  0,  8,  0,  8
 	DB	2,  54, 166,  54,182, 30,  0, 30,  0
-	DB	3, 130, 166, 160,166,  0,  8,  0,  8
-	DB	2, 130, 166, 130,182, 30,  0, 30,  0
+	DB	3, 130, 166, 190,166,  0,  8,  0,  8
+	DB	3, 130, 166, 130,182, 30,  0, 30,  0
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -460,6 +462,8 @@ G.TBUF:	DS	ROOMXSIZ*ROOMYSIZ
 	EXTRN	ED.CHAR,EDLEVEL,EDROOM
 
 CHAREVENT:
+	CP	MS_BUTTON1
+	RET	NZ
 	LD	DE,(EDLEVEL)
 	LD	BC,(EDROOM)
 	LD	HL,(COORD)
@@ -467,6 +471,22 @@ CHAREVENT:
 	ADD	A,A
 	ADD	A,A
 	JP	ED.CHAR
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	ED.DOOR,EDLEVEL,EDROOM
+
+DOOREVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	LD	HL,(COORD)
+	LD	A,(HEIGHT)
+	ADD	A,A
+	ADD	A,A
+	JP	ED.DOOR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
