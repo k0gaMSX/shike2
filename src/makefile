@@ -219,7 +219,7 @@ game.rel : game.asm
 	echo game.asm
 	as $(ASFLAGS) game.asm
 
-level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc
+level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
 	echo level.asm
 	as $(ASFLAGS) level.asm
 
