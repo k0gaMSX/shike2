@@ -367,6 +367,32 @@ UNLINKANIM:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOVABLE
+;OUTPUT:HL = POINTER TO THE HEIGHT MATRIX
+;	Z = 1 WHEN ERROR
+
+	CSEG
+	PUBLIC	MOVHMATRIX
+	EXTRN	GETHMATRIX
+
+MOVHMATRIX:
+	LD	A,(IX+MOV.Z)
+	AND	0FCH
+	RRCA
+	RRCA
+	LD	E,(IX+MOV.RINFO)
+	LD	D,(IX+MOV.RINFO+1)
+	LD	IYL,E
+	LD	IYU,D
+	LD	E,(IX+MOV.LEVEL)
+	LD	D,(IX+MOV.LEVEL+1)
+	LD	C,(IX+MOV.ROOM)
+	LD	B,(IX+MOV.ROOM+1)
+	LD	L,(IX+MOV.Y)
+	LD	H,(IX+MOV.X)
+	JP	GETHMATRIX
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE MOVABLE
 ;OUTPUT:Z = 1 WHEN ERROR
 ;       A = HEIGHT VALUE
 ;	HL = ADDRESS POINTER (0 WHEN IS LOCATED IN ROM)
