@@ -1,8 +1,8 @@
 
+	INCLUDE	LEVEL.INC
 	INCLUDE	DATA.INC
 
 
-NR_OBJECTS	EQU	6
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE OBJECT
@@ -43,7 +43,22 @@ OBJECT:	PUSH	BC
 OBJDEF:	DB	0,0			;PATTERN,SIZE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	E = OBJECT NUMBER
+
+	CSEG
+	PUBLIC	GETNOBJ
+	EXTRN	MULTEA
+
+GETNOBJ:LD	A,SIZOBJECT
+	CALL	MULTEA
+	LD	DE,OBJBUF
+	ADD	HL,DE
+	RET
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	DSEG
+OBJBUF:	DS	NR_OBJECTS*SIZOBJECT
 
 

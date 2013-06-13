@@ -52,6 +52,8 @@ RECEIVERS:
 	DW	GENHEIGHT
 	DB	160,30,166,8
 	DW	DOOREVENT
+	DB	160,30,174,8
+	DW	OBJEVENT
 	DB	1,29,174,8
 	DW	HEIGHTEVENT
 	DB	54,30,174,8
@@ -493,6 +495,22 @@ DOOREVENT:
 	ADD	A,A
 	ADD	A,A
 	JP	ED.DOOR
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	ED.OBJECT,EDLEVEL,EDROOM
+
+OBJEVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+	LD	DE,(EDLEVEL)
+	LD	BC,(EDROOM)
+	LD	HL,(COORD)
+	LD	A,(HEIGHT)
+	ADD	A,A
+	ADD	A,A
+	JP	ED.OBJECT
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

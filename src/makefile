@@ -4,7 +4,7 @@ REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
 REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel object.rel
 REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
 REL4 = edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
-REL5 = eddoor.rel
+REL5 = eddoor.rel edobject.rel
 REL =  $(REL1) $(REL2) $(REL3) $(REL4) $(REL5)
 
 all : shike data
@@ -182,6 +182,9 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
+edobject.rel : edobject.asm shike2.inc
+	echo edobject.asm
+	as $(ASFLAGS) edobject.asm
 
 eddoor.rel : eddoor.asm data.inc shike2.inc level.inc event.inc
 	echo eddoor.asm
@@ -191,7 +194,7 @@ edchar.rel : edchar.asm shike2.inc bios.inc level.inc data.inc event.inc
 	echo edchar.asm
 	as $(ASFLAGS) edchar.asm
 
-object.rel : object.asm data.inc
+object.rel : object.asm data.inc level.inc
 	echo object.asm
 	as $(ASFLAGS) object.asm
 
