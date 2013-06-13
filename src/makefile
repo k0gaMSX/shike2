@@ -121,7 +121,7 @@ patset0.obj : ..\\gfx\\patset0.gl5
 	del patset0.obj > NUL
 	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
 
-leveldef.obj : leveldef.asm level.inc palete.asm font.asm
+leveldef.obj : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	echo leveldef.asm
 	as leveldef.asm
 	ld /R4000 leveldef.obj=leveldef.rel
@@ -199,7 +199,7 @@ door.rel : door.asm data.inc level.inc
 	echo door.asm
 	as $(ASFLAGS) door.asm
 
-talk.rel : talk.asm sprite.inc fontspr.asm data.inc
+talk.rel : talk.asm sprite.inc data.inc shike2.inc
 	echo talk.asm
 	as $(ASFLAGS) talk.asm
 
