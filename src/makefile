@@ -182,7 +182,7 @@ leveldef.bin : leveldef.obj loadpg1.obj bload.obj
 ##########################################################
 #sources
 
-edobject.rel : edobject.asm shike2.inc
+edobject.rel : edobject.asm shike2.inc level.inc data.inc event.inc
 	echo edobject.asm
 	as $(ASFLAGS) edobject.asm
 

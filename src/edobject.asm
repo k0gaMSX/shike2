@@ -1,6 +1,8 @@
 
 	INCLUDE	SHIKE2.INC
 	INCLUDE	DATA.INC
+	INCLUDE	LEVEL.INC
+	INCLUDE	EVENT.INC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = LEVEL
@@ -30,6 +32,8 @@ ED.LOOP:LD	E,EDPAGE
 	RET
 
 RECEIVERS:
+	DB	1,29,8,8
+	DW	OBJEVENT
 	DB	0
 
 
@@ -93,7 +97,32 @@ OINFO:	DB	" OBJECT",9,"%d",10
 	DB	" Y",9,"%02d",10
 	DB	" Z",9,"%02d",0
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+
+OBJEVENT:
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENTS OBJ NUMBER
+	JR	NZ,O.1
+	LD	A,(NOBJ)
+	CP	NR_OBJECTS-1
+	RET	Z
+	INC	A
+	JR	O.END
+
+O.1:	CP	MS_BUTTON2		;BUTTON 2 DECREMENTS OBJ NUMBER
+	RET	NZ
+	LD	A,(NOBJ)
+	OR	A
+	RET	Z
+	DEC	A
+
+O.END:	LD	(NOBJ),A
+	RET
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 	DSEG
 NOBJ:	DB	0
