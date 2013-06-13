@@ -372,7 +372,7 @@ UNLINKANIM:
 
 	CSEG
 	PUBLIC	MOVHMATRIX
-	EXTRN	GETHMATRIX
+	EXTRN	HMATRIX
 
 MOVHMATRIX:
 	LD	A,(IX+MOV.Z)
@@ -389,7 +389,7 @@ MOVHMATRIX:
 	LD	B,(IX+MOV.ROOM+1)
 	LD	L,(IX+MOV.Y)
 	LD	H,(IX+MOV.X)
-	JP	GETHMATRIX
+	JP	HMATRIX
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE MOVABLE
