@@ -207,6 +207,7 @@ GETHMATRIX:
 	EX	AF,AF'			;A' = HEIGHT LEVEL
 	LD	A,IYL
 	OR	IYU
+	LD	(G.RAM),A
 	JR	Z,H.NINFO
 
 	EX	AF,AF'			;A = HEIGHT LEVEL
@@ -259,9 +260,18 @@ GETHEIGHT:
 	POP	DE
 	RET	Z
 	CALL	MOFFSET
-	LD	A,(HL)			;HL = &HMATRIX[Y][X]
+	LD	B,(HL)			;HL = &HMATRIX[Y][X]
+	LD	A,(G.RAM)
+	OR	A
+	JR	NZ,H.1
+	LD	HL,G.RAM		;IF THE MATRIX IS IN ROM, RETURN
+	LD	(HL),B
+H.1:	LD	A,B			;A DUMMY POSITION
 	CP	-1
 	RET
+
+	DSEG
+G.RAM:	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = ROOM COORDENATES
