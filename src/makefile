@@ -271,7 +271,7 @@ shike2.rel : shike2.asm shike2.inc bios.inc
 	echo shike2.asm
 	as $(ASFLAGS) shike2.asm
 
-bios.rel : bios.asm bios.inc
+bios.rel : bios.asm bios.inc shike2.inc
 	echo bios.asm
 	as $(ASFLAGS) bios.asm
 
