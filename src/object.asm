@@ -2,6 +2,7 @@
 	INCLUDE	LEVEL.INC
 	INCLUDE	DATA.INC
 
+OBJPAT	EQU	4*4*3+8
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -40,7 +41,8 @@ OBJECT:	PUSH	BC
 	RET
 
 
-OBJDEF:	DB	0,0			;PATTERN,SIZE
+OBJDEF:	DB	OBJPAT,1		;PATTERN,SIZE
+	DB	OBJPAT,2		;PATTERN,SIZE
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	E = OBJECT NUMBER

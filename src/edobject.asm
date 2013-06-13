@@ -1,4 +1,5 @@
 
+	INCLUDE	BIOS.INC
 	INCLUDE	SHIKE2.INC
 	INCLUDE	DATA.INC
 	INCLUDE	LEVEL.INC
@@ -78,12 +79,14 @@ SHOWSCR:LD	DE,1
 	LD	C,15
 	LD	DE,OBJG
 	CALL	GLINES			;DRAW BUTTONS
-	RET
+        JP	DRAWOBJ
 
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 OBJG:	DB	6,   0,  7,   30,  7,  0,  8,  0,  8
 	DB	2,   0,  7,    0, 47, 30,  0, 30,  0
+	DB	2,  60,  5,   76,  5,  0, 32,  0, 32
+	DB	2,  60,  5,   60, 37, 16,  0, 16,  0
 	DB	0
 
 
@@ -96,6 +99,23 @@ OINFO:	DB	" OBJECT",9,"%d",10
 	DB	" X",9,"%02d",10
 	DB	" Y",9,"%02d",10
 	DB	" Z",9,"%02d",0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	EXTRN	LMMM,MOB2XY,VDPPAGE
+
+DRAWOBJ:LD	A,LOGTIMP
+	LD	(LOGOP),A
+	LD	A,MOBPAGE
+	LD	(VDPPAGE),A
+
+	LD	IY,(OBJPTR)
+	LD	E,(IY+MOV.PAT)
+	CALL	MOB2XY
+	LD	DE,3C05H
+	LD	BC,1020H
+	JP	LMMM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: A = EVENT
