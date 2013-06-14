@@ -6,6 +6,33 @@ OBJPAT	EQU	4*4*3+8
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+	PUBLIC	OBJINIT
+	EXTRN	OBJDATA
+
+OBJINIT:PUSH	IX
+	LD	B,NR_OBJECTS
+	LD	IY,OBJDATA
+	LD	IX,OBJBUF
+
+I.LOOP:	PUSH	BC
+	PUSH	IY
+	LD	E,IYL
+	LD	D,IYU
+	LD	C,(IY+OINFO.ID)
+	CALL	OBJECT
+	LD	DE,SIZOBJECT
+	ADD	IX,DE
+	POP	IY
+	LD	DE,SIZOINFO
+	ADD	IY,DE
+	POP	BC
+	DJNZ	I.LOOP
+	POP	IX
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE OBJECT
 ;	DE = POINT LOCATION
 ;	C = OBJECT ID
@@ -18,6 +45,7 @@ OBJECT:	PUSH	BC
 	PUSH	DE
 	LD	HL,OBJDEF
 	LD	A,C
+	ADD	A,A
 	CALL	ADDAHL
 	LD	E,(HL)			;E = PATTERN
 	INC	HL
