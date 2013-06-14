@@ -70,7 +70,30 @@ OBJECT:	PUSH	BC
 
 
 OBJDEF:	DB	OBJPAT,1		;PATTERN,SIZE
-	DB	OBJPAT,2		;PATTERN,SIZE
+	DB	OBJPAT-1,2		;PATTERN,SIZE
+	DB	OBJPAT,0
+	DB	OBJPAT,0
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO OBJECT
+;	E = OBJECT ID
+
+	CSEG
+	PUBLIC	SETOBJID
+
+SETOBJID:
+	LD	(IX+OBJECT.ID),E
+	LD	A,E
+	ADD	A,A
+	LD	HL,OBJDEF
+	CALL	ADDAHL
+	LD	A,(HL)
+	LD	(IX+MOV.PAT),A
+	INC	HL
+	LD	A,(HL)
+	LD	(IX+MOV.ZSIZ),A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	E = OBJECT NUMBER

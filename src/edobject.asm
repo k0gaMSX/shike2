@@ -35,6 +35,8 @@ ED.LOOP:LD	E,EDPAGE
 RECEIVERS:
 	DB	1,29,8,8
 	DW	OBJEVENT
+	DB	1,29,16,8
+	DW	IDEVENT
 	DB	1,29,32,8
 	DW	PLACEEVENT
 	DB	0
@@ -70,7 +72,9 @@ SHOWSCR:LD	DE,1
 	PUSH	HL
 	LD	L,(IY+OBJECT.OWNER)
 	PUSH	HL
-	LD	L,(IY+OBJECT.ID)
+	LD	A,(IY+OBJECT.ID)
+	LD	(ID),A
+	LD	L,A
 	PUSH	HL
 	LD	A,(NOBJ)
 	LD	L,A
@@ -161,6 +165,38 @@ PLACEEVENT:
 	POP	IX
 	RET
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+	EXTRN	SETOBJID
+	public	idevent
+
+IDEVENT:LD	IY,(OBJPTR)
+	CP	MS_BUTTON1		;BUTTON 1 INCREMENTS ID NUMBER
+	JR	NZ,I.1
+	LD	A,(ID)
+	CP	NR_OBJID-1
+	RET	Z
+	INC	A
+	JR	I.END
+
+I.1:	CP	MS_BUTTON2		;BUTTON 2 DECREMENTS ID NUMBER
+	RET	NZ
+	LD	A,(IY+OBJECT.ID)
+	OR	A
+	RET	Z
+	DEC	A
+
+I.END:	LD	(ID),A
+	LD	E,A
+	PUSH	IX
+	PUSH	IY
+	POP	IX
+	CALL	SETOBJID
+	POP	IX
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -168,6 +204,7 @@ PLACEEVENT:
 	DSEG
 NOBJ:	DB	0
 OBJPTR:	DW	0
+ID:	DB	0
 POINT1:	DS	SIZPOINT
 
 
