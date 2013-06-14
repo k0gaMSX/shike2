@@ -35,6 +35,8 @@ ED.LOOP:LD	E,EDPAGE
 RECEIVERS:
 	DB	1,29,8,8
 	DW	OBJEVENT
+	DB	1,29,32,8
+	DW	PLACEEVENT
 	DB	0
 
 
@@ -140,6 +142,25 @@ O.1:	CP	MS_BUTTON2		;BUTTON 2 DECREMENTS OBJ NUMBER
 
 O.END:	LD	(NOBJ),A
 	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+	EXTRN	PLACE
+
+PLACEEVENT:
+	CP	MS_BUTTON1
+	RET	NZ
+
+	PUSH	IX
+	LD	IX,(OBJPTR)
+	LD	C,(IX+MOV.DIR)
+	LD	DE,POINT1
+	CALL	PLACE
+	POP	IX
+	RET
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
