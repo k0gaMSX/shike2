@@ -11,7 +11,7 @@ unsigned char screen[212][256];
 char plane = XYPLANE;
 
 void
-die(const char *msg)
+die(char *msg)
 {
 	puts(msg);
 	exit(EXIT_FAILURE);
@@ -44,7 +44,7 @@ genfnames(char *in, char *out)
 }
 
 void
-writesr5(const char *fname, unsigned char *buf)
+writesr5(char *fname, unsigned char *buf)
 {
 	static FILE *out;
 	static size_t offset;

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 void
-die(const char *msg)
+die(char *msg)
 {
 	fputs(msg, stderr);
 	putc('\n', stderr);

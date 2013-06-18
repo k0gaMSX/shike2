@@ -14,7 +14,7 @@ usage(void)
 }
 
 void
-die(const char *msg)
+die(char *msg)
 {
 	fprintf(stderr, "db: %s\n", msg);
 	exit(EXIT_FAILURE);
