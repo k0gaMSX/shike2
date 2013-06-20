@@ -1,0 +1,33 @@
+
+CC = cc
+AS = as
+LD = ld
+ASFLAGS = -t
+CFLAGS = -DCPM
+LDFLAGS = /X
+
+all : delgl5.com export.com fon2spr.com isoview.c db.com
+
+delgl5.com : delgl5.asm
+	$(AS) $(ASFLAGS) delgl5.asm
+	$(LD) $(LDFLAGS) delgl5.rel
+
+export.com : export.c
+	$(CC) $(CFLAGS) export.c
+
+fon2spr.com : fon2spr.c
+	$(CC) $(CFLAGS) fon2spr.c
+
+isoview.com : isoview.c
+	$(CC) $(CFLAGS) isoview.c
+
+db.com : db.c
+	$(CC) $(CFLAGS) db.c
+
+
+clean :
+	del *.com > NUL
+	del *.rel > NUL
+	del *.sym > NUL
+
+
