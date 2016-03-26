@@ -14,7 +14,8 @@ shike : shike2.com
 data : leveldef.bin patset0.bin patset1.bin charset0.bin charset1.bin map0.bin map1.bin map2.bin map3.bin height0.bin height1.bin
 
 dist :
-	a:\\utils\\comp\\lhpack a shike2.lzh *.asm *.inc makefile ld.cmd
+	rm shike2.lzh
+	lhpack a shike2.lzh *.dat *.asm *.inc makefile ld.cmd
 
 palete.asm : ..\\gfx\\shike2.pl5
 	echo shike2.pl5
