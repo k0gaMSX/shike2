@@ -6,7 +6,11 @@ ASFLAGS = -t
 CFLAGS = -DCPM
 LDFLAGS = /X
 
-all : delgl5.com export.com fon2spr.com isoview.c db.com
+all : delgl5.com export.com fon2spr.com isoview.c db.com save.com
+
+save.com : save.asm
+	$(AS) $(ASFLAGS) save.asm
+	$(LD) $(LDFLAGS) save.rel
 
 delgl5.com : delgl5.asm
 	$(AS) $(ASFLAGS) delgl5.asm
