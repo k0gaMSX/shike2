@@ -26,13 +26,11 @@ ED.MAP:	CALL	EDINIT
 
 	LD	HL,0
 	LD	(COORD),HL
+	LD	A,1
+	LD	(RFSH),A
 
-ED.LOOP:LD	E,EDPAGE
-	CALL	CLRVPAGE
-	CALL	PUTLPAGE
-	CALL	GETMDATA
-	CALL	SHOWSCR
-	CALL	VDPSYNC
+ED.LOOP:
+	CALL	REFRESH
 	LD	DE,RECEIVERS
 	CALL	LISTEN
 	JR	NZ,ED.LOOP
@@ -52,8 +50,12 @@ RECEIVERS:
 	DW	GENHEIGHT
 	DB	160,30,166,8
 	DW	DOOREVENT
+	DB	190,30,166,8
+	DW	RFSH.ON
 	DB	160,30,174,8
 	DW	OBJEVENT
+	DB	190,30,174,8
+	DW	RFSH.OFF
 	DB	1,29,174,8
 	DW	HEIGHTEVENT
 	DB	54,30,174,8
@@ -63,6 +65,21 @@ RECEIVERS:
 	DB	1,254,32,127
 	DW	MAPEVENT
 	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+REFRESH:
+	LD	A,(RFSH)
+	OR	A
+	RET	Z
+	LD	E,EDPAGE
+	CALL	CLRVPAGE
+	CALL	PUTLPAGE
+	CALL	GETMDATA
+	CALL	SHOWSCR
+	JP	VDPSYNC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -146,8 +163,10 @@ SHOWSCR:LD	DE,21
 	JP	PUTSPRITE		;SHOW THE SELECTED ACTION
 
 
-FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9," UPDATE",9," DOORS",10
-	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",9," CHARS",9, " OBJECT",10
+FMT:	DB	" MAP",9," %04d FLOOR",9,"%03d",9
+	DB	" UPDATE",9," DOORS",9," RFSH+",10
+	DB	" HEIGHT",9,"   %02d TILE",9,"%03d",9
+	DB	" CHARS",9, " OBJECT",9, " RFSH-",10
 	DB	" POS=%03dX%03d,ROOM=%02dX%02d,LEVEL=%02dX%02d",0
 
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
@@ -157,9 +176,27 @@ MAPG:	DB     	9,  0,   95, 127, 32, 16,  8, 16,  8
 	DB	2,  0,  166,   0,182, 30,  0, 30,  0
 	DB	3,  54, 166,  84,166,  0,  8,  0,  8
 	DB	2,  54, 166,  54,182, 30,  0, 30,  0
-	DB	3, 130, 166, 190,166,  0,  8,  0,  8
-	DB	3, 130, 166, 130,182, 30,  0, 30,  0
+	DB	3, 130, 166, 220,166,  0,  8,  0,  8
+	DB	4, 130, 166, 130,182, 30,  0, 30,  0
 	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+RFSH.ON:
+	LD	A,1
+	LD	(RFSH),A
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+	CSEG
+
+RFSH.OFF:
+	XOR	A
+	LD	(RFSH),A
+	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	DE = SCREEN COORDINATES
@@ -275,6 +312,8 @@ FLOOREVENT:
 	CP	MS_BUTTON1
 	RET	NZ
 
+	LD	A,1
+	LD	(RFSH),A
 	CALL	ED.FLOOR
 	JR	Z,F.1
 	LD	(FLOOR),A
@@ -296,6 +335,8 @@ TILEEVENT:
 	CP	MS_BUTTON1
 	RET	NZ
 
+	LD	A,1
+	LD	(RFSH),A
 	CALL	ED.TILE
 	JR	Z,T.1
 	LD	(TILE),A
@@ -472,6 +513,9 @@ G.TBUF:	DS	ROOMXSIZ*ROOMYSIZ
 CHAREVENT:
 	CP	MS_BUTTON1
 	RET	NZ
+
+	LD	A,1
+	LD	(RFSH),A
 	LD	DE,(EDLEVEL)
 	LD	BC,(EDROOM)
 	LD	HL,(COORD)
@@ -488,6 +532,9 @@ CHAREVENT:
 DOOREVENT:
 	CP	MS_BUTTON1
 	RET	NZ
+
+	LD	A,1
+	LD	(RFSH),A
 	LD	DE,(EDLEVEL)
 	LD	BC,(EDROOM)
 	LD	HL,(COORD)
@@ -504,6 +551,9 @@ DOOREVENT:
 OBJEVENT:
 	CP	MS_BUTTON1
 	RET	NZ
+
+	LD	A,1
+	LD	(RFSH),A
 	LD	DE,(EDLEVEL)
 	LD	BC,(EDROOM)
 	LD	HL,(COORD)
@@ -522,5 +572,5 @@ HEIGHT:	DB	0
 RPTR:	DW	0
 FLOOR:	DB	0
 TILE:	DB	0
-
+RFSH:	DB	0
 
