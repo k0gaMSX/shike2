@@ -121,10 +121,10 @@ patset0.obj : ..\\gfx\\patset0.gl5
 	del patset0.obj > NUL
 	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
 
-leveldef.obj : leveldef.asm level.inc palete.asm font.asm fontspr.asm
+leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	echo leveldef.asm
 	as leveldef.asm
-	ld /R4000 leveldef.obj=leveldef.rel
+	ld /R4000 leveldef.dat=leveldef.rel
 
 leveldef.inc : leveldef.rel
 	echo leveldef.rel
@@ -174,9 +174,10 @@ patset0.bin : patset0.obj loadpg8.obj bload.obj
 	echo patset0.obj
 	concat /B bload.obj + patset0.obj + loadpg8.obj patset0.bin
 
-leveldef.bin : leveldef.obj loadpg1.obj bload.obj
+leveldef.bin : leveldef.dat loadpg1.obj bload.obj
 	echo leveldef.rel
-	concat /B bload.obj + leveldef.obj + loadpg1.obj leveldef.bin
+	del leveldef.bin > NUL
+	concat /B bload.obj + leveldef.dat + loadpg1.obj leveldef.bin
 
 
 ##########################################################
