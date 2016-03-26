@@ -43,6 +43,10 @@ RECEIVERS:
 	DW	PLACEEVENT
 	DB	1,29,48,8
 	DW	SAVEEVENT
+	DB	1,254,1,127
+	DW	HELP
+	DB	1,254,127,127
+	DW	HELP
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -117,6 +121,27 @@ DINFO:	DB	" DOOR",9,"%d",10
 ;	       REP  X0  Y0    X1  Y1 IX0 IY0 IX1 IY1
 DOORG:	DB	7,   0,  7,   30,  7,  0,  8,  0,  8
 	DB	2,   0,  7,    0, 55, 30,  0, 30,  0
+	DB	0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	A = EVENT
+
+	CSEG
+	EXTRN	SHOWHLP
+
+HELP:	CP	KB_F1
+	RET	NZ
+
+	LD	DE,HLPMSG
+	JP	SHOWHLP
+
+HLPMSG:	DB	"[DOOR]   - SELECT THE CURRENT DOOR",0AH,0DH
+	DB	"[STATE]  - CHANGE CURRENT STATE",0AH,0DH
+	DB	"[TYPE]   - CHANGE THE TYPEOFTHE DOOR",0AH,0DH
+	DB	"[KEY]    - CHANGE DOOR KEY",0AH,0DH
+	DB	"[PLACE]  - PLACE THE DOOR IN THE POSITION SELECTED",0AH,0DH
+	DB      "            IN THE ROOM EDITOR",0AH,0DH
+	DB	"[SAVE]   - SAVE DOOR DATA TO THE ROM",0AH,0DH
 	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

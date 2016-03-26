@@ -39,6 +39,10 @@ RECEIVERS:
 	DW	IDEVENT
 	DB	1,29,32,8
 	DW	PLACEEVENT
+	DB	1,254,1,127
+	DW	HELP
+	DB	1,254,127,127
+	DW	HELP
 	DB	0
 
 
@@ -122,6 +126,23 @@ DRAWOBJ:LD	A,LOGTIMP
 	LD	DE,3C05H
 	LD	BC,1020H
 	JP	LMMM
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: A = EVENT
+
+	CSEG
+	EXTRN	SHOWHLP
+
+HELP:	CP	KB_F1
+	RET	NZ
+
+	LD	DE,HLPMSG
+	JP	SHOWHLP
+
+HLPMSG:	DB	"[OBJECT]- CHANGE CURRENT OBJECT",0AH,0DH
+	DB	"[ID]    - CHANGE THE ID USED IN SCRIPTS",0AH,0DH
+	DB	"[OWNER] - CHANGE WHICH CHARACTER OWNS IT",0AH,0DH
+	DB	"[SAVE]  - SAVE OBJECT DATA TO THE ROM",0AH,0DH
+	DB	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: A = EVENT
