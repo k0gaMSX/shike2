@@ -71,8 +71,8 @@ OBJECT:	PUSH	BC
 
 OBJDEF:	DB	OBJPAT,1		;PATTERN,SIZE
 	DB	OBJPAT-1,2		;PATTERN,SIZE
-	DB	OBJPAT,0
-	DB	OBJPAT,0
+	DB	OBJPAT+1,1
+	DB	OBJPAT+2,0
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
