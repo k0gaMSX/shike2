@@ -43,11 +43,5 @@ EXIT:	CALL	RESISR		;RESTORE SYSTEM ISR
 	DSEG
 E.RET:	DW	0
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-	CSEG
-	PUBLIC	ERRSTR
-
-ERRSTR:	DW	0
 
 
