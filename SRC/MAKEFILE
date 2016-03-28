@@ -239,6 +239,6 @@ clean :
 	del font.asm > NUL
 	del fontspr.asm > NUL
 	del leveldef.inc > NUL
-	del *.bat > NUL
+	del make$$$$.bat > NUL
 
 
