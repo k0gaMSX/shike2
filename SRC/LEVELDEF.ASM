@@ -212,6 +212,19 @@ L15_2:	DS	8*8*2
 L15_3:	DS	8*8*2
 L15_ACC:DS	8*8
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;LEVEL 16
+RIVER:	DB	"RIVER"				;LEVEL 16
+L16_STR:DS	SIZLVLNAME - (L16_STR - RIVER) 
+L16_PAL:DB	0
+L16_GFX:DB	0
+L16_1:	DS	8*8*2
+L16_2:	DS	8*8*2
+L16_3:	DS	8*8*2
+L16_ACC:DS	8*8
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	PUBLIC	CHARSDAT,DOORSDAT,CAMDAT,GLOBEDEF,WHITEDEF,FONTSPR,OBJDAT
@@ -279,6 +292,5 @@ WHITEDEF:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 END:	DS	CARTSEG+4000H-$,0
-
 
 
