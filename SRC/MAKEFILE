@@ -106,6 +106,24 @@ leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	as leveldef.asm
 	ld /R4000 leveldef.dat=leveldef.rel
 
+height0.dat :
+	copy data\\height0.dat
+
+height1.dat :
+	copy data\\height1.dat
+
+map0.dat :
+	copy data\\map0.dat
+
+map1.dat :
+	copy data\\map1.dat
+
+map2.dat :
+	copy data\\map2.dat
+
+map3.dat :
+	copy data\\map3.dat
+
 leveldef.inc : leveldef.rel
 	export leveldef.sym > leveldef.inc
 
@@ -239,6 +257,7 @@ clean :
 	del font.asm > NUL
 	del fontspr.asm > NUL
 	del leveldef.inc > NUL
+	del leveldef.dat > NUL
 	del make$$$$.bat > NUL
 
 
