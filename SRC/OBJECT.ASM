@@ -73,6 +73,7 @@ OBJDEF:	DB	OBJPAT,1		;PATTERN,SIZE
 	DB	OBJPAT-1,2		;PATTERN,SIZE
 	DB	OBJPAT+1,1
 	DB	OBJPAT+2,0
+	DB	OBJPAT+3,1
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
