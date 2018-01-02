@@ -3,7 +3,7 @@ ASFLAGS = -t
 REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
 REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel object.rel
 REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
-REL4 = edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
+REL4 = edlevel.rel edneigh.rel edmap.rel edtsel.rel edfloor.rel edchar.rel
 REL5 = eddoor.rel edobject.rel
 REL =  $(REL1) $(REL2) $(REL3) $(REL4) $(REL5)
 
@@ -204,14 +204,14 @@ level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
 edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc event.inc
 	as $(ASFLAGS) edlevel.asm
 
-edroom.rel : edroom.asm shike2.inc level.inc bios.inc event.inc
-	as $(ASFLAGS) edroom.asm
+edneigh.rel : edneigh.asm shike2.inc level.inc bios.inc event.inc
+	as $(ASFLAGS) edneigh.asm
 
 map.rel : map.asm shike2.inc level.inc bios.inc
 	as $(ASFLAGS) map.asm
 
-edtile.rel : edtile.asm bios.inc shike2.inc event.inc level.inc
-	as $(ASFLAGS) edtile.asm
+edtsel.rel : edtsel.asm bios.inc shike2.inc event.inc level.inc
+	as $(ASFLAGS) edtsel.asm
 
 edfloor.rel : edfloor.asm bios.inc shike2.inc event.inc level.inc
 	as $(ASFLAGS) edfloor.asm
