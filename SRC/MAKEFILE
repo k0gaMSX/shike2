@@ -106,22 +106,22 @@ leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	as leveldef.asm
 	ld /R4000 leveldef.dat=leveldef.rel
 
-height0.dat :
+height0.dat : data\\height0.dat
 	copy data\\height0.dat
 
-height1.dat :
+height1.dat : data\\height1.dat
 	copy data\\height1.dat
 
-map0.dat :
+map0.dat : data\\map0.dat
 	copy data\\map0.dat
 
-map1.dat :
+map1.dat : data\\map1.dat
 	copy data\\map1.dat
 
-map2.dat :
+map2.dat : data\\map2.dat
 	copy data\\map2.dat
 
-map3.dat :
+map3.dat : data\\map3.dat
 	copy data\\map3.dat
 
 leveldef.inc : leveldef.rel
