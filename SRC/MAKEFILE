@@ -104,7 +104,7 @@ patset0.obj : ..\\gfx\\patset0.gl5
 
 leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	as leveldef.asm
-	ld /R4000 leveldef.dat=leveldef.rel
+	ld /R8000 leveldef.dat=leveldef.rel
 
 height0.dat : data\\height0.dat
 	copy data\\height0.dat
@@ -247,7 +247,7 @@ kbd.rel : kbd.asm shike2.inc bios.inc event.inc
 	as $(ASFLAGS) kbd.asm
 
 shike2.com : $(REL)
-	ld /R0100 /P0100 /D8000 /X /Gmain & < ld.cmd
+	ld /R0100 /P0100 /D5000 /X /Gmain & < ld.cmd
 
 clean :
 	del *.rel > NUL
