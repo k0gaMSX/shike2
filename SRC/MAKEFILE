@@ -4,7 +4,7 @@ REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
 REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel object.rel
 REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
 REL4 = edlevel.rel edneigh.rel edmap.rel edtsel.rel edfloor.rel edchar.rel
-REL5 = eddoor.rel edobject.rel
+REL5 = eddoor.rel edobject.rel edtile.rel
 REL =  $(REL1) $(REL2) $(REL3) $(REL4) $(REL5)
 
 all : shike data
@@ -218,6 +218,9 @@ edfloor.rel : edfloor.asm bios.inc shike2.inc event.inc level.inc
 
 edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc sprite.inc
 	as $(ASFLAGS) edmap.asm
+
+edtile.rel : edtile.asm
+	as $(ASFLAGS) edtile.asm
 
 editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc
 	as $(ASFLAGS) editor.asm
