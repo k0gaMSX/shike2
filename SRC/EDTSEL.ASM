@@ -38,8 +38,6 @@ E.LOOP:	CALL	DISSCR
 RECEIVERS:
 	DB	1,29,182,8
 	DW	PAGEEV
-	DB	1,29,190,8
-	DW	QUITEV
 	DB	1,253,0,254
 	DW	TILEEVENT
 	DB	0
@@ -95,13 +93,13 @@ S.1:	LD	D,A
 
 	RET
 
-STR:	DB	" PAGE %d",10," QUIT",0
+STR:	DB	" PAGE %d",0
 
 LINEY	EQU	NR_TILES_ROW*TILEYSIZ*8
 
 ;	       REP  X0  Y0    X1  Y1  IX0 IY0 IX1 IY1
-MAPG:	DB	3,  0,  182,  30,182,  0,  8,  0,  8
-	DB	2,  0,  182,   0,198, 30,  0, 30,  0
+MAPG:	DB	2,  0,  182,  30,182,  0,  8,  0,  8
+	DB	2,  0,  182,   0,190, 30,  0, 30,  0
 	DB	4,  0,  0,   255,  0,  0, TILEYSIZ*8,  0, TILEYSIZ*8
 	DB	9,  0,  0,     0,LINEY, TILEXSIZ*16,  0, TILEXSIZ*16,  0
 	DB	0
@@ -255,16 +253,6 @@ PREV:	LD	A,(PAGE)
 	RET	Z
 	DEC	A
 	LD	(PAGE),A
-	RET
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;INPUT:	A = EVENT
-;	DE = SCREEN LOCATION
-
-	CSEG
-
-QUITEV:	LD	A,1
-	LD	(QUIT),A
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
