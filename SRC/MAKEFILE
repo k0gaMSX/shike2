@@ -2,7 +2,7 @@ ASFLAGS = -t
 
 REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
 REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel object.rel
-REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
+REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel script.rel
 REL4 = edlevel.rel edneigh.rel edmap.rel edtsel.rel edfloor.rel edchar.rel
 REL5 = eddoor.rel edobject.rel edtile.rel edpick.rel
 REL =  $(REL1) $(REL2) $(REL3) $(REL4) $(REL5)
@@ -191,6 +191,9 @@ talk.rel : talk.asm sprite.inc data.inc shike2.inc
 
 char.rel : char.asm bios.inc data.inc event.inc level.inc
 	as $(ASFLAGS) char.asm
+
+script.rel : script.asm data.inc shike2.inc
+	as $(ASFLAGS) script.asm
 
 movable.rel : movable.asm bios.inc shike2.inc data.inc level.inc
 	as $(ASFLAGS) movable.asm
