@@ -201,7 +201,7 @@ movable.rel : movable.asm bios.inc shike2.inc data.inc level.inc
 mob.rel : mob.asm bios.inc shike2.inc data.inc
 	as $(ASFLAGS) mob.asm
 
-game.rel : game.asm
+game.rel : game.asm data.inc
 	as $(ASFLAGS) game.asm
 
 level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
