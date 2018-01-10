@@ -62,22 +62,24 @@ C.LOOP:	PUSH	BC
 	RET
 
 
-CTRL:	DW	DUMMY,CS.1
+CTRL:	DW	DUMMY,CS.0
 	DB	0
-	DW	USER,CS.2
+	DW	USER,CS.1
 	DB	1
-	DW	FOLLOW,CS.3
+	DW	FOLLOW,CS.2
 	DB	2
-	DW	EXEC,CS.4
+	DW	EXEC,CS.3
 	DB	3
+	DW	TELLCTL,CS.4
+	DB	4
 
-CS.1:	"DUMMY",0
-CS.2:	"USER",0
-CS.3:	"FOLLOW",0
-CS.4:	"EXEC",0
+CS.0:	DB	"DUMMY",0
+CS.1:	DB	"USER",0
+CS.2:	DB	"FOLLOW",0
+CS.3:	DB	"EXEC",0
+CS.4:	DB	"TELL",0
 
 	DSEG
-
 C.PTR:	DW	0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -116,6 +118,18 @@ CT.OK:	PUSH	IY
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: IX = POINTER TO THE CHARACTER
+;       DE = NEW CONTROL FUNCTION
+
+	CSEG
+	PUBLIC	CHANGECTL
+
+CHANGECTL:
+	LD	(IX+CHAR.CONTROL),E
+	LD	(IX+CHAR.CONTROL+1),D
+	JP	SETRDY
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE CHARACTER
 
 	CSEG
@@ -131,6 +145,9 @@ DUMMY:	LD	E,IDLEF
 	CSEG
 
 LINK:   LD	(IX+CHAR.STATE),READYF
+	LD	A,(IX+CHAR.NEXT)
+	OR	(IX+CHAR.NEXT+1)
+	RET	NZ
 	LD	IYL,E			;IY = HEAD
 	LD	IYU,D
 	LD	L,E			;HL = HEAD
@@ -176,6 +193,11 @@ UNLINK:	LD	(IX+CHAR.STATE),E
 	LD	IYU,D
 	LD	(IY+CHAR.PREV),C
 	LD	(IY+CHAR.PREV+1),B	;PTR->NEXT->PREV = PTR->PREV
+	XOR	A
+	LD	(IX+CHAR.NEXT),A
+	LD	(IX+CHAR.NEXT+1),A
+	LD	(IX+CHAR.PREV),A
+	LD	(IX+CHAR.PREV+1),A
 	RET
 
 
@@ -331,6 +353,34 @@ F.1:	LD	E,(IX+CHAR.ARG1)
 	LD	(IX+CHAR.ARG2),0
 	CALL	PATH2MOV
 	RET
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: IX = POINTER TO THE CHARACTER
+
+	CSEG
+	PUBLIC	TELLCTL
+	EXTRN	TALKS,TELL,ARYHL
+
+TELLCTL:
+	LD	A,(IX+CHAR.ARG1)
+	LD	HL,TALKS
+	CALL	ARYHL
+	EX	DE,HL		;DE = TALKS[IX->ARGS1]
+	LD	BC,WAKEUP
+	CALL	TELL
+	RET	Z		;THERE WAS SOME ERROR TELLING SOMETHING
+				;TRY AGAIN
+	LD	E,TELLF
+	JP	UNLINK
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: IX = POINTER TO THE CHARACTER
+
+	CSEG
+
+WAKEUP:	LD	DE,EXEC		;RESUME THE EXECUTION OF THE SCRIPT
+	JP	CHANGECTL
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: IX = POINTER TO THE CHARACTER

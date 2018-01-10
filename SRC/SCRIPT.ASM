@@ -19,6 +19,7 @@ IGOTOZ	EQU	0DH
 IGOTON	EQU	0EH
 IUSER	EQU	0FH
 IFOLLOW	EQU	10H
+ITELL	EQU	11H
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	CSEG
@@ -41,6 +42,7 @@ INSTBL:	DW	STOPFN		; 00
 	DW	GOTO.NFN	; 0E
 	DW	USERFN		; 0F
 	DW	FOLLOWFN	; 10
+	DW	TELLFN		; 11
 
 VARTBL:	DS	1
 
@@ -48,19 +50,33 @@ SCRIPTBL:
 	DW	SCRIPT0
 	DW	SCRIPT1
 	DW	SCRIPT2
+	DW	SCRIPT3
 
 SCRIPTNM:
+	DW	S.0
 	DW	S.1
 	DW	S.2
 	DW	S.3
 
-S.1:	DB	"STOP",0
-S.2:	DB	"USER",0
-S.3:	DB	"FOLLOW",0
+S.0:	DB	"STOP",0
+S.1:	DB	"USER",0
+S.2:	DB	"FOLLOW",0
+S.3:	DB	"TELL",0
 
 SCRIPT0:DB	ISTOP
 SCRIPT1:DB	IUSER
 SCRIPT2:DB	IFOLLOW
+SCRIPT3:DB	ICONST
+	DB	THELLO
+	DB	ITELL
+	DB	IFOLLOW
+
+	PUBLIC	TALKS
+
+THELLO	EQU	0
+TALKS:	DW	T.0
+
+T.0:	DB	"THIS IS A TALK",0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: E = SCRIPT NUMBER
@@ -113,8 +129,8 @@ EXEC:	LD	HL,0
 
 	CSEG
 
-YIELD:	LD	HL,(OLDSP)
-	LD	SP,HL
+YIELD:	LD	HL,(OLDSP)		;STOP USING THE CPU AND LET
+	LD	SP,HL			;SOME OTHER CHAR TO USE IT
 	RET
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -159,30 +175,42 @@ POPVAL:	LD	E,IXL
 	EXTRN	DUMMY
 
 STOPFN:
-	DEC	(IX+CHAR.PC)
-	CALL	DUMMY
-	JP	YIELD
+	LD	DE,DUMMY
+	JP	.CHANGECTL
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE CHAR
 
 	CSEG
+
 	EXTRN	USER
 
-USERFN:	LD	HL,(.UFUN)
-	LD	(IX+CHAR.CONTROL),L
-	LD	(IX+CHAR.CONTROL+1),H
-	JP	YIELD
+USERFN:	LD	DE,USER
+	JP	.CHANGECTL
 
-.UFUN:	DW	USER
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE CHAR
 
 	CSEG
-	EXTRN	FOLLOW
+	EXTRN	ADDAHL,TELL,TELLCTL
+
+TELLFN:	CALL	POPVAL
+	LD	(IX+CHAR.ARG1),A
+	LD	DE,TELLCTL
+	JP	.CHANGECTL
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	IX = POINTER TO THE CHAR
+
+	CSEG
+	EXTRN	FOLLOW,CHANGECTL
 
 FOLLOWFN:
-	LD	HL,(.FFUN)
-	LD	(IX+CHAR.CONTROL),L
-	LD	(IX+CHAR.CONTROL),H
-	JP	YIELD
+	LD	DE,FOLLOW
 
-.FFUN:	DW	FOLLOW
+.CHANGECTL:
+	CALL	CHANGECTL
+	JP	YIELD
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT:	IX = POINTER TO THE CHAR
