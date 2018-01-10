@@ -122,11 +122,14 @@ SHOWSCR:LD	DE,1
 	LD	L,(IY+MOV.LEVEL+1)
 	PUSH	HL
 
-	LD	L,(IY+CHAR.STATE)
+	LD	A,(IY+CHAR.STATE)
+	LD	HL,STNAMES
+	CALL	ARYHL
 	PUSH	HL
 
 	LD	DE,CHAR.PATH
 	ADD	IY,DE
+	LD	H,0
 	LD	L,(IY+7)
 	PUSH	HL
 	LD	L,(IY+6)
@@ -249,7 +252,7 @@ CINFO:	DB	" CHAR",9,"%02d",10
 	DB	" ARG2 ",9,"%02d",10
 	DB	" PATH ",9,"%02d",9
 	DB	"%02x %02x %02x %02x %02x %02x %02x %02x",10
-	DB	" STATE ",9,"%02x",10
+	DB	" STATE ",9,"%s",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" ROOM",9,"%02dX%02d",10
 	DB	" X",9,"%02d",10
@@ -262,6 +265,19 @@ CHARG:	DB	2,  60,  5,   76,  5,  0, 32,  0, 32
 	DB     14,   0,  6,   30,  6,  0,  8,  0,  8
 	DB	2,   0,  6,    0,110, 30,  0, 30,  0
 	DB	0
+
+STNAMES:
+	DW	ST.0
+	DW	ST.1
+	DW	ST.2
+	DW	ST.3
+	DW	ST.4
+
+	DB	"CREATED",0
+	DB	"READY",0
+	DB	"SLEEP",0
+	DB	"ANIM",0
+	DB	"IDLE",0
 
 DIRTBL:	DW	RIGTH,DOWN,UP,LEFT,NODIR
 RIGTH:	DB	"RIGTH",0
