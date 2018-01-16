@@ -692,6 +692,56 @@ LINE:	LD	IY,CMDBUF
 	JP	VDPCMD
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT: DE = SOURCE PALETE
+;       BC = DESTINE PALETE
+
+	CSEG
+
+FADEITER:
+	EX	DE,HL		;HL = SOURCE
+	LD	E,C
+	LD	D,B		;DE = DESTINE
+	LD	B,32
+
+.FLOOP:	PUSH	BC
+	LD	A,(DE)
+	CP	(HL)
+	JR	Z,.FNEXT
+	LD	C,A		;A = C = FULL DESTINE BYTE
+
+	AND	0FH
+	LD	B,A		;B = DESTINE LOWER NIBBLE
+	LD	A,(HL)
+	AND	0FH		;A = SOURCE LOWER NIBBLE
+	CP	B
+	JR	Z,.FUPPER
+	JR	C,.FLBIG
+	INC	C
+.FLBIG:	JR	.FUPPER
+	DEC	C
+
+.FUPPER:LD	A,C		;A = C = FULL DESTINE BYTE
+	AND	0F0H
+	LD	B,A		;B = DESTINE HIGHER BYTE
+	LD	A,(HL)
+	AND	0F0H		;A = SOURCE HIGHER NIBBLE
+	CP	B
+	LD	A,C
+	JR	Z,.FSTORE
+	JR	C,.FUBIG
+	ADD	A,10H
+	JR	.FSTORE
+.FUBIG:	SUB	10H
+
+.FSTORE:LD	(DE),A
+
+.FNEXT:	INC	HL
+	INC	DE
+	POP	BC
+	DJNZ	.FLOOP
+	RET
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	CSEG
 	PUBLIC	VDPHOOK
