@@ -2,9 +2,9 @@ ASFLAGS = -t
 
 REL1 = shike2.rel movable.rel mob.rel zbuffer.rel editor.rel
 REL2 = char.rel door.rel talk.rel game.rel level.rel map.rel object.rel
-REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel
-REL4 = edlevel.rel edroom.rel edmap.rel edtile.rel edfloor.rel edchar.rel
-REL5 = eddoor.rel edobject.rel
+REL3 = kbd.rel mouse.rel stdlib.rel vdp.rel bios.rel script.rel
+REL4 = edlevel.rel edneigh.rel edmap.rel edtsel.rel edfloor.rel edchar.rel
+REL5 = eddoor.rel edobject.rel edtile.rel edpick.rel
 REL =  $(REL1) $(REL2) $(REL3) $(REL4) $(REL5)
 
 all : shike data
@@ -104,25 +104,25 @@ patset0.obj : ..\\gfx\\patset0.gl5
 
 leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
 	as leveldef.asm
-	ld /R4000 leveldef.dat=leveldef.rel
+	ld /R8000 leveldef.dat=leveldef.rel
 
-height0.dat :
-	copy data\\height0.dat
+height0.dat : data\\height0.dat
+	copy /T data\\height0.dat
 
-height1.dat :
-	copy data\\height1.dat
+height1.dat : data\\height1.dat
+	copy /T data\\height1.dat
 
-map0.dat :
-	copy data\\map0.dat
+map0.dat : data\\map0.dat
+	copy /T data\\map0.dat
 
-map1.dat :
-	copy data\\map1.dat
+map1.dat : data\\map1.dat
+	copy /T data\\map1.dat
 
-map2.dat :
-	copy data\\map2.dat
+map2.dat : data\\map2.dat
+	copy /T data\\map2.dat
 
-map3.dat :
-	copy data\\map3.dat
+map3.dat : data\\map3.dat
+	copy /T data\\map3.dat
 
 leveldef.inc : leveldef.rel
 	export leveldef.sym > leveldef.inc
@@ -168,6 +168,9 @@ leveldef.bin : leveldef.dat loadpg1.obj bload.obj
 ##########################################################
 #sources
 
+edpick.rel : edpick.asm shike2.inc level.inc bios.inc
+	as $(ASFLAGS) edpick.asm
+
 edobject.rel : edobject.asm shike2.inc level.inc data.inc event.inc bios.inc
 	as $(ASFLAGS) edobject.asm
 
@@ -189,13 +192,16 @@ talk.rel : talk.asm sprite.inc data.inc shike2.inc
 char.rel : char.asm bios.inc data.inc event.inc level.inc
 	as $(ASFLAGS) char.asm
 
+script.rel : script.asm data.inc shike2.inc
+	as $(ASFLAGS) script.asm
+
 movable.rel : movable.asm bios.inc shike2.inc data.inc level.inc
 	as $(ASFLAGS) movable.asm
 
 mob.rel : mob.asm bios.inc shike2.inc data.inc
 	as $(ASFLAGS) mob.asm
 
-game.rel : game.asm
+game.rel : game.asm data.inc
 	as $(ASFLAGS) game.asm
 
 level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
@@ -204,20 +210,23 @@ level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
 edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc event.inc
 	as $(ASFLAGS) edlevel.asm
 
-edroom.rel : edroom.asm shike2.inc level.inc bios.inc event.inc
-	as $(ASFLAGS) edroom.asm
+edneigh.rel : edneigh.asm shike2.inc level.inc bios.inc event.inc
+	as $(ASFLAGS) edneigh.asm
 
 map.rel : map.asm shike2.inc level.inc bios.inc
 	as $(ASFLAGS) map.asm
 
-edtile.rel : edtile.asm bios.inc shike2.inc event.inc level.inc
-	as $(ASFLAGS) edtile.asm
+edtsel.rel : edtsel.asm bios.inc shike2.inc event.inc level.inc
+	as $(ASFLAGS) edtsel.asm
 
 edfloor.rel : edfloor.asm bios.inc shike2.inc event.inc level.inc
 	as $(ASFLAGS) edfloor.asm
 
 edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc sprite.inc
 	as $(ASFLAGS) edmap.asm
+
+edtile.rel : edtile.asm
+	as $(ASFLAGS) edtile.asm
 
 editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc
 	as $(ASFLAGS) editor.asm
@@ -244,7 +253,7 @@ kbd.rel : kbd.asm shike2.inc bios.inc event.inc
 	as $(ASFLAGS) kbd.asm
 
 shike2.com : $(REL)
-	ld /R0100 /P0100 /D8000 /X /Gmain & < ld.cmd
+	ld /R0100 /P0100 /D5000 /X /Gmain & < ld.cmd
 
 clean :
 	del *.rel > NUL

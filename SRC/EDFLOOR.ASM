@@ -4,7 +4,7 @@
 	INCLUDE	EVENT.INC
 	INCLUDE	LEVEL.INC
 
-NR_FLOORS	EQU	7
+NR_FLOORS	EQU	8
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;OUTPUT:Z = 1 WHEN NO FLOOR IS SELECTED
@@ -27,7 +27,7 @@ ED.FLOOR:
 	RET
 
 RECEIVERS:
-	DB	1,32*NR_FLOORS,0,16
+	DB	1,253,0,16
 	DW	FLOOREVENT
 	DB	0
 
