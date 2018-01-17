@@ -130,6 +130,10 @@ SHOWSCR:LD	DE,1
 	LD	DE,CHAR.PATH
 	ADD	IY,DE
 	LD	H,0
+	LD	L,(IY+9)
+	PUSH	HL
+	LD	L,(IY+8)
+	PUSH	HL
 	LD	L,(IY+7)
 	PUSH	HL
 	LD	L,(IY+6)
@@ -251,7 +255,7 @@ CINFO:	DB	" CHAR",9,"%02d",10
 	DB	" ARG1 ",9,"%02d",10
 	DB	" ARG2 ",9,"%02d",10
 	DB	" PATH ",9,"%02d",9
-	DB	"%02x %02x %02x %02x %02x %02x %02x %02x",10
+	DB	"%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x",10
 	DB	" STATE ",9,"%s",10
 	DB	" LEVEL",9,"%02dX%02d",10
 	DB	" ROOM",9,"%02dX%02d",10
