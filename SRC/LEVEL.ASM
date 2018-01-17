@@ -178,6 +178,26 @@ LDPATSET:LD	A,PAT0PAGE
 	LD	A,PATPAGE*2
 	JP	VLDIR			;COPY THEM TO VRAM (256*128)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;INPUT:	DE = A POINT|LEVEL|MAP
+;OUTPUT:Z = 1 WHEN NO VALID POSITION
+
+	CSEG
+
+CHKROOM:LD	A,D
+	CP	-1
+	RET	Z
+	CP	ROOMXSIZ
+	RET	Z
+	LD	A,E
+	CP	-1
+	RET	Z
+	CP	ROOMYSIZ
+	RET
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;INPUT: DE = LEVEL POSITION
 ;	BC = ROOM POSITION
@@ -341,7 +361,7 @@ M.LOOP:	PUSH	BC
 	LD	A,D
 	ADD	A,H
 	LD	D,A
-	CALL	ISGOOD
+	CALL	CHKROOM
 	LD	(IY+RINFO.ROOM),E	;DE = NEW ROOM LOCATION
 	LD	(IY+RINFO.ROOM+1),D
 	CALL	FILLHMATRIX
