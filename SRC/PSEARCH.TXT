@@ -1,0 +1,26 @@
+Three data structures:
+- GOOD (stack)
+- BAD (stack)
+- WORST (queue)
+
+We insert improvement nodes in GOOD. If the node is worst than the
+parent but is better that the top os BAD, then it is set as top of
+BAD. Otherwhise it is inserted at the end of WORST. If in some moment we
+take an element of WORST it means that BAD is empty, so we interchange
+BAD and WORST.
+
+Explanation:
+The algorithm is based in the fact that we do not support diagonals, so
+each node is -1, +1 than its parent, and since in each step we expand the
+best node, then it means that if a descendant is better than its parent,
+then it is the best. For the same reason, the current node must be better
+or equal than the previous node, so children worse than the father will
+be better or equal than the top of BAD if the current node was taken from
+GOOD. If the current node was taken from BAD (because GOOD was empty),
+it is a backtrack and the worse child may be worse than the top of BAD,
+in which case must be worse or equal than any other node in WORSE,
+so WORSE must be a queue (with back insertion). With this definition
+the algorithm follows a deep search when it takes from GOOD, that is
+the common case when the map is an open scenario (infinite search are
+avoided using a buffer marking explored nodes). If we want to change to
+breath search then we only have to move GOOD and BAD to queues.
