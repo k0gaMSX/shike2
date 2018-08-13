@@ -7,7 +7,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-	PUBLIC	MAPDEF,LEVELDEF
+	PUBLIC	MAPACCS,MAPDEF,LEVELDEF
 
 MAPDEF:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
@@ -18,7 +18,7 @@ MAPDEF:	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0,13, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 
-ACCS:	DB	0, 0, 0, 0, 0, 0, 0, 0
+MAPACCS:DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
 	DB	0, 0, 0, 0, 0, 0, 0, 0
@@ -288,6 +288,7 @@ WHITEDEF:
 	INCLUDE	PALETE.ASM
 	INCLUDE	FONT.ASM
 	INCLUDE	FONTSPR.ASM
+	INCLUDE	DIR.ASM
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

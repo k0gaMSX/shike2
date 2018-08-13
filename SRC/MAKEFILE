@@ -28,6 +28,9 @@ fontspr.asm : font.obj
 font.asm : font.obj
 	db -lFONTGR5 font.obj > font.asm
 
+dir.asm : dir.obj
+	db -lDIRGR5  dir.obj > dir.asm
+
 bload.obj : bload.asm
 	as $(ASFLAGS) bload.asm
 	ld bload.obj=bload.rel
@@ -82,6 +85,10 @@ loadpg1.obj : loadpg1.asm loader.asm shike2.inc bios.inc
 ########################################################
 #data objects
 
+dir.obj : ..\\gfx\\dir.gl5
+	del dir.obj > NUL
+	delgl5 ..\\gfx\\dir.gl5 dir.obj
+
 font.obj : ..\\gfx\\font.gl5
 	del font.obj > NUL
 	delgl5 ..\\gfx\\font.gl5 font.obj
@@ -102,8 +109,10 @@ patset0.obj : ..\\gfx\\patset0.gl5
 	del patset0.obj > NUL
 	delgl5 ..\\gfx\\patset0.gl5 patset0.obj
 
-leveldef.dat : leveldef.asm level.inc palete.asm font.asm fontspr.asm
+leveldef.rel : leveldef.asm level.inc palete.asm font.asm fontspr.asm dir.asm
 	as leveldef.asm
+
+leveldef.dat : leveldef.rel
 	ld /R8000 leveldef.dat=leveldef.rel
 
 height0.dat : data\\height0.dat
@@ -210,7 +219,7 @@ level.rel : level.asm shike2.inc bios.inc level.inc leveldef.inc data.inc
 edlevel.rel : edlevel.asm shike2.inc level.inc bios.inc event.inc
 	as $(ASFLAGS) edlevel.asm
 
-edneigh.rel : edneigh.asm shike2.inc level.inc bios.inc event.inc
+edneigh.rel : edneigh.asm shike2.inc level.inc bios.inc event.inc data.inc
 	as $(ASFLAGS) edneigh.asm
 
 map.rel : map.asm shike2.inc level.inc bios.inc
@@ -228,7 +237,7 @@ edmap.rel : edmap.asm bios.inc shike2.inc level.inc event.inc sprite.inc
 edtile.rel : edtile.asm
 	as $(ASFLAGS) edtile.asm
 
-editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc
+editor.rel : editor.asm shike2.inc bios.inc level.inc event.inc leveldef.inc
 	as $(ASFLAGS) editor.asm
 
 mouse.rel : mouse.asm bios.inc sprite.inc shike2.inc
@@ -263,6 +272,7 @@ clean :
 	del *.obj > NUL
 	del shike2.lzh > NUL
 	del palete.asm > NUL
+	del dir.asm > NUL
 	del font.asm > NUL
 	del fontspr.asm > NUL
 	del leveldef.inc > NUL
